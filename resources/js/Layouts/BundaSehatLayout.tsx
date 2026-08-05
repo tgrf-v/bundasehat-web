@@ -86,9 +86,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           
           {/* Logo Brand */}
           <Link href={isLoggedIn ? "/beranda" : "/"} className="flex items-center gap-3 group">
-            <div className="h-10 w-10 rounded-2xl bg-white p-1 border border-pink-100 shadow-soft-sm group-hover:scale-105 transition-transform flex items-center justify-center">
-              <ApplicationLogo className="h-8 w-8 object-contain" />
-            </div>
+            <ApplicationLogo className="h-9 w-auto object-contain group-hover:scale-105 transition-transform" />
             <div>
               <span className="font-extrabold text-lg text-slate-900 tracking-tight flex items-center gap-1">
                 Bunda<span className="text-rose-500">Sehat</span>
