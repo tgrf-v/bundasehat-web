@@ -5,7 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Select } from "@/Components/ui/select";
+import { DatePicker } from "@/Components/ui/date-picker";
+import { Checkbox } from "@/Components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 import { Badge } from "@/Components/ui/badge";
 import { Progress } from "@/Components/ui/progress";
 import { ScreeningInput, EdemaLevel } from "@/types/screening";
@@ -141,17 +150,17 @@ export default function KehamilanScreening() {
         {/* Step Indicator Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
-            <span className={currentStep >= 1 ? "text-emerald-700 font-extrabold" : ""}>
+            <span className={currentStep >= 1 ? "text-rose-600 font-extrabold" : ""}>
               1. Data Diri & HPHT
             </span>
-            <span className={currentStep >= 2 ? "text-emerald-700 font-extrabold" : ""}>
+            <span className={currentStep >= 2 ? "text-rose-600 font-extrabold" : ""}>
               2. Tensi & Gejala
             </span>
-            <span className={currentStep >= 3 ? "text-emerald-700 font-extrabold" : ""}>
+            <span className={currentStep >= 3 ? "text-rose-600 font-extrabold" : ""}>
               3. Bias Treatment
             </span>
           </div>
-          <Progress value={(currentStep / 3) * 100} variant="emerald" className="h-2.5" />
+          <Progress value={(currentStep / 3) * 100} variant="rose" className="h-2.5" />
         </div>
 
         {/* Form Card Container */}
@@ -163,7 +172,7 @@ export default function KehamilanScreening() {
               <div className="space-y-5 p-6 animate-fadeIn">
                 <div className="border-b border-slate-100 pb-3">
                   <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <User className="h-5 w-5 text-emerald-600" />
+                    <User className="h-5 w-5 text-rose-600" />
                     <span>Langkah 1: Identitas & Riwayat Kehamilan</span>
                   </h3>
                   <p className="text-xs text-slate-500">Masukkan umur, paritas, dan tanggal HPHT pasien</p>
@@ -223,15 +232,14 @@ export default function KehamilanScreening() {
 
                   <div>
                     <Label htmlFor="hpht">Hari Pertama Haid Terakhir (HPHT)</Label>
-                    <Input
+                    <DatePicker
                       id="hpht"
-                      type="date"
                       value={formData.hpht}
-                      onChange={(e) => setFormData({ ...formData, hpht: e.target.value })}
+                      onChange={(val) => setFormData({ ...formData, hpht: val })}
                       className="mt-1.5"
                     />
                     {gestationalInfo.weeks > 0 && (
-                      <div className="mt-2.5 p-3 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-between text-xs text-emerald-800">
+                      <div className="mt-2.5 p-3 rounded-xl bg-pink-50 border border-pink-100 flex items-center justify-between text-xs text-rose-900">
                         <span>Usia Kehamilan Otomatis: <strong className="font-bold">{gestationalInfo.weeks} Minggu</strong></span>
                         {gestationalInfo.dueDate && <span>HPL: <strong className="font-bold">{gestationalInfo.dueDate}</strong></span>}
                       </div>
@@ -241,16 +249,18 @@ export default function KehamilanScreening() {
                   <div>
                     <Label htmlFor="wilayah">Wilayah Puskesmas / Faskes Domisili</Label>
                     <Select
-                      id="wilayah"
                       value={formData.wilayah_puskesmas}
-                      onChange={(e) => setFormData({ ...formData, wilayah_puskesmas: e.target.value })}
-                      options={[
-                        { value: "Puskesmas Wilayah 1", label: "Puskesmas Wilayah 1 (Kecamatan A)" },
-                        { value: "Puskesmas Wilayah 2", label: "Puskesmas Wilayah 2 (Kecamatan B)" },
-                        { value: "Puskesmas Wilayah 3", label: "Puskesmas Wilayah 3 (Kecamatan C)" },
-                      ]}
-                      className="mt-1.5"
-                    />
+                      onValueChange={(val) => setFormData({ ...formData, wilayah_puskesmas: val })}
+                    >
+                      <SelectTrigger id="wilayah" className="mt-1.5">
+                        <SelectValue placeholder="Pilih wilayah puskesmas..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Puskesmas Wilayah 1">Puskesmas Wilayah 1 (Kecamatan A)</SelectItem>
+                        <SelectItem value="Puskesmas Wilayah 2">Puskesmas Wilayah 2 (Kecamatan B)</SelectItem>
+                        <SelectItem value="Puskesmas Wilayah 3">Puskesmas Wilayah 3 (Kecamatan C)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </div>
@@ -319,20 +329,22 @@ export default function KehamilanScreening() {
                   <div>
                     <Label htmlFor="edema">Tanda Pembengkakan (Edema)</Label>
                     <Select
-                      id="edema"
                       value={formData.edema_level}
-                      onChange={(e) => setFormData({ ...formData, edema_level: e.target.value as EdemaLevel })}
-                      options={[
-                        { value: "none", label: "Tidak Ada Pembengkakan (Normal)" },
-                        { value: "ringan_kaki", label: "Ringan - Bengkak di Pergelangan Kaki" },
-                        { value: "sedang_tungkai", label: "Sedang - Bengkak di Tungkai / Betis" },
-                        { value: "berat_wajah_tangan", label: "Berat - Bengkak di Wajah & Kelopak Tangan" },
-                      ]}
-                      className="mt-1.5"
-                    />
+                      onValueChange={(val) => setFormData({ ...formData, edema_level: val as EdemaLevel })}
+                    >
+                      <SelectTrigger id="edema" className="mt-1.5">
+                        <SelectValue placeholder="Pilih tingkat edema..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Tidak Ada Pembengkakan (Normal)</SelectItem>
+                        <SelectItem value="ringan_kaki">Ringan - Bengkak di Pergelangan Kaki</SelectItem>
+                        <SelectItem value="sedang_tungkai">Sedang - Bengkak di Tungkai / Betis</SelectItem>
+                        <SelectItem value="berat_wajah_tangan">Berat - Bengkak di Wajah & Kelopak Tangan</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Checkbox Keluhan Spesifik */}
+                  {/* Checkbox Keluhan Spesifik (Shadcn UI Checkbox Component) */}
                   <div>
                     <Label className="text-xs font-bold text-slate-900 block mb-2">
                       Keluhan Fisik Spesifik Lainnya (Bisa pilih lebih dari satu):
@@ -349,22 +361,23 @@ export default function KehamilanScreening() {
                       ].map((item) => {
                         const checked = formData.keluhan_spesifik.includes(item.id);
                         return (
-                          <label
+                          <div
                             key={item.id}
-                            className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer select-none text-xs font-semibold ${
+                            className={`flex items-center gap-3 p-3 rounded-xl border transition-all select-none text-xs font-semibold ${
                               checked
-                                ? "bg-rose-50 border-rose-200 text-rose-900 shadow-soft-sm"
+                                ? "bg-pink-50 border-pink-200 text-rose-900 shadow-soft-sm"
                                 : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
                             }`}
                           >
-                            <input
-                              type="checkbox"
+                            <Checkbox
+                              id={item.id}
                               checked={checked}
-                              onChange={() => handleCheckboxToggle(item.id)}
-                              className="h-4 w-4 rounded border-slate-300 text-rose-600 focus:ring-rose-500"
+                              onCheckedChange={() => handleCheckboxToggle(item.id)}
                             />
-                            <span>{item.label}</span>
-                          </label>
+                            <label htmlFor={item.id} className="cursor-pointer flex-1">
+                              {item.label}
+                            </label>
+                          </div>
                         );
                       })}
                     </div>
@@ -393,29 +406,14 @@ export default function KehamilanScreening() {
                       Apakah pasien sudah mendapatkan treatment / penanganan medis sebelumnya?
                     </Label>
 
-                    <div className="flex items-center gap-4">
-                      <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="sudah_treatment"
-                          checked={formData.sudah_dapat_treatment === true}
-                          onChange={() => setFormData({ ...formData, sudah_dapat_treatment: true })}
-                          className="h-4 w-4 text-emerald-600 focus:ring-emerald-500"
-                        />
-                        <span>Ya, Sudah Menerima Treatment</span>
-                      </label>
-
-                      <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="sudah_treatment"
-                          checked={formData.sudah_dapat_treatment === false}
-                          onChange={() => setFormData({ ...formData, sudah_dapat_treatment: false })}
-                          className="h-4 w-4 text-emerald-600 focus:ring-emerald-500"
-                        />
-                        <span>Belum Ada Treatment</span>
-                      </label>
-                    </div>
+                    <RadioGroup
+                      value={formData.sudah_dapat_treatment ? "ya" : "belum"}
+                      onValueChange={(val) => setFormData({ ...formData, sudah_dapat_treatment: val === "ya" })}
+                      className="flex items-center gap-6"
+                    >
+                      <RadioGroupItem value="ya" id="treatment_ya" label="Ya, Sudah Menerima Treatment" />
+                      <RadioGroupItem value="belum" id="treatment_belum" label="Belum Ada Treatment" />
+                    </RadioGroup>
                   </div>
 
                   {formData.sudah_dapat_treatment && (

@@ -5,7 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Select } from "@/Components/ui/select";
+import { Checkbox } from "@/Components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 import { Badge } from "@/Components/ui/badge";
 import { evaluateScreening } from "@/lib/scoringEngine";
 import {
@@ -151,27 +158,28 @@ export default function PersalinanScreening() {
               <div>
                 <Label htmlFor="posisi">Presentasi / Posisi Janin</Label>
                 <Select
-                  id="posisi"
                   value={formData.posisi_janin}
-                  onChange={(e) => setFormData({ ...formData, posisi_janin: e.target.value })}
-                  options={[
-                    { value: "kepala_bawah", label: "Kepala di Bawah (Normal / Preskep)" },
-                    { value: "sungsang", label: "Sungsang / Bokong di Bawah (Resti)" },
-                    { value: "lintang", label: "Posisi Lintang / Melintang (Wajib SC RS)" },
-                  ]}
-                  className="mt-1"
-                />
+                  onValueChange={(val) => setFormData({ ...formData, posisi_janin: val })}
+                >
+                  <SelectTrigger id="posisi" className="mt-1">
+                    <SelectValue placeholder="Pilih posisi janin..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="kepala_bawah">Kepala di Bawah (Normal / Preskep)</SelectItem>
+                    <SelectItem value="sungsang">Sungsang / Bokong di Bawah (Resti)</SelectItem>
+                    <SelectItem value="lintang">Posisi Lintang / Melintang (Wajib SC RS)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="p-3 rounded-xl bg-rose-50/60 border border-rose-100 flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-pink-50/60 border border-pink-100 flex items-center justify-between">
                 <div className="text-xs text-rose-900 font-semibold">
                   <span>Apakah Ada Riwayat Operasi SC Sebelumnya?</span>
                 </div>
-                <input
-                  type="checkbox"
+                <Checkbox
+                  id="riwayat_sc_check"
                   checked={formData.ada_riwayat_sc}
-                  onChange={(e) => setFormData({ ...formData, ada_riwayat_sc: e.target.checked })}
-                  className="h-4 w-4 text-rose-600 rounded border-slate-300 focus:ring-rose-500"
+                  onCheckedChange={(checked) => setFormData({ ...formData, ada_riwayat_sc: checked })}
                 />
               </div>
             </CardContent>

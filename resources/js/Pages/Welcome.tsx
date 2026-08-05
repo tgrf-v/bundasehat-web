@@ -6,6 +6,7 @@ import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
+import { DatePicker } from "@/Components/ui/date-picker";
 import { calculateGestationalAge } from "@/lib/scoringEngine";
 import { UserRole } from "@/types/screening";
 import {
@@ -108,11 +109,10 @@ export default function Welcome() {
                 <form onSubmit={handleCalculateHPHT} className="space-y-3">
                   <div>
                     <Label htmlFor="hpht">Hari Pertama Haid Terakhir (HPHT)</Label>
-                    <Input
+                    <DatePicker
                       id="hpht"
-                      type="date"
                       value={hphtInput}
-                      onChange={(e) => setHphtInput(e.target.value)}
+                      onChange={(val) => setHphtInput(val)}
                       className="mt-1.5"
                     />
                   </div>

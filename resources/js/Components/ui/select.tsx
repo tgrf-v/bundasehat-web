@@ -1,46 +1,217 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { ChevronDown, Check } from "lucide-react";
 
-export interface SelectOption {
-  value: string;
-  label: string;
+interface SelectContextType {
+  value?: string | null;
+  onValueChange?: (val: string) => void;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedLabel: string;
+  setSelectedLabel: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  options?: SelectOption[];
-  error?: string;
+const SelectContext = React.createContext<SelectContextType | undefined>(undefined);
+
+export interface SelectProps {
+  value?: string | null;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  items?: { label: string; value: string | null }[];
+  children?: React.ReactNode;
 }
 
-const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, options = [], children, error, ...props }, ref) => {
+const Select: React.FC<SelectProps> = ({
+  value: controlledValue,
+  onValueChange,
+  children,
+}) => {
+  const [value, setValue] = React.useState<string | null>(controlledValue ?? null);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [selectedLabel, setSelectedLabel] = React.useState<string>("");
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (controlledValue !== undefined) {
+      setValue(controlledValue);
+    }
+  }, [controlledValue]);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleValueChange = (val: string) => {
+    setValue(val);
+    if (onValueChange) {
+      onValueChange(val);
+    }
+    setIsOpen(false);
+  };
+
+  return (
+    <SelectContext.Provider
+      value={{
+        value,
+        onValueChange: handleValueChange,
+        isOpen,
+        setIsOpen,
+        selectedLabel,
+        setSelectedLabel,
+      }}
+    >
+      <div className="relative w-full" ref={containerRef}>
+        {children}
+      </div>
+    </SelectContext.Provider>
+  );
+};
+
+const useSelect = () => {
+  const context = React.useContext(SelectContext);
+  if (!context) {
+    throw new Error("Select compound components must be used within a <Select>");
+  }
+  return context;
+};
+
+export interface SelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+
+const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
+  ({ className, children, ...props }, ref) => {
+    const { isOpen, setIsOpen } = useSelect();
     return (
-      <div className="w-full">
-        <select
-          className={cn(
-            "flex h-11 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-50 shadow-soft-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10",
-            error && "border-rose-500 focus:border-rose-500 focus:ring-rose-500/20",
-            className
-          )}
-          ref={ref}
-          {...props}
-        >
-          {options.length > 0
-            ? options.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))
-            : children}
-        </select>
-        {error && (
-          <p className="mt-1 text-xs font-medium text-rose-600 animate-fadeIn">
-            {error}
-          </p>
+      <button
+        ref={ref}
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "flex h-11 w-full items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-50 shadow-soft-sm text-left select-none",
+          isOpen && "border-rose-500 ring-2 ring-rose-500/20",
+          className
         )}
+        {...props}
+      >
+        {children}
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 text-slate-400 transition-transform duration-200 shrink-0 ml-2",
+            isOpen && "rotate-180 text-rose-500"
+          )}
+        />
+      </button>
+    );
+  }
+);
+SelectTrigger.displayName = "SelectTrigger";
+
+export interface SelectValueProps {
+  placeholder?: string;
+}
+
+const SelectValue: React.FC<SelectValueProps> = ({ placeholder = "Pilih..." }) => {
+  const { selectedLabel } = useSelect();
+  return (
+    <span className={cn("truncate", !selectedLabel && "text-slate-400")}>
+      {selectedLabel || placeholder}
+    </span>
+  );
+};
+
+export interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
+  ({ className, children, ...props }, ref) => {
+    const { isOpen } = useSelect();
+    if (!isOpen) return null;
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "absolute left-0 right-0 top-[calc(100%+6px)] z-50 max-h-60 overflow-auto rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft-lg animate-scaleUp",
+          className
+        )}
+        {...props}
+      >
+        {children}
       </div>
     );
   }
 );
-Select.displayName = "Select";
+SelectContent.displayName = "SelectContent";
 
-export { Select };
+const SelectGroup = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn("py-1", className)} {...props} />
+  )
+);
+SelectGroup.displayName = "SelectGroup";
+
+const SelectLabel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn("px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider", className)}
+      {...props}
+    />
+  )
+);
+SelectLabel.displayName = "SelectLabel";
+
+export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: string;
+}
+
+const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
+  ({ className, children, value: itemValue, ...props }, ref) => {
+    const { value, onValueChange, setSelectedLabel } = useSelect();
+    const isSelected = value === itemValue;
+
+    React.useEffect(() => {
+      if (isSelected && typeof children === "string") {
+        setSelectedLabel(children);
+      }
+    }, [isSelected, children, setSelectedLabel]);
+
+    return (
+      <div
+        ref={ref}
+        onClick={() => {
+          if (onValueChange) onValueChange(itemValue);
+          if (typeof children === "string") setSelectedLabel(children);
+        }}
+        className={cn(
+          "flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-xs md:text-sm font-medium transition-colors cursor-pointer select-none my-0.5",
+          isSelected
+            ? "bg-pink-50 text-rose-700 font-bold"
+            : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
+          className
+        )}
+        {...props}
+      >
+        <span className="truncate">{children}</span>
+        {isSelected && <Check className="h-4 w-4 text-rose-600 shrink-0 ml-2" />}
+      </div>
+    );
+  }
+);
+SelectItem.displayName = "SelectItem";
+
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+};

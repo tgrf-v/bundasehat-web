@@ -5,7 +5,18 @@ import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Select } from "@/Components/ui/select";
+import { DatePicker } from "@/Components/ui/date-picker";
+import { Checkbox } from "@/Components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 import { Progress } from "@/Components/ui/progress";
 import { Dialog } from "@/Components/ui/dialog";
 import { Tabs } from "@/Components/ui/tabs";
@@ -78,32 +89,36 @@ export default function DesignSystem() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-xs font-semibold">
-            {/* Emerald Primary */}
-            <div className="p-3.5 rounded-2xl bg-emerald-600 text-white shadow-soft-sm space-y-1">
-              <p className="font-bold">Maternity Emerald</p>
-              <p className="text-[10px] opacity-80">#059669 (Primary)</p>
+            {/* Primary Main Rose */}
+            <div className="p-3.5 rounded-2xl bg-rose-500 text-white shadow-soft-sm space-y-1">
+              <p className="font-bold">Primary Main</p>
+              <p className="text-[10px] opacity-90">#F43F5E (rose-500)</p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-emerald-500 text-white shadow-soft-sm space-y-1">
-              <p className="font-bold">Emerald Light</p>
-              <p className="text-[10px] opacity-80">#10B981</p>
-            </div>
-            <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-900 border border-emerald-200/80 space-y-1">
-              <p className="font-bold">Emerald Soft BG</p>
-              <p className="text-[10px] text-emerald-700">#ECFDF5</p>
+            <div className="p-3.5 rounded-2xl bg-rose-400 text-white shadow-soft-sm space-y-1">
+              <p className="font-bold">Rose Light</p>
+              <p className="text-[10px] opacity-90">#FB7185 (rose-400)</p>
             </div>
 
-            {/* Rose Accent */}
-            <div className="p-3.5 rounded-2xl bg-rose-600 text-white shadow-soft-sm space-y-1">
-              <p className="font-bold">Medical Rose</p>
-              <p className="text-[10px] opacity-80">#E11D48 (Halodoc)</p>
+            {/* Pink Coral */}
+            <div className="p-3.5 rounded-2xl bg-pink-500 text-white shadow-soft-sm space-y-1">
+              <p className="font-bold">Pink Coral</p>
+              <p className="text-[10px] opacity-90">#EC4899 (pink-500)</p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-rose-500 text-white shadow-soft-sm space-y-1">
-              <p className="font-bold">Rose Accent</p>
-              <p className="text-[10px] opacity-80">#F43F5E</p>
+            <div className="p-3.5 rounded-2xl bg-pink-400 text-white shadow-soft-sm space-y-1">
+              <p className="font-bold">Pink Accent</p>
+              <p className="text-[10px] opacity-90">#F472B6 (pink-400)</p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-rose-50 text-rose-900 border border-rose-200/80 space-y-1">
-              <p className="font-bold">Rose Soft BG</p>
-              <p className="text-[10px] text-rose-700">#FFF1F2</p>
+
+            {/* Soft Background */}
+            <div className="p-3.5 rounded-2xl bg-pink-50 text-rose-900 border border-pink-200/80 space-y-1">
+              <p className="font-bold">Soft Background</p>
+              <p className="text-[10px] text-rose-700">#FDF2F8 (pink-50)</p>
+            </div>
+
+            {/* Secondary Maternity Emerald */}
+            <div className="p-3.5 rounded-2xl bg-emerald-600 text-white shadow-soft-sm space-y-1">
+              <p className="font-bold">Maternity Emerald</p>
+              <p className="text-[10px] opacity-90">#059669 (Secondary)</p>
             </div>
           </div>
         </section>
@@ -261,18 +276,23 @@ export default function DesignSystem() {
                 />
               </div>
 
-              {/* Select Dropdown */}
+              {/* Select Dropdown (Shadcn UI Official Compound Component) */}
               <div className="space-y-2">
                 <Label htmlFor="edema_select">Tanda Pembengkakan (Edema)</Label>
-                <Select
-                  id="edema_select"
-                  options={[
-                    { value: "none", label: "Tidak Ada Pembengkakan (Normal)" },
-                    { value: "ringan_kaki", label: "Ringan - Bengkak Pergelangan Kaki" },
-                    { value: "sedang_tungkai", label: "Sedang - Bengkak Tungkai/Betis" },
-                    { value: "berat_wajah_tangan", label: "Berat - Bengkak Wajah & Tangan" },
-                  ]}
-                />
+                <Select defaultValue="none">
+                  <SelectTrigger id="edema_select">
+                    <SelectValue placeholder="Pilih tingkat edema..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Kondisi Fisik Edema</SelectLabel>
+                      <SelectItem value="none">Tidak Ada Pembengkakan (Normal)</SelectItem>
+                      <SelectItem value="ringan_kaki">Ringan - Bengkak Pergelangan Kaki</SelectItem>
+                      <SelectItem value="sedang_tungkai">Sedang - Bengkak Tungkai/Betis</SelectItem>
+                      <SelectItem value="berat_wajah_tangan">Berat - Bengkak Wajah & Tangan</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Error State Simulation Input */}
@@ -292,13 +312,31 @@ export default function DesignSystem() {
                 </div>
               </div>
 
-              {/* Date Input */}
+              {/* DatePicker Component */}
               <div className="space-y-2">
-                <Label htmlFor="hpht_date">Tanggal HPHT</Label>
-                <Input
+                <Label htmlFor="hpht_date">Tanggal HPHT (Shadcn UI DatePicker)</Label>
+                <DatePicker
                   id="hpht_date"
-                  type="date"
+                  placeholder="Pilih tanggal HPHT Bunda..."
                 />
+              </div>
+
+              {/* Checkbox Showcase */}
+              <div className="space-y-2">
+                <Label>Keluhan Fisik (Shadcn UI Checkbox)</Label>
+                <div className="flex flex-col gap-2 pt-1">
+                  <Checkbox id="check1" label="Pusing Berat / Pandangan Kabur" checked={true} />
+                  <Checkbox id="check2" label="Nyeri Ulu Hati (Epigastrium)" checked={false} />
+                </div>
+              </div>
+
+              {/* Radio Group Showcase */}
+              <div className="space-y-2">
+                <Label>Penanganan Medis (Shadcn UI RadioGroup)</Label>
+                <RadioGroup defaultValue="ya" className="flex items-center gap-6 pt-1">
+                  <RadioGroupItem value="ya" id="r1" label="Ya, Sudah Menerima Treatment" />
+                  <RadioGroupItem value="belum" id="r2" label="Belum Ada Treatment" />
+                </RadioGroup>
               </div>
 
             </div>

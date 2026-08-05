@@ -17,7 +17,7 @@ export interface TabsProps {
 
 const Tabs: React.FC<TabsProps> = ({ items, activeTab, onChange, className }) => {
   return (
-    <div className={cn("flex space-x-1 rounded-2xl bg-slate-100/80 p-1.5 border border-slate-200/50 shadow-inner", className)}>
+    <div className={cn("inline-flex items-center space-x-1 rounded-full bg-slate-100/90 p-1 border border-slate-200/60 shadow-inner w-fit", className)}>
       {items.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
@@ -25,9 +25,9 @@ const Tabs: React.FC<TabsProps> = ({ items, activeTab, onChange, className }) =>
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex flex-1 items-center justify-center gap-2 rounded-xl py-2 px-3 text-xs md:text-sm font-semibold transition-all duration-200 select-none",
+              "inline-flex items-center justify-center gap-2 rounded-full py-1.5 px-4 text-xs md:text-sm font-semibold transition-all duration-200 select-none whitespace-nowrap",
               isActive
-                ? "bg-white text-emerald-700 shadow-soft-sm font-bold"
+                ? "bg-white text-rose-600 shadow-soft-sm font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             )}
           >
