@@ -2,242 +2,327 @@ import React, { useState } from "react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
 import { Badge } from "@/Components/ui/badge";
-import { Dialog } from "@/Components/ui/dialog";
+import { Input } from "@/Components/ui/input";
 import { Tabs } from "@/Components/ui/tabs";
-import { KamusItem } from "@/types/screening";
 import {
   BookOpen,
   Search,
-  Sparkles,
+  Video,
   Heart,
-  ChevronRight,
+  Sparkles,
   CheckCircle2,
+  ChevronRight,
+  PlayCircle,
+  FileText,
   AlertTriangle,
   Stethoscope,
 } from "lucide-react";
 
+interface ArticleItem {
+  id: string;
+  letter: string;
+  title: string;
+  category: string;
+  summary: string;
+  firstAid: string;
+}
+
+interface VideoItem {
+  id: string;
+  title: string;
+  category: string;
+  youtubeId: string;
+  duration: string;
+  description: string;
+}
+
+const ARTICLES: ArticleItem[] = [
+  {
+    id: "anemia",
+    letter: "A",
+    title: "Anemia pada Ibu Hamil (Kekurangan Sel Darah Merah)",
+    category: "Komplikasi Umum",
+    summary: "Kondisi di mana kadar hemoglobin (Hb) ibu hamil < 11 g/dL pada trimester 1 & 3, atau < 10.5 g/dL pada trimester 2.",
+    firstAid: "Konsumsi suplemen Tablet Tambah Darah (TTD) bersama vitamin C (jus jeruk), hindari teh/kopi saat minum obat, dan perbanyak bayam & hati ayam.",
+  },
+  {
+    id: "hipertensi",
+    letter: "H",
+    title: "Hipertensi Gestasional (Tekanan Darah Tinggi Kehamilan)",
+    category: "Vaskular",
+    summary: "Tekanan darah sistolik ≥ 140 mmHg atau diastolik ≥ 90 mmHg yang pertama kali muncul setelah usia kehamilan 20 minggu.",
+    firstAid: "Tirah baring (rest) posisi miring ke kiri, batasi asupan garam tinggi, kelola stres dengan relaksasi napas, dan rutin cek tensi mingguan.",
+  },
+  {
+    id: "preeklamsia",
+    letter: "P",
+    title: "Preeklamsia & Tanda Bahaya Epigastrium",
+    category: "Risiko Tinggi (KRST)",
+    summary: "Hipertensi kehamilan disertai proteinuria atau pembengkakan (edema) wajah/tangan serta nyeri ulu hati dan pandangan kabur.",
+    firstAid: "Segera rujukan ke RS / Faskes terdekat. Posisikan ibu miring kiri, longgarkan pakaian, dan hindari kebisingan.",
+  },
+  {
+    id: "perdarahan",
+    letter: "P",
+    title: "Perdarahan Antepartum (Plasenta Previa / Solusio)",
+    category: "Darurat Kebidanan",
+    summary: "Keluarnya darah dari jalan lahir pada usia kehamilan di atas 20 minggu yang bisa menandakan plasenta menutupi jalan lahir.",
+    firstAid: "Tirah baring total, DILARANG melakukan pemeriksaan dalam per vaginam, segera bawa ke IGD Rumah Sakit dengan ambulans.",
+  },
+  {
+    id: "seksio",
+    letter: "S",
+    title: "Seksio Sesarea (SC) & Indikasi Rujukan",
+    category: "Persalinan",
+    summary: "Operasi melahirkan janin melalui insisi dinding perut dan rahim pada kondisi panggul sempit atau posisi janin lintang.",
+    firstAid: "Persiapkan dokumen BPJS/Askes, mintalah pendampingan suami, dan ikuti instruksi puasa pre-operasi dari dokter spesialis.",
+  },
+];
+
+const VIDEOS: VideoItem[] = [
+  {
+    id: "v1",
+    title: "Teknik Pijat Oxytocin Ibu Hamil & Pelancar ASI",
+    category: "Pijat & Relaksasi",
+    youtubeId: "dQw4w9WgXcQ",
+    duration: "08:45",
+    description: "Panduan gerakan pijat sepanjang tulang belakang untuk merangsang hormon oksitosin dan melancarkan persalinan.",
+  },
+  {
+    id: "v2",
+    title: "Senam Hamil Trimester 3 Pelancar Pembukaan Persalinan",
+    category: "Olahraga Bumil",
+    youtubeId: "dQw4w9WgXcQ",
+    duration: "12:30",
+    description: "Gerakan squat ringan dan pelenturan panggul yang aman untuk membantu kepala janin turun ke pintu atas panggul.",
+  },
+  {
+    id: "v3",
+    title: "Terapi Napas Deep Breathing Meredakan Nyeri Kontraksi",
+    category: "Manajemen Nyeri",
+    youtubeId: "dQw4w9WgXcQ",
+    duration: "06:15",
+    description: "Teknik olah napas lambat untuk mengalihkan sensasi nyeri mulas saat pembengkakan edema atau kontraksi persalinan.",
+  },
+];
+
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
 export default function KamusIndex() {
-  const [activeTab, setActiveTab] = useState<string>("semua");
+  const [activeTab, setActiveTab] = useState<string>("artikel");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedArticle, setSelectedArticle] = useState<KamusItem | null>(null);
+  const [selectedLetter, setSelectedLetter] = useState<string>("semua");
+  const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
 
-  const kamusList: KamusItem[] = [
-    {
-      id: 1,
-      judul: "Terapi Perendaman Kaki Air Hangat & Garam Epsom",
-      slug: "terapi-perendaman-kaki-air-hangat-garam-epsom",
-      kategori: "terapi_komplementer",
-      ringkasan: "Terapi non-obat terbukti efektif mengurangi pembengkakan (edema) kaki pada ibu hamil trimester 2 dan 3.",
-      konten:
-        "Perendaman kaki menggunakan air hangat berdesinfektan alami atau garam epsom selama 15-20 menit membantu melancarkan sirkulasi pembuluh darah perifer dan menurunkan retensi cairan ekstremitas bawah.",
-      tingkat_risiko_target: "Sedang",
-      panduan_langkah: [
-        "Siapkan wadah baskom berisi air hangat suam-suam kuku (37-40 derajat Celsius).",
-        "Tambahkan 2 sendok makan garam epsom atau garam murni, aduk hingga larut.",
-        "Rendam kedua kaki hingga di atas pergelangan kaki selama 15-20 menit.",
-        "Keringkan kaki dengan handuk bersih dan posisikan kaki lebih tinggi dari jantung saat berbaring.",
-      ],
-      sumber_referensi: "Jurnal Kebidanan & Terapi Komplementer (Bu Asih et al.)",
-      is_active: true,
-    },
-    {
-      id: 2,
-      judul: "Teknik Relaksasi Napas Dalam & Aromaterapi Lavender",
-      slug: "teknik-relaksasi-napas-dalam-aromaterapi-lavender",
-      kategori: "terapi_komplementer",
-      ringkasan: "Panduan penenang kecemasan dan penstabil tekanan darah ringan secara alami untuk ibu hamil.",
-      konten:
-        "Inhalasi aromaterapi lavender yang dikombinasikan dengan latihan pernapasan diafragma membantu menurunkan regulasi sistem saraf simpatis dan meredakan ketegangan vaskular.",
-      tingkat_risiko_target: "Ringan",
-      panduan_langkah: [
-        "Duduk dalam posisi rileks atau berbaring miring ke kiri.",
-        "Teteskan 2-3 tetes minyak esensial lavender pada diffuser atau sapu tangan.",
-        "Tarik napas perlahan melalui hidung selama 4 hitungan, tahan 2 hitungan, lalu hembuskan lewat mulut selama 6 hitungan.",
-        "Ulangi selama 10-15 menit pada pagi dan malam hari.",
-      ],
-      sumber_referensi: "Panduan Praktik Klinis Kebidanan Terintegrasi",
-      is_active: true,
-    },
-    {
-      id: 3,
-      judul: "Mengenal Preeklamsia & Tanda Bahaya Kehamilan Trimester 3",
-      slug: "mengenal-preeklamsia-tanda-bahaya-kehamilan",
-      kategori: "edukasi",
-      ringkasan: "Edukasi komprehensif mengenai bahaya hipertensi gestasional, bengkak wajah, dan pusing berlebih.",
-      konten:
-        "Preeklamsia adalah kondisi komplikasi kehamilan yang ditandai dengan tekanan darah tinggi (>= 140/90 mmHg) disertai pembengkakan dan atau proteinuria. Penanganan cepat sangat krusial untuk keselamatan ibu dan bayi.",
-      tingkat_risiko_target: "Berat",
-      panduan_langkah: [
-        "Rutin periksakan tekanan darah ke faskes/bidan minimal 1 bulan sekali.",
-        "Segera ke IGD atau Rumah Sakit jika timbul pusing berat tak kunjung hilang atau pandangan kabur.",
-        "Waspadai nyeri ulu hati hebat yang menetap.",
-      ],
-      sumber_referensi: "Kemenkes RI & Ikatan Bidan Indonesia (IBI)",
-      is_active: true,
-    },
-    {
-      id: 4,
-      judul: "Pertolongan Pertama Nyeri Ulu Hati & Sesak Napas Kehamilan",
-      slug: "pertolongan-pertama-nyeri-ulu-hati-sesak-napas",
-      kategori: "pertolongan_pertama",
-      ringkasan: "Langkah darurat awal sebelum ibu hamil dirujuk ke faskes atau rumah sakit.",
-      konten:
-        "Nyeri epigastrium atau ulu hati pada usia kehamilan tua merupakan salah satu tanda bahaya eklamsia. Posisikan ibu hamil secara tepat dan segera hubungi tenaga kesehatan.",
-      tingkat_risiko_target: "Berat",
-      panduan_langkah: [
-        "Baringkan ibu miring ke kiri untuk memaksimalkan aliran darah ke janin.",
-        "Longgarkan pakaian di bagian dada dan perut.",
-        "Jangan berikan makanan/minuman keras secara paksa jika terjadi mual muntah hebat.",
-        "Hubungi Bidan Desa atau bawa segera ke Rumah Sakit terdekat.",
-      ],
-      sumber_referensi: "SOP Kebidanan Darurat Faskes Lanjutan",
-      is_active: true,
-    },
-  ];
-
-  const filteredItems = kamusList.filter((item) => {
+  const filteredArticles = ARTICLES.filter((art) => {
     const matchesSearch =
-      item.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.ringkasan.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      activeTab === "semua" || item.kategori === activeTab;
-    return matchesSearch && matchesCategory;
+      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.summary.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLetter =
+      selectedLetter === "semua" || art.letter.toUpperCase() === selectedLetter;
+    return matchesSearch && matchesLetter;
   });
 
   return (
     <BundaSehatLayout activeNav="kamus">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
         
-        {/* Page Header & Search Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
-          <div>
-            <Badge variant="outline" className="mb-1.5 gap-1.5">
-              <BookOpen className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Edukasi & Konseling Kebidanan</span>
-            </Badge>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
-              Kamus Kesehatan & Terapi Komplementer
-            </h1>
-            <p className="text-xs md:text-sm text-slate-500 mt-1">
-              Panduan pengetahuan seputar komplikasi kehamilan & tata cara pereda gejala non-obat
-            </p>
-          </div>
-
-          <div className="w-full md:w-72">
-            <div className="relative">
-              <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
-              <Input
-                placeholder="Cari terapi / edukasi..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 text-xs"
-              />
-            </div>
-          </div>
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <Badge variant="rose" className="gap-1.5 mb-1">
+            <BookOpen className="h-3.5 w-3.5" />
+            <span>Kamus Kesehatan & Edukasi Terapi</span>
+          </Badge>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            Katalog Medis & Terapi Komplementer Non-Obat
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 max-w-lg mx-auto">
+            Pelajari istilah komplikasi kehamilan A-Z dan tonton video panduan terapi fisik mandiri yang aman untuk Ibu Hamil
+          </p>
         </div>
 
-        {/* Category Tabs Filter */}
-        <Tabs
-          activeTab={activeTab}
-          onChange={setActiveTab}
-          items={[
-            { id: "semua", label: "Semua Panduan", count: kamusList.length },
-            { id: "terapi_komplementer", label: "Terapi Komplementer", count: 2 },
-            { id: "edukasi", label: "Edukasi Kebidanan", count: 1 },
-            { id: "pertolongan_pertama", label: "Pertolongan Pertama", count: 1 },
-          ]}
-        />
+        {/* Tabs Switcher: Artikel A-Z vs Video Terapi Komplementer */}
+        <div className="flex justify-center">
+          <Tabs
+            items={[
+              { id: "artikel", label: "Kamus Kesehatan A-Z", icon: <FileText className="h-4 w-4" /> },
+              { id: "terapi", label: "Video Terapi Komplementer", icon: <Video className="h-4 w-4" /> },
+            ]}
+            activeTab={activeTab}
+            onChange={(id) => setActiveTab(id)}
+          />
+        </div>
 
-        {/* Articles & Therapy Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredItems.map((item) => (
-            <Card
-              key={item.id}
-              className="border-slate-200/80 hover:border-emerald-300 transition-all duration-300 shadow-soft-sm hover:shadow-soft-md cursor-pointer flex flex-col justify-between"
-              onClick={() => setSelectedArticle(item)}
-            >
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <Badge variant={item.kategori === "terapi_komplementer" ? "default" : "outline"} className="text-[10px]">
-                    {item.kategori === "terapi_komplementer"
-                      ? "Terapi Komplementer"
-                      : item.kategori === "edukasi"
-                      ? "Edukasi Kebidanan"
-                      : "Pertolongan Pertama"}
-                  </Badge>
+        {/* TAB 1: ARTIKEL KESEHATAN A-Z */}
+        {activeTab === "artikel" && (
+          <div className="space-y-6 animate-fadeIn">
+            
+            {/* Search Bar & Alphabet Filter (Halodoc Style) */}
+            <div className="space-y-4">
+              <div className="relative max-w-xl mx-auto">
+                <Search className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                <Input
+                  placeholder="Cari istilah komplikasi (misal: preeklamsia, anemia, hipertensi)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-11 pr-4"
+                />
+              </div>
 
-                  <Badge
-                    variant={
-                      item.tingkat_risiko_target === "Berat"
-                        ? "berat"
-                        : item.tingkat_risiko_target === "Sedang"
-                        ? "sedang"
-                        : "ringan"
-                    }
-                    className="text-[10px]"
+              {/* Alphabet Filter Pills */}
+              <div className="flex items-center justify-center flex-wrap gap-1 max-w-3xl mx-auto pt-1">
+                <button
+                  onClick={() => setSelectedLetter("semua")}
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                    selectedLetter === "semua"
+                      ? "bg-rose-500 text-white shadow-soft-sm"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  Semua (A-Z)
+                </button>
+                {ALPHABET.map((char) => (
+                  <button
+                    key={char}
+                    onClick={() => setSelectedLetter(char)}
+                    className={`h-7 w-7 rounded-full text-xs font-bold transition-all flex items-center justify-center ${
+                      selectedLetter === char
+                        ? "bg-rose-500 text-white shadow-soft-sm"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
                   >
-                    Risiko {item.tingkat_risiko_target}
-                  </Badge>
-                </div>
-
-                <CardTitle className="text-base font-bold text-slate-900 leading-snug hover:text-emerald-700 transition-colors">
-                  {item.judul}
-                </CardTitle>
-              </CardHeader>
-
-              <CardContent className="py-2 text-xs text-slate-600 leading-relaxed">
-                {item.ringkasan}
-              </CardContent>
-
-              <div className="p-4 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-600">
-                <span>Buka Panduan Langkah</span>
-                <ChevronRight className="h-4 w-4" />
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* Article Detail Modal / Dialog */}
-        {selectedArticle && (
-          <Dialog
-            isOpen={!!selectedArticle}
-            onClose={() => setSelectedArticle(null)}
-            title={selectedArticle.judul}
-            description={`Kategori: ${selectedArticle.kategori.replace("_", " ")} | Sumber: ${selectedArticle.sumber_referensi}`}
-          >
-            <div className="space-y-4 pt-2">
-              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 text-xs text-emerald-900 font-medium">
-                {selectedArticle.konten}
-              </div>
-
-              {selectedArticle.panduan_langkah && selectedArticle.panduan_langkah.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                    <Sparkles className="h-4 w-4 text-emerald-600" />
-                    <span>Panduan Langkah Praktis:</span>
-                  </h4>
-                  <ol className="space-y-2 text-xs text-slate-700">
-                    {selectedArticle.panduan_langkah.map((step, idx) => (
-                      <li key={idx} className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                        <span className="h-5 w-5 rounded-full bg-emerald-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
-                          {idx + 1}
-                        </span>
-                        <span>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-
-              <div className="pt-3 border-t border-slate-100 flex justify-end">
-                <Button variant="default" size="sm" onClick={() => setSelectedArticle(null)}>
-                  Tutup Panduan
-                </Button>
+                    {char}
+                  </button>
+                ))}
               </div>
             </div>
-          </Dialog>
+
+            {/* Article Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredArticles.map((article) => (
+                <Card
+                  key={article.id}
+                  className="p-5 rounded-3xl border-slate-100 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer bg-white space-y-3"
+                  onClick={() => setSelectedArticle(article)}
+                >
+                  <div className="flex items-center justify-between">
+                    <Badge variant="rose" className="text-[10px] font-bold">
+                      {article.category}
+                    </Badge>
+                    <span className="h-6 w-6 rounded-full bg-pink-50 text-rose-600 font-black text-xs flex items-center justify-center">
+                      {article.letter}
+                    </span>
+                  </div>
+
+                  <h3 className="font-extrabold text-slate-900 text-base leading-snug">
+                    {article.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                    {article.summary}
+                  </p>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-rose-600">
+                    <span>Baca Pertolongan Pertama</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            {/* Article Detail Modal Dialog */}
+            {selectedArticle && (
+              <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+                <Card className="max-w-lg w-full rounded-3xl bg-white p-6 space-y-4 shadow-soft-lg">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <Badge variant="rose">{selectedArticle.category}</Badge>
+                    <button
+                      onClick={() => setSelectedArticle(null)}
+                      className="text-xs font-bold text-slate-400 hover:text-slate-700 p-1"
+                    >
+                      Tutup [X]
+                    </button>
+                  </div>
+
+                  <h3 className="font-extrabold text-slate-900 text-lg">
+                    {selectedArticle.title}
+                  </h3>
+
+                  <div className="space-y-3 text-xs text-slate-700">
+                    <div>
+                      <span className="font-bold text-slate-900 block mb-1">Pengertian & Gejala:</span>
+                      <p className="leading-relaxed text-slate-600">{selectedArticle.summary}</p>
+                    </div>
+
+                    <div className="p-3.5 rounded-2xl bg-pink-50 border border-pink-100 space-y-1 text-rose-950">
+                      <span className="font-extrabold text-rose-900 flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4 text-rose-600 shrink-0" />
+                        <span>Pertolongan Pertama Mandiri:</span>
+                      </span>
+                      <p className="leading-relaxed text-slate-800 font-medium pl-5">
+                        {selectedArticle.firstAid}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button variant="default" size="sm" onClick={() => setSelectedArticle(null)}>
+                      Mengerti & Tutup
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* TAB 2: VIDEO TERAPI KOMPLEMENTER (NON-OBAT) */}
+        {activeTab === "terapi" && (
+          <div className="space-y-6 animate-fadeIn">
+            
+            <div className="p-4 rounded-3xl bg-pink-50 border border-pink-100 flex items-center gap-3 text-xs text-rose-900">
+              <Sparkles className="h-5 w-5 text-rose-600 shrink-0" />
+              <div>
+                <strong className="font-extrabold block">Apa itu Terapi Komplementer?</strong>
+                <span>Metode pendamping non-farmakologi (seperti pijat oxytocin, aromaterapi, dan senam panggul) yang aman membantu memperlancar persalinan dan meredakan kecemasan.</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {VIDEOS.map((vid) => (
+                <Card key={vid.id} className="rounded-3xl border-slate-100 overflow-hidden shadow-soft-sm bg-white space-y-3">
+                  {/* Embedded Video Placeholder / Player */}
+                  <div className="relative aspect-video bg-slate-900 flex items-center justify-center group cursor-pointer">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${vid.youtubeId}`}
+                      title={vid.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="rose" className="text-[10px]">{vid.category}</Badge>
+                      <span className="text-[11px] font-bold text-slate-400">{vid.duration}</span>
+                    </div>
+
+                    <h4 className="font-extrabold text-slate-900 text-sm leading-snug">
+                      {vid.title}
+                    </h4>
+
+                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                      {vid.description}
+                    </p>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+          </div>
         )}
 
       </div>

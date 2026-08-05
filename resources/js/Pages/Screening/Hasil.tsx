@@ -35,11 +35,13 @@ export default function HasilScreening() {
         setResult(null);
       }
     } else {
-      // Mock Fallback Result jika diakses langsung
       setResult({
         kode_screening: "SCR-20260805-7782",
         skor_poedji_rochjati: 10,
+        total_skor: 10,
         tingkat_risiko: "Sedang",
+        kategori_risiko: "KRT",
+        status_label: "🟨 Risiko Tinggi / Sedang (KRT)",
         map_value: 96.33,
         potensi_komplikasi: [
           "Pre-Hipertensi Gestasional",
@@ -48,7 +50,20 @@ export default function HasilScreening() {
         ],
         rekomendasi_faskes:
           "Dapat Dilayani di Puskesmas / Rumah Sakit Type C dengan Pendampingan Bidan & Dokter Umum.",
+        rekomendasi_tempat: "Puskesmas Rawat Inap / PONED",
+        penolong_persalinan: "Bidan & Dokter Umum",
+        taksiran_hpl: "18 November 2026",
         saran_terapi_ids: [1, 2],
+        saran_terapi: [
+          "Kompres Warm Compress pada leher & pundak",
+          "Teknik Pernapasan Deep Breathing Relaksasi",
+          "Pijat Oxytocin Tulang Belakang (Bantuan Suami)"
+        ],
+        detail_skor: [
+          { deskripsi: "Skor Awal Ibu Hamil", skor: 2 },
+          { deskripsi: "Pre-Hipertensi Gestasional", skor: 4 },
+          { deskripsi: "Edema Ekstremitas Ringan", skor: 4 }
+        ],
         input_summary: {
           nama_pasien: "Ibu Rahma Rahayu",
           umur: 28,
@@ -62,6 +77,7 @@ export default function HasilScreening() {
           tipe_screening: "kehamilan",
           wilayah_puskesmas: "Puskesmas Wilayah 1",
         },
+        nama_pasien: "Ibu Rahma Rahayu",
         created_at: "5 Agustus 2026, 14:30 WIB",
       });
     }
@@ -77,7 +93,7 @@ export default function HasilScreening() {
   const isSedang = result.tingkat_risiko === "Sedang";
 
   return (
-    <BundaSehatLayout activeNav="admin">
+    <BundaSehatLayout activeNav="kehamilan">
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
         
         {/* Header Output Title */}

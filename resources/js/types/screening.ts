@@ -31,15 +31,29 @@ export interface ScreeningInput {
 
 export type RiskLevel = 'Ringan' | 'Sedang' | 'Berat';
 
+export interface DetailSkorFactor {
+  deskripsi: string;
+  skor: number;
+}
+
 export interface ScreeningResult {
   kode_screening: string;
   skor_poedji_rochjati: number;
+  total_skor: number;
   tingkat_risiko: RiskLevel;
+  kategori_risiko: 'KRR' | 'KRT' | 'KRST';
+  status_label: string;
   map_value: number;
   potensi_komplikasi: string[];
   rekomendasi_faskes: string;
+  rekomendasi_tempat: string;
+  penolong_persalinan: string;
+  taksiran_hpl?: string;
   saran_terapi_ids: number[];
+  saran_terapi: string[];
+  detail_skor: DetailSkorFactor[];
   input_summary: ScreeningInput;
+  nama_pasien?: string;
   created_at: string;
 }
 
