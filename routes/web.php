@@ -8,6 +8,11 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('welcome');
 
+// Form Login
+Route::get('/login', function () {
+    return Inertia::render('Auth/Login');
+})->name('login');
+
 // Beranda (Setelah Login)
 Route::get('/beranda', function () {
     return Inertia::render('Beranda');

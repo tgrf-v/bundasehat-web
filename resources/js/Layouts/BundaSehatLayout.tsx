@@ -187,13 +187,13 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           {/* Right Action Button */}
           <div className="flex items-center gap-3">
             {!isLoggedIn ? (
-              <button
-                onClick={() => toggleAuthMode(true)}
+              <Link
+                href="/login"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-rose-500 text-white text-xs font-bold shadow-soft-sm hover:bg-rose-600 transition-all active:scale-95"
               >
                 <LogIn className="h-4 w-4" />
                 <span>Masuk / Login</span>
-              </button>
+              </Link>
             ) : (
               <div className="flex items-center gap-3">
                 <Link
