@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
-import { Button } from "@/Components/ui/button";
+import { Card } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
 import { Progress } from "@/Components/ui/progress";
 import {
   Activity,
-  Heart,
   BookOpen,
   User,
   Stethoscope,
   ChevronRight,
   Sparkles,
-  AlertTriangle,
   CheckCircle2,
-  Calendar,
   RefreshCw,
   Plus,
-  Video,
 } from "lucide-react";
 import { ScreeningResult } from "@/types/screening";
 
@@ -42,8 +37,13 @@ export default function Beranda() {
         
         {/* Profile Greeting Banner */}
         <div className="rounded-3xl bg-gradient-to-r from-rose-500 to-pink-500 text-white p-6 md:p-8 shadow-soft-md relative overflow-hidden">
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="space-y-1">
+          {/* Background Ambient Glow */}
+          <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            
+            {/* Left Info */}
+            <div className="space-y-2 max-w-xl">
               <Badge variant="rose" className="bg-white/20 text-white border-white/30 backdrop-blur-sm gap-1.5 py-0.5 px-3">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Status Akun Pasien Aktif</span>
@@ -54,15 +54,27 @@ export default function Beranda() {
               <p className="text-xs md:text-sm text-pink-100 font-medium">
                 Puskesmas Wilayah 1 &bull; HPHT: 12 Oktober 2025
               </p>
+
+              <div className="pt-2">
+                <Link
+                  href="/screening/kehamilan"
+                  className="px-5 py-2.5 rounded-full bg-white text-rose-600 font-extrabold text-xs shadow-soft-sm hover:bg-pink-50 transition-all shrink-0 inline-flex items-center gap-1.5"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Screening Kehamilan</span>
+                </Link>
+              </div>
             </div>
 
-            <Link
-              href="/screening/kehamilan"
-              className="px-5 py-2.5 rounded-full bg-white text-rose-600 font-extrabold text-xs shadow-soft-sm hover:bg-pink-50 transition-all shrink-0 flex items-center gap-1.5"
-            >
-              <Plus className="h-4 w-4" />
-              <span>Screening Kehamilan</span>
-            </Link>
+            {/* Right Woman Illustration */}
+            <div className="hidden sm:block shrink-0">
+              <img
+                src="/pregnant-woman.svg"
+                alt="Ilustrasi Ibu Hamil"
+                className="h-36 md:h-44 w-auto object-contain drop-shadow-xl hover:scale-105 transition-transform"
+              />
+            </div>
+
           </div>
         </div>
 

@@ -6,39 +6,43 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 
 ## ⛔ ATURAN KETAT (MUST FOLLOW AT ALL TIMES)
 
-### 1. No Auto-Commit / Auto-Push (DILARANG SANGAT KERAS)
+### 1. DILARANG LANGSUNG EDIT KODE SAAT USER BERTANYA / DISKUSI (SANGAT KETAT)
+- **DILARANG KERAS** langsung melakukan edit/modifikasi file kode ketika prompt user bersifat bertanya, berdiskusi, menganalisis, atau menggunakan frasa seperti *"aku tanya aja nih"*, *"kenapa bisa begini"*, *"menurutmu gimana"*, atau sejenisnya!
+- **WAJIB** selalu menjawab, menjelaskan, atau memberikan analisis terlebih dahulu dan **MENUNGGU KONFIRMASI / INSTRUKSI EKSPLISIT** dari user sebelum melakukan perubahan kode apa pun pada file proyek.
+
+### 2. No Auto-Commit / Auto-Push (DILARANG SANGAT KERAS)
 - **DILARANG KERAS** menjalankan perintah `git add`, `git commit`, `git push`, atau perintah Git apa pun secara otomatis!
 - **WAJIB** menunggu instruksi atau izin eksplisit dari user sebelum mengeksekusi perintah Git apa pun.
 
-### 2. Strictly No Emoji Icons
+### 3. Strictly No Emoji Icons
 - **DILARANG KERAS** menggunakan Unicode emoji (seperti 🚀, 💡, ⚙️, ❌, 🩺) sebagai ikon pada UI/komponen.
 - **WAJIB** selalu menggunakan pustaka ikon resmi `lucide-react`.
 
-### 3. Button Styling Rule
-- Semua tombol (Button) **WAJIB** menggunakan gaya melengkung sempurna (`rounded-full`).
+### 4. Button & Control Styling Rule
+- Semua tombol (Button), Input text, Select trigger, dan DatePicker **WAJIB** menggunakan gaya melengkung sempurna (`rounded-full`).
 
-### 4. Modern Component Library First
+### 5. Modern Component Library First
 - Prioritaskan penggunaan Tailwind CSS dengan komponen berbasis **Shadcn UI** yang diletakkan di `resources/js/Components/ui/`.
 - Hindari gaya HTML native yang terlihat seperti template default.
 
-### 5. States Matter (Loading, Empty, & Error State)
+### 6. States Matter (Loading, Empty, & Error State)
 - Selalu buatkan visual yang jelas untuk **Loading State** (spinner/skeleton), **Empty State** (jika data kosong), dan **Error State** (jika validasi/API gagal) pada komponen yang mengambil atau memproses data.
 
-### 6. No Truncated Code
+### 7. No Truncated Code
 - Selalu tulis kode secara lengkap dari awal hingga akhir.
 - **DILARANG** memotong kode dengan komentar seperti `// ... rest of the code` atau `// TODO: implement logic`.
 
-### 7. TypeScript Strictness
+### 8. TypeScript Strictness
 - Hindari penggunaan tipe `any`. Definisikan `interface` atau `type` eksplisit di `resources/js/types/` untuk setiap props, state, dan respons API.
 
-### 8. Modular Components
+### 9. Modular Components
 - Pecah kode ke dalam komponen-komponen kecil yang memiliki fungsi tunggal (*Single Responsibility Principle*).
-- Jaga file komponen agar tidak terlalu panjang (&lt;200 baris per file).
+- Jaga file komponen agar tidak terlalu panjang (<200 baris per file).
 
-### 9. Defensive Coding
+### 10. Defensive Coding
 - Selalu sertakan error handling (`try-catch`, `null`/`undefined` check) pada kalkulasi skoring, HPHT, MAP, atau pemanggilan API.
 
-### 10. Brief Context After Code
+### 11. Brief Context After Code
 - Berikan penjelasan perubahan kode secara singkat dan to-the-point di **BAWAH** blok kode, bukan sebelum kode.
 
 ---
