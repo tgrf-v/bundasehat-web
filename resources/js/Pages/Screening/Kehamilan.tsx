@@ -17,6 +17,7 @@ import {
 import { Badge } from "@/Components/ui/badge";
 import { Progress } from "@/Components/ui/progress";
 import { ScrollArea } from "@/Components/ui/scroll-area";
+import { Separator } from "@/Components/ui/separator";
 import { ScreeningInput, EdemaLevel, ScreeningResult } from "@/types/screening";
 import { calculateGestationalAge, calculateMAP, evaluateScreening } from "@/lib/scoringEngine";
 import {
@@ -187,9 +188,6 @@ export default function KehamilanScreening() {
               
               {/* Header Kolom Kanan */}
               <div className="mb-6">
-                <span className="bg-teal-50 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full w-fit mb-3 inline-block">
-                  Deteksi Dini Risk
-                </span>
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
                   Deteksi Dini Komplikasi Kehamilan
                 </h1>
@@ -202,104 +200,117 @@ export default function KehamilanScreening() {
 
               {/* Dynamic Area: Form 3-Step atau Result View */}
               {hasScreened && screeningResult ? (
-                /* CONDITION 1: SUDAH SCREENED -> DISPLAY RESULT VIEW */
+                /* CONDITION 1: SUDAH SCREENED -> DISPLAY RESULT VIEW (STYLED FROM BERANDA.TSX & REFERENCE IMAGE) */
                 <div className="space-y-5 animate-fadeIn">
                   
-                  <div className="border border-slate-200 bg-white rounded-none overflow-hidden">
-                    <div
-                      className={`p-5 text-white ${
-                        screeningResult.kategori_risiko === "KRR"
-                          ? "bg-emerald-600"
-                          : screeningResult.kategori_risiko === "KRT"
-                          ? "bg-amber-500"
-                          : "bg-rose-600"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <div>
-                          <span className="text-[11px] font-bold uppercase tracking-wider opacity-90 block">Kategori Risiko Kehamilan:</span>
-                          <h2 className="text-xl sm:text-2xl font-bold mt-0.5">
-                            {screeningResult.status_label}
-                          </h2>
-                        </div>
-
-                        <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-xl">
-                          {screeningResult.total_skor}
-                        </div>
-                      </div>
-
-                      <div className="mt-3 pt-3 border-t border-white/20 flex flex-wrap justify-between gap-2 text-xs">
-                        <span>Nama Pasien: <strong>{screeningResult.nama_pasien}</strong></span>
-                        <span>Skor KSPR: <strong>{screeningResult.total_skor} Poin</strong></span>
-                        <span>Tensi: <strong>{formData.sistolik}/{formData.diastolik} mmHg</strong></span>
-                      </div>
-                    </div>
-
-                    <div className="p-5 space-y-5">
-                      
-                      {/* Rekomendasi Faskes & Rujukan */}
-                      <div className="p-3.5 rounded-xl bg-pink-50/70 border border-pink-100 space-y-1">
-                        <h4 className="font-bold text-rose-900 text-xs flex items-center gap-2">
-                          <Stethoscope className="h-4 w-4 text-rose-600" />
-                          <span>Rekomendasi Tempat & Penolong Persalinan</span>
-                        </h4>
-                        <p className="text-xs text-slate-700 leading-relaxed pl-6 font-semibold">
-                          {screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})
-                        </p>
-                      </div>
-
-                      {/* Rincian Faktor Risiko */}
-                      <div className="space-y-2">
-                        <h4 className="font-bold text-slate-900 text-xs">Rincian Faktor Risiko Terdeteksi:</h4>
-                        <div className="space-y-1.5">
-                          {screeningResult.detail_skor.map((factor, idx) => (
-                            <div key={idx} className="p-2.5 rounded-lg bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
-                              <span className="font-medium text-slate-800">{factor.deskripsi}</span>
-                              <Badge variant="rose" className="font-bold text-[11px]">+{factor.skor} Poin</Badge>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Terapi Komplementer Non-Obat Khusus Hasil Screening */}
-                      <div className="space-y-2 pt-1">
-                        <h4 className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                          <Heart className="h-4 w-4 text-rose-600" />
-                          <span>Saran Terapi Komplementer Non-Obat Khusus Bunda</span>
-                        </h4>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                          {screeningResult.saran_terapi.map((terapi, idx) => (
-                            <div key={idx} className="p-3 rounded-xl bg-pink-50/50 border border-pink-100 space-y-1 text-xs">
-                              <p className="font-bold text-rose-900 flex items-center gap-1.5">
-                                <CheckCircle2 className="h-3.5 w-3.5 text-rose-600 shrink-0" />
-                                <span>{terapi}</span>
-                              </p>
-                              <p className="text-[11px] text-slate-600 leading-relaxed pl-5">
-                                Metode aman non-farmakologi untuk meredakan ketegangan dan mengoptimalkan kondisi fisik ibu hamil.
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                    </div>
-
-                    {/* Bottom Rescreen Action */}
-                    <div className="border-t border-slate-100 p-4 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3">
-                      <p className="text-xs text-slate-500">
-                        Usia kehamilan bertambah atau ada perubahan gejala minggu ini?
+                  {/* Card 1: Level Risiko & Tri-Color Risk Gauge Meter */}
+                  <Card className="border border-slate-200/80 shadow-soft-sm bg-white rounded-2xl p-6 sm:p-7 space-y-5 text-center">
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium text-slate-500">
+                        Level risiko Ibu Hamil, <span className="font-semibold text-slate-700">{formData.umur || 28} thn</span>
                       </p>
+                      <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
+                        screeningResult.kategori_risiko === "KRR"
+                          ? "text-emerald-700"
+                          : screeningResult.kategori_risiko === "KRT"
+                          ? "text-amber-600"
+                          : "text-rose-600"
+                      }`}>
+                        {screeningResult.status_label}
+                      </h2>
+                    </div>
 
-                      <Button
+                    {/* Tri-Color Segmented Gauge Bar (Hijau-Kuning-Merah) with Black Pin Marker */}
+                    <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
+                      <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
+                        <div className="flex-1 bg-[#64B565]" />
+                        <div className="flex-1 bg-[#F7D154]" />
+                        <div className="flex-1 bg-[#F83838]" />
+                      </div>
+
+                      {/* Floating Black Score Pin Pointer */}
+                      {(() => {
+                        const score = screeningResult.total_skor || 2;
+                        const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
+                        return (
+                          <div
+                            className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
+                            style={{ left: `${percent}%` }}
+                          >
+                            <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
+                            <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
+                              {score}
+                            </div>
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    <p className="text-xs text-slate-500 leading-relaxed font-medium max-w-sm mx-auto">
+                      Skor KSPR: <strong className="text-slate-800 font-bold">{screeningResult.total_skor} Poin</strong> • Tensi: <strong className="text-slate-800 font-bold">{formData.sistolik}/{formData.diastolik} mmHg</strong> (MAP: {calculateMAP(formData.sistolik, formData.diastolik)} mmHg)
+                    </p>
+
+                    {/* Bottom Link Actions (Lihat Perhitungan & Cek Ulang) */}
+                    <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-2 text-xs font-bold text-rose-600">
+                      <a href="#rincian-faktor" className="hover:text-rose-700 transition-colors">
+                        Lihat Perhitungan
+                      </a>
+
+                      <button
                         type="button"
-                        variant="rose"
                         onClick={handleRescreen}
-                        className="w-full sm:w-auto gap-2 font-bold shadow-soft-sm text-xs"
+                        className="hover:text-rose-700 flex items-center gap-1.5 transition-colors"
                       >
                         <RefreshCw className="h-3.5 w-3.5" />
-                        <span>Lakukan Screening Ulang</span>
-                      </Button>
+                        <span>Cek Ulang</span>
+                      </button>
+                    </div>
+                  </Card>
+
+                  {/* Card 2: Rekomendasi Tempat & Penolong Persalinan */}
+                  <Card className="p-4 sm:p-5 rounded-2xl bg-pink-50/60 border border-pink-100/80 space-y-1.5 text-left shadow-soft-xs">
+                    <h4 className="font-bold text-rose-900 text-sm sm:text-base">
+                      Rekomendasi Tempat & Penolong Persalinan
+                    </h4>
+                    <p className="text-xs text-slate-700 leading-relaxed font-semibold">
+                      {screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})
+                    </p>
+                  </Card>
+
+                  {/* Card 3: Rincian Faktor Risiko Terdeteksi */}
+                  <div id="rincian-faktor" className="space-y-2 pt-1">
+                    <h4 className="font-bold text-slate-900 text-sm sm:text-base mb-1">Rincian Faktor Risiko Terdeteksi:</h4>
+                    <div className="space-y-1.5">
+                      {screeningResult.detail_skor.map((factor, idx) => (
+                        <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
+                          <span className="font-medium text-slate-800">{factor.deskripsi}</span>
+                          <span className="font-bold text-rose-600 text-xs shrink-0">+ {factor.skor} Poin</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Card 4: Saran Terapi Komplementer Non-Obat Khusus Bunda (Pola List Clean dengan Shadcn Separator) */}
+                  <div className="space-y-3 pt-2">
+                    <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                      <Heart className="h-4.5 w-4.5 text-rose-600 shrink-0" />
+                      <span>Saran Terapi Komplementer Non-Obat Khusus Bunda</span>
+                    </h4>
+
+                    <div className="space-y-2 pl-6 sm:pl-6.5">
+                      {screeningResult.saran_terapi.map((terapi, idx) => (
+                        <React.Fragment key={idx}>
+                          {idx > 0 && <Separator className="my-2 bg-slate-200/70" />}
+                          <div className="text-xs py-0.5 space-y-0.5">
+                            <p className="font-bold text-slate-900 text-xs">
+                              {terapi}
+                            </p>
+                            <p className="text-[11px] text-slate-500 leading-relaxed">
+                              Metode aman non-farmakologi untuk meredakan ketegangan dan mengoptimalkan kondisi fisik ibu hamil.
+                            </p>
+                          </div>
+                        </React.Fragment>
+                      ))}
                     </div>
                   </div>
 
