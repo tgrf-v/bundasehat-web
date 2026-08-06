@@ -168,8 +168,8 @@ export default function KehamilanScreening() {
         <div className="w-full mx-auto bg-white rounded-none border border-slate-200 overflow-hidden lg:h-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
             
-            {/* Kolom Kiri (Gambar Locked / Static) */}
-            <div className="relative lg:col-span-5 h-[240px] lg:h-full overflow-hidden">
+            {/* Kolom Kiri (Gambar Locked / Static - 50%) */}
+            <div className="relative lg:col-span-6 h-[240px] lg:h-full overflow-hidden">
               <img
                 src="/images/pregnancy-screening.jpg"
                 alt="Screening Kehamilan"
@@ -181,8 +181,8 @@ export default function KehamilanScreening() {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white lg:hidden" />
             </div>
 
-            {/* Kolom Kanan (Konten Utama & Form Screening - Scrollable Shadcn ScrollArea) */}
-            <ScrollArea className="lg:col-span-7 h-full">
+            {/* Kolom Kanan (Konten Utama & Form Screening - 50% - Scrollable Shadcn ScrollArea) */}
+            <ScrollArea className="lg:col-span-6 h-full">
               <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
               
               {/* Header Kolom Kanan */}
