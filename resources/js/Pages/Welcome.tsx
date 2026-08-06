@@ -167,59 +167,7 @@ export default function Welcome() {
           </div>
         </section>
 
-        {/* SECTION 1: ALASAN MENGGUNAKAN BUNDASEHAT (FULL WIDTH / EDGE-TO-EDGE) */}
-        <section id="alasan" className="w-full bg-slate-50 py-16 sm:py-24 border-b border-slate-100">
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
-            
-            <div className="text-center space-y-3 mb-12">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900">
-                Solusi Kebidanan Cerdas Pencegah Komplikasi
-              </h2>
-              <p className="text-xs sm:text-sm md:text-base text-slate-500 max-w-xl mx-auto">
-                Dirancang khusus untuk mendukung pendampingan ibu hamil dengan standar ilmiah dan pemantauan berlapis
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              
-              {/* Card 1 */}
-              <Card className="p-6 sm:p-8 rounded-3xl border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all bg-white">
-                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center font-bold mb-4">
-                  <Activity className="h-6 w-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-lg mb-2">Skoring KSPR Adaptif</h3>
-                <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
-                  Mengintegrasikan Kartu Skor Poedji Rochjati (KSPR) untuk mengelompokkan risiko menjadi Risiko Ringan (KRR), Risiko Sedang (KRT), dan Risiko Berat (KRST).
-                </p>
-              </Card>
-
-              {/* Card 2 */}
-              <Card className="p-6 sm:p-8 rounded-3xl border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all bg-white">
-                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold mb-4">
-                  <HelpCircle className="h-6 w-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-lg mb-2">Pencegahan Bias Treatment</h3>
-                <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
-                  Memastikan hasil skoring tidak bias oleh obat-obatan awal yang sudah diminum (seperti obat tensi/anti-hypertension) agar rekomendasi faskes tetap akurat.
-                </p>
-              </Card>
-
-              {/* Card 3 */}
-              <Card className="p-6 sm:p-8 rounded-3xl border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all bg-white">
-                <div className="h-12 w-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold mb-4">
-                  <Heart className="h-6 w-6" />
-                </div>
-                <h3 className="font-extrabold text-slate-900 text-lg mb-2">Terapi Komplementer Non-Obat</h3>
-                <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
-                  Memberikan saran intervensi pendamping seperti pijat oxytocin, kompres hangat, dan aromaterapi yang disesuaikan dengan kondisi risiko fisik spesifik ibu.
-                </p>
-              </Card>
-
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION 2: FITUR-FITUR DALAM WEB INI (WHITE ACCORDION STYLE) */}
+        {/* SECTION FITUR (LAYANAN & FITUR UNGGULAN RADIX ACCORDION) */}
         <section id="fitur" className="w-full bg-white text-slate-900 py-16 sm:py-24">
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
@@ -231,7 +179,7 @@ export default function Welcome() {
 
             {/* Accordion Fitur Kebidanan Clean Style */}
             <div className="w-full">
-              <Accordion defaultValue="item-1">
+              <Accordion type="single" collapsible defaultValue="item-1">
                 
                 {/* Accordion Item 1 */}
                 <AccordionItem value="item-1">
@@ -257,7 +205,7 @@ export default function Welcome() {
                 {/* Accordion Item 2 */}
                 <AccordionItem value="item-2">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
                       <Stethoscope className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -278,7 +226,7 @@ export default function Welcome() {
                 {/* Accordion Item 3 */}
                 <AccordionItem value="item-3">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
                       <BookOpen className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -299,7 +247,7 @@ export default function Welcome() {
                 {/* Accordion Item 4 */}
                 <AccordionItem value="item-4">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
                       <Video className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-extrabold text-slate-900">
