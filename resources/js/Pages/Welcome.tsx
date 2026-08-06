@@ -270,57 +270,75 @@ export default function Welcome() {
           </div>
         </section>
 
-        {/* SECTION 3: TENTANG KAMI */}
+        {/* SECTION 3: TENTANG KAMI (ALTERNATING 2-ROW LAYOUT LIKE REFERENCE) */}
         <section id="tentang" className="w-full bg-white py-16 sm:py-24">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
             
             {/* Section Title */}
             <div className="text-center">
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
-                Tentang Platform BundaSehat
+                Tentang Kami
               </h2>
             </div>
 
-            {/* About Card Content */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-10 space-y-6 shadow-soft-sm">
-              <div className="flex items-center gap-3 border-b border-slate-200/60 pb-4">
-                <div className="h-12 w-12 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 shrink-0">
-                  <ShieldCheck className="h-6 w-6" />
-                </div>
-                <div>
-                  <span className="font-bold text-lg text-slate-900 tracking-tight">
-                    Inovasi Kebidanan Digital Wilayah
-                  </span>
-                  <p className="text-xs text-slate-500 font-medium">Bidan Praktik Mandiri & Dokter Puskesmas</p>
-                </div>
-              </div>
-
-              <div className="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-                <p>
-                  <strong className="font-bold text-slate-900">BundaSehat</strong> merupakan aplikasi berbasis website yang dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-rose-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
-                </p>
-                <p>
-                  Sistem skoring risiko dikalkulasikan secara otomatis berdasarkan parameter klinis terpercaya (seperti tensi Mean Arterial Pressure / MAP, riwayat edema, dan faktor trimester) guna menentukan klasifikasi rujukan tempat & penolong bersalin yang paling tepat.
-                </p>
-                <p>
-                  <strong className="font-bold text-slate-900">Kepakaran Kebidanan Bu Asih & Nakes Wilayah</strong> menjadi fondasi utama dalam penyusunan rekomendasi medis, edukasi kamus kesehatan A-Z, dan panduan terapi komplementer non-obat yang dihadirkan di dalam platform.
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-500">
-                <p className="font-semibold text-slate-800">
-                  Moto kami yakni <em className="font-bold text-rose-600">Inovasi Medis & Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
-                </p>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-xs border border-rose-100">
-                    BS
-                  </div>
+            {/* Row 1: Left Image Box, Right Text Content */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Image Box */}
+              <div className="md:col-span-5 flex justify-center">
+                <div className="w-full h-64 sm:h-80 rounded-3xl bg-pink-50/80 p-8 flex flex-col items-center justify-center border border-pink-100 shadow-soft-sm">
+                  <ApplicationLogo className="h-20 sm:h-24 w-auto object-contain mb-3" />
                   <span className="font-bold text-lg text-slate-900 tracking-tight">
                     Bunda<span className="text-rose-500">Sehat</span>
                   </span>
                 </div>
               </div>
+
+              {/* Right Text Content */}
+              <div className="md:col-span-7 space-y-4 text-slate-700">
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  <strong className="font-bold text-slate-900">BundaSehat</strong> merupakan aplikasi berbasis website yang dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-rose-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Platform ini dirancang dengan mengintegrasikan standar medis nasional Kartu Skor Poedji Rochjati (KSPR), pemantauan usia kehamilan & taksiran persalinan (HPL), serta rekomendasi penolong dan tempat persalinan yang aman.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Kami berkomitmen menjadikan BundaSehat sebagai platform pilihan utama ibu hamil dan bidan wilayah dalam mempercepat rujukan medis serta menekan angka komplikasi kehamilan secara digital dan transparan.
+                </p>
+              </div>
+
+            </div>
+
+            {/* Row 2: Left Text Content, Right Image Box */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Text Content */}
+              <div className="md:col-span-7 space-y-4 text-slate-700 order-2 md:order-1">
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  <strong className="font-bold text-slate-900">Kepakaran Kebidanan Bu Asih & Nakes Wilayah</strong> menjadi fondasi utama dalam penyusunan rekomendasi medis, edukasi kamus kesehatan A-Z, dan panduan terapi komplementer non-obat yang dihadirkan di dalam platform.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Visi kami adalah berkontribusi aktif dalam percepatan transformasi digital di bidang kesehatan ibu dan anak, dengan menghadirkan solusi teknologi yang menjawab permasalahan krusial kebidanan secara tepat dan berbasis bukti medis.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Moto kami yakni <em className="font-bold text-rose-600">Inovasi Medis & Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
+                </p>
+              </div>
+
+              {/* Right Image Box */}
+              <div className="md:col-span-5 flex justify-center order-1 md:order-2">
+                <div className="w-full h-64 sm:h-80 rounded-3xl bg-pink-50/80 p-8 flex flex-col items-center justify-center border border-pink-100 shadow-soft-sm">
+                  <ApplicationLogo className="h-20 sm:h-24 w-auto object-contain mb-3" />
+                  <span className="font-bold text-lg text-slate-900 tracking-tight">
+                    Bunda<span className="text-rose-500">Sehat</span>
+                  </span>
+                </div>
+              </div>
+
             </div>
 
           </div>
