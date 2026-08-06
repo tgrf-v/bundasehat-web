@@ -52,7 +52,29 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-hidden">
+
+      {/* Background Ambient Ornaments & Visible Gradient Glows */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        {/* Visible Soft Radial Gradient Blobs */}
+        <div className="absolute -right-28 -top-10 w-[650px] h-[650px] bg-gradient-to-br from-rose-300/65 via-pink-200/45 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-pink-300/55 via-rose-200/35 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] bg-gradient-to-t from-rose-300/45 via-pink-200/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+        {/* Floating Plus Signs (+ Ornaments) & Sparkles (More Visible) */}
+        <div className="absolute top-36 left-12 text-rose-400/60 text-2xl font-normal select-none">
+          +
+        </div>
+        <div className="absolute top-1/2 right-16 text-rose-400/50 text-3xl font-normal select-none">
+          +
+        </div>
+        <div className="absolute bottom-1/4 left-1/4 text-pink-400/55 text-2xl font-normal select-none">
+          +
+        </div>
+        <div className="absolute top-1/4 right-1/3 text-rose-400/60 text-xl select-none">
+          ✦
+        </div>
+      </div>
 
       {/* Main Header Desktop (Super Clean & Seamless Scroll Behavior) */}
       <header
@@ -185,7 +207,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pb-20 md:pb-8">{children}</main>
+      <main className="relative z-10 flex-1 pb-20 md:pb-8">{children}</main>
 
       {/* Mobile Bottom Navigation Bar (Softglasses Style) */}
       {isLoggedIn && (
