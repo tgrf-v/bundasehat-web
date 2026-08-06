@@ -253,7 +253,7 @@ export function GlobalSearch() {
           }}
           onFocus={() => setIsOpen(true)}
           placeholder="Cari..."
-          className="w-full h-9 pl-9 pr-9 rounded-full bg-slate-100/90 border border-slate-200/80 text-xs font-semibold text-slate-800 placeholder:text-slate-400 placeholder:font-normal focus:bg-white focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition-all shadow-inner-xs"
+          className="w-full h-9 pl-9 pr-9 rounded-full bg-slate-100/90 border border-slate-200/80 text-xs font-semibold text-slate-800 placeholder:text-slate-400 placeholder:font-normal outline-none focus:outline-none focus-visible:outline-none focus:bg-white focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition-all shadow-inner-xs"
         />
 
         {/* Loading Spinner or Clear Button */}

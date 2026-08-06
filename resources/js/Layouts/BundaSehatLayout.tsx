@@ -106,10 +106,12 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             </span>
           </Link>
 
-          {/* Global Search Bar Component (Live Search & Auto-complete) */}
-          <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md mx-2 sm:mx-4">
-            <GlobalSearch />
-          </div>
+          {/* Global Search Bar Component (Hanya Tampil Saat Logged In / Bukan di Landing Page) */}
+          {isLoggedIn && (
+            <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md mx-2 sm:mx-4">
+              <GlobalSearch />
+            </div>
+          )}
 
           {/* Navigasi Desktop (Super Clean: Hanya Tampil Saat Logged In) */}
           {isLoggedIn && (

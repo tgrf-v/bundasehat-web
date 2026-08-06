@@ -99,7 +99,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         disabled={disabled}
         onClick={() => !disabled && setIsOpen(!isOpen)}
         className={cn(
-          "flex h-11 w-full items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-50 shadow-soft-sm text-left select-none",
+          "flex h-11 w-full items-center justify-between rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-rose-500 outline-none focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-rose-500/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:opacity-50 shadow-soft-sm text-left select-none",
           isOpen && "border-rose-500 ring-2 ring-rose-500/20",
           error && "border-rose-500 focus:border-rose-500 focus:ring-rose-500/20",
           className
