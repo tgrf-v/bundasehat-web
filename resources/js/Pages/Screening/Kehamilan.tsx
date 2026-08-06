@@ -16,6 +16,7 @@ import {
 } from "@/Components/ui/select";
 import { Badge } from "@/Components/ui/badge";
 import { Progress } from "@/Components/ui/progress";
+import { ScrollArea } from "@/Components/ui/scroll-area";
 import { ScreeningInput, EdemaLevel, ScreeningResult } from "@/types/screening";
 import { calculateGestationalAge, calculateMAP, evaluateScreening } from "@/lib/scoringEngine";
 import {
@@ -161,10 +162,10 @@ export default function KehamilanScreening() {
 
   return (
     <BundaSehatLayout activeNav="kehamilan">
-      <div className="max-w-5xl mx-auto px-4 py-4 lg:py-6 lg:h-[calc(100vh-80px)] flex flex-col justify-center">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 py-0 lg:h-[calc(100vh-65px)] flex flex-col justify-center">
         
-        {/* Modern Split Card with Image Fade Overlay (2 Kolom - Locked Viewport Height) */}
-        <div className="max-w-5xl w-full mx-auto bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden lg:h-full">
+        {/* Modern Split Card with Image Fade Overlay (2 Kolom - Aligned with Navbar Logo) */}
+        <div className="w-full mx-auto bg-white rounded-none border border-slate-200 overflow-hidden lg:h-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
             
             {/* Kolom Kiri (Gambar Locked / Static) */}
@@ -180,8 +181,9 @@ export default function KehamilanScreening() {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white lg:hidden" />
             </div>
 
-            {/* Kolom Kanan (Konten Utama & Form Screening - Scrollable) */}
-            <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-white relative z-10 lg:h-full lg:overflow-y-auto custom-scrollbar">
+            {/* Kolom Kanan (Konten Utama & Form Screening - Scrollable Shadcn ScrollArea) */}
+            <ScrollArea className="lg:col-span-7 h-full">
+              <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
               
               {/* Header Kolom Kanan */}
               <div className="mb-6">
@@ -203,7 +205,7 @@ export default function KehamilanScreening() {
                 /* CONDITION 1: SUDAH SCREENED -> DISPLAY RESULT VIEW */
                 <div className="space-y-5 animate-fadeIn">
                   
-                  <div className="border border-slate-200 shadow-soft-sm bg-white rounded-2xl overflow-hidden">
+                  <div className="border border-slate-200 bg-white rounded-none overflow-hidden">
                     <div
                       className={`p-5 text-white ${
                         screeningResult.kategori_risiko === "KRR"
@@ -565,7 +567,8 @@ export default function KehamilanScreening() {
                 </div>
               )}
 
-            </div>
+              </div>
+            </ScrollArea>
 
           </div>
         </div>

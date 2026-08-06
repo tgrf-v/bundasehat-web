@@ -57,7 +57,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-clip">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-clip lg:overflow-y-hidden">
 
       {/* Background Ambient Ornaments & Visible Gradient Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -190,7 +190,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 pb-20 md:pb-8">{children}</main>
+      <main className="relative z-10 flex-1 pb-20 md:pb-0">{children}</main>
 
       {/* Mobile Bottom Navigation Bar (Softglasses Style) */}
       {isLoggedIn && (
@@ -259,26 +259,25 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         </div>
       )}
 
-      {/* Footer Edukatif */}
-      <footer className="bg-white border-t border-slate-100 py-8 px-4 mt-auto hidden md:block">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <ApplicationLogo className="h-5 w-auto" />
-            <span className="font-semibold text-slate-700">
-              BundaSehat &copy; {new Date().getFullYear()}
-            </span>
-            <span>- Platform Screening Komplikasi Kehamilan & Persalinan Sehat</span>
+      {/* Footer Edukatif (Hanya Tampil Pada Landing Page Sebelum Login) */}
+      {!isLoggedIn && (
+        <footer className="bg-white border-t border-slate-100 py-8 px-4 mt-auto hidden md:block">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div className="flex items-center gap-2">
+              <ApplicationLogo className="h-5 w-auto" />
+              <span className="font-semibold text-slate-700">
+                BundaSehat &copy; {new Date().getFullYear()}
+              </span>
+              <span>- Platform Screening Komplikasi Kehamilan & Persalinan Sehat</span>
+            </div>
+            <div className="flex items-center gap-4 font-medium">
+              <Link href="/#fitur" className="hover:text-rose-600">
+                Fitur Unggulan
+              </Link>
+            </div>
           </div>
-          <div className="flex items-center gap-4 font-medium">
-            <Link href={isLoggedIn ? "/kamus" : "/#fitur"} className="hover:text-rose-600">
-              Kamus Kesehatan
-            </Link>
-            <Link href={isLoggedIn ? "/screening/kehamilan" : "/#fitur"} className="hover:text-rose-600">
-              Screening Kehamilan
-            </Link>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
 
       {/* Floating Demo Switcher Widget (Pojok Kanan Bawah) */}
       <div className="fixed bottom-16 right-3 md:bottom-6 md:right-6 z-50 animate-fadeIn">
