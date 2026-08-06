@@ -12,6 +12,7 @@ import {
   Globe,
 } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import { GlobalSearch } from "@/Components/GlobalSearch";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -35,16 +36,20 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleAuthMode = (loggedIn: boolean) => {
-    setIsLoggedIn(loggedIn);
-    localStorage.setItem("bundasehat_auth", String(loggedIn));
-    if (loggedIn) {
+  const toggleAuthMode = (mode: boolean) => {
+    setIsLoggedIn(mode);
+    localStorage.setItem("bundasehat_auth", mode ? "true" : "false");
+    if (mode) {
       router.visit("/beranda");
     } else {
       router.visit("/");
@@ -84,22 +89,27 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             : "bg-white/80 backdrop-blur-xl border-b border-white/50 shadow-soft-sm text-slate-900"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between gap-4">
           
           {/* Logo Brand & Title */}
-          <Link href={isLoggedIn ? "/beranda" : "/"} className="flex items-center gap-3 group">
+          <Link href={isLoggedIn ? "/beranda" : "/"} className="flex items-center gap-3 group shrink-0">
             <ApplicationLogo
               variant={!isLoggedIn && !isScrolled ? "white" : "color"}
               className="h-9 w-auto object-contain group-hover:scale-105 transition-transform"
             />
             <span
-              className={`font-extrabold text-lg tracking-tight flex items-center gap-1 transition-colors ${
+              className={`font-bold text-lg tracking-tight flex items-center gap-1 transition-colors ${
                 !isLoggedIn && !isScrolled ? "text-white" : "text-slate-900"
               }`}
             >
               Bunda<span className={!isLoggedIn && !isScrolled ? "text-pink-200" : "text-rose-500"}>Sehat</span>
             </span>
           </Link>
+
+          {/* Global Search Bar Component (Live Search & Auto-complete) */}
+          <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md mx-2 sm:mx-4">
+            <GlobalSearch />
+          </div>
 
           {/* Navigasi Desktop (Super Clean: Hanya Tampil Saat Logged In) */}
           {isLoggedIn && (
