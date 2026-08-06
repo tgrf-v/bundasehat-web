@@ -13,6 +13,8 @@ import {
   CheckCircle2,
   RefreshCw,
   Plus,
+  ShieldCheck,
+  FileText,
 } from "lucide-react";
 import { ScreeningResult } from "@/types/screening";
 
@@ -193,58 +195,82 @@ export default function Beranda() {
               </Link>
             </Card>
           ) : (
-            /* FILLED STATE: HASIL SCREENING TERAKHIR (MATCHING REFERENCE IMAGE STYLE) */
-            <Card className="border border-slate-200/80 shadow-soft-md bg-white rounded-3xl p-6 sm:p-8 space-y-6 text-center max-w-xl mx-auto">
+            /* FILLED STATE: HASIL SCREENING TERAKHIR (MATCHING REFERENCE IMAGE FULL WIDTH LAYOUT) */
+            <Card className="border border-slate-200/80 shadow-soft-sm hover:shadow-soft-md bg-white rounded-3xl p-6 sm:p-8 space-y-6 w-full">
               
-              {/* Header Context Line */}
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-slate-500">
-                  Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
-                </p>
-                <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
-                  screeningResult.kategori_risiko === "KRR"
-                    ? "text-emerald-700"
-                    : screeningResult.kategori_risiko === "KRT"
-                    ? "text-amber-700"
-                    : "text-rose-600"
-                }`}>
-                  {screeningResult.status_label}
-                </h2>
-              </div>
-
-              {/* Tri-Color Segmented Risk Gauge Meter with Floating Black Pin */}
-              <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
-                {/* Tri-Color Bar (Green - Yellow - Red - Clean Flush Rounded Ends) */}
-                <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
-                  <div className="flex-1 bg-[#64B565]" />
-                  <div className="flex-1 bg-[#F7D154]" />
-                  <div className="flex-1 bg-[#F83838]" />
-                </div>
-
-                {/* Floating Black Score Pin Pointer (Black Pill + Arrow) */}
-                {(() => {
-                  const score = screeningResult.total_skor || 2;
-                  const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
-                  return (
-                    <div
-                      className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
-                      style={{ left: `${percent}%` }}
-                    >
-                      {/* Triangle Pointer Up */}
-                      <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
-                      {/* Black Pill Badge */}
-                      <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
-                        {score}
+              <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-8">
+                
+                {/* Left Side Illustration / Badge (Visible on Medium & Larger Screens) */}
+                <div className="hidden md:flex items-center justify-center shrink-0">
+                  <div className="relative h-32 w-32 sm:h-36 sm:w-36 rounded-full bg-pink-50/70 border border-pink-100/60 flex items-center justify-center">
+                    {/* Floating sparkles */}
+                    <span className="absolute top-2 right-4 text-pink-300 text-xs font-bold">+</span>
+                    <span className="absolute bottom-4 left-3 text-pink-300 text-xs font-bold">+</span>
+                    
+                    {/* Rose Shield Badge with Heart */}
+                    <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-500 to-pink-400 text-white flex items-center justify-center shadow-soft-md relative transform -rotate-3">
+                      <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 text-white drop-shadow-xs" />
+                      <div className="absolute -bottom-1 -right-1 bg-white text-rose-600 rounded-full p-1 shadow-soft-xs">
+                        <CheckCircle2 className="h-4 w-4 fill-rose-600 text-white" />
                       </div>
                     </div>
-                  );
-                })()}
-              </div>
+                  </div>
+                </div>
 
-              {/* Informational Subtext */}
-              <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-md mx-auto">
-                Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
-              </p>
+                {/* Center Main Content Area */}
+                <div className="flex-1 w-full text-center space-y-4">
+                  {/* Header Context Line */}
+                  <div>
+                    <p className="text-xs sm:text-sm font-medium text-slate-500">
+                      Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
+                    </p>
+                    <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
+                      screeningResult.kategori_risiko === "KRR"
+                        ? "text-emerald-700"
+                        : screeningResult.kategori_risiko === "KRT"
+                        ? "text-amber-700"
+                        : "text-rose-600"
+                    }`}>
+                      {screeningResult.status_label}
+                    </h2>
+                  </div>
+
+                  {/* Tri-Color Segmented Risk Gauge Meter with Floating Black Pin */}
+                  <div className="relative w-full max-w-lg mx-auto pt-2 pb-7">
+                    {/* Tri-Color Bar (Green - Yellow - Red - Clean Flush Rounded Ends) */}
+                    <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
+                      <div className="flex-1 bg-[#64B565]" />
+                      <div className="flex-1 bg-[#F7D154]" />
+                      <div className="flex-1 bg-[#F83838]" />
+                    </div>
+
+                    {/* Floating Black Score Pin Pointer (Black Pill + Arrow) */}
+                    {(() => {
+                      const score = screeningResult.total_skor || 2;
+                      const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
+                      return (
+                        <div
+                          className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
+                          style={{ left: `${percent}%` }}
+                        >
+                          {/* Triangle Pointer Up */}
+                          <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
+                          {/* Black Pill Badge */}
+                          <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
+                            {score}
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Informational Subtext */}
+                  <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-lg mx-auto">
+                    Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
+                  </p>
+                </div>
+
+              </div>
 
               {/* Bottom Action Footer (Left: Lihat Detail, Right: Screening Ulang) */}
               <div className="flex items-center justify-between border-t border-slate-100 pt-5 px-1 sm:px-4">
