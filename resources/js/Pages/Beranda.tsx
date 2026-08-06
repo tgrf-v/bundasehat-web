@@ -34,108 +34,130 @@ export default function Beranda() {
     <BundaSehatLayout activeNav="beranda">
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
         
-        {/* Profile Greeting Banner */}
-        <div className="rounded-3xl bg-gradient-to-r from-rose-500 to-pink-500 text-white p-6 md:p-8 shadow-soft-md relative overflow-hidden">
-          {/* Background Ambient Glow */}
-          <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        {/* Extra Compact Profile Greeting Header (Ghost Link aligned flush to left) */}
+        <div>
+          <Link
+            href="/profil"
+            className="inline-flex items-center gap-2.5 group cursor-pointer"
+          >
+            {/* User Avatar Circle */}
+            <div className="h-10 w-10 rounded-full overflow-hidden border border-rose-200 bg-pink-50 flex items-center justify-center shrink-0 shadow-soft-xs group-hover:scale-105 transition-transform">
+              <User className="h-5 w-5 text-rose-600" />
+            </div>
 
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            
-            {/* Left Info */}
-            <div className="space-y-3 max-w-xl">
-              <h1 className="text-2xl md:text-3xl font-black tracking-tight">
-                Selamat Datang, Ibu Rahma Rahayu 👋
-              </h1>
-              <p className="text-xs md:text-sm text-pink-100 font-medium">
-                Puskesmas Wilayah 1 &bull; HPHT: 12 Oktober 2025
+            {/* Greeting Text Stack */}
+            <div>
+              <p className="text-[11px] text-slate-500 font-medium leading-none mb-0.5">
+                Selamat Datang,
               </p>
-
-              <div className="pt-2">
-                <Link
-                  href="/screening/kehamilan"
-                  className="px-5 py-2.5 rounded-full bg-white text-rose-600 font-extrabold text-xs shadow-soft-sm hover:bg-pink-50 transition-all shrink-0 inline-flex items-center gap-1.5"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>Screening Kehamilan</span>
-                </Link>
-              </div>
+              <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight group-hover:text-rose-600 transition-colors">
+                Ibu Rahma Rahayu
+              </h1>
             </div>
-
-            {/* Right Woman Illustration */}
-            <div className="hidden sm:block shrink-0">
-              <img
-                src="/pregnant-woman.svg"
-                alt="Ilustrasi Ibu Hamil"
-                className="h-36 md:h-44 w-auto object-contain drop-shadow-xl hover:scale-105 transition-transform"
-              />
-            </div>
-
-          </div>
+          </Link>
         </div>
 
-        {/* SECTION 1: LAYANAN KAMI (1 LARGE CARD CONTAINER LIKE REFERENCE) */}
-        <section>
-          <Card className="p-6 md:p-8 rounded-3xl bg-white border border-slate-100 shadow-soft-sm space-y-6">
-            <h2 className="text-lg md:text-xl font-extrabold text-slate-900 tracking-tight">
-              Layanan Kami
+        {/* SECTION 1: LAYANAN KAMI (HALODOC SIDE-BY-SIDE STYLE) */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          
+          {/* Left Side: Title & Description (Rata Atas) */}
+          <div className="lg:col-span-5 space-y-2.5 pt-1">
+            <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
+              Layanan Utama <span className="text-rose-600">BundaSehat</span>
             </h2>
+            <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-medium">
+              Akses cepat layanan screening kehamilan, kesiapan persalinan, serta edukasi kesehatan kebidanan secara terintegrasi.
+            </p>
+          </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8">
-              
-              {/* Shortcut 1: Screening Kehamilan */}
-              <Link
-                href="/screening/kehamilan"
-                className="flex flex-col items-center text-center space-y-3 group"
-              >
-                <div className="h-16 w-16 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-110 transition-transform shadow-soft-xs">
-                  <Activity className="h-7 w-7" />
+          {/* Right Side: Feature Cards Grid (Compact Width) */}
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 md:gap-4">
+            
+            {/* Shortcut 1: Screening Kehamilan */}
+            <Link
+              href="/screening/kehamilan"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                  <Activity className="h-6 w-6" />
                 </div>
-                <span className="font-semibold text-slate-900 text-xs md:text-sm block group-hover:text-rose-600 transition-colors">
-                  Screening Kehamilan
-                </span>
-              </Link>
-
-              {/* Shortcut 2: Screening Persalinan */}
-              <Link
-                href="/screening/persalinan"
-                className="flex flex-col items-center text-center space-y-3 group"
-              >
-                <div className="h-16 w-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/80 group-hover:scale-110 transition-transform shadow-soft-xs">
-                  <Stethoscope className="h-7 w-7" />
+                <div className="min-w-0">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                    Screening Kehamilan
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
+                    Cek Risiko Trimester
+                  </p>
                 </div>
-                <span className="font-semibold text-slate-900 text-xs md:text-sm block group-hover:text-rose-600 transition-colors">
-                  Screening Persalinan
-                </span>
-              </Link>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+            </Link>
 
-              {/* Shortcut 3: Kamus Kesehatan */}
-              <Link
-                href="/kamus"
-                className="flex flex-col items-center text-center space-y-3 group"
-              >
-                <div className="h-16 w-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100/80 group-hover:scale-110 transition-transform shadow-soft-xs">
-                  <BookOpen className="h-7 w-7" />
+            {/* Shortcut 2: Screening Persalinan */}
+            <Link
+              href="/screening/persalinan"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                  <Stethoscope className="h-6 w-6" />
                 </div>
-                <span className="font-semibold text-slate-900 text-xs md:text-sm block group-hover:text-rose-600 transition-colors">
-                  Kamus Kesehatan
-                </span>
-              </Link>
-
-              {/* Shortcut 4: Profil Saya */}
-              <Link
-                href="/profil"
-                className="flex flex-col items-center text-center space-y-3 group"
-              >
-                <div className="h-16 w-16 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100/80 group-hover:scale-110 transition-transform shadow-soft-xs">
-                  <User className="h-7 w-7" />
+                <div className="min-w-0">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                    Screening Persalinan
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
+                    Kesiapan Bersalin
+                  </p>
                 </div>
-                <span className="font-semibold text-slate-900 text-xs md:text-sm block group-hover:text-rose-600 transition-colors">
-                  Profil Saya
-                </span>
-              </Link>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+            </Link>
 
-            </div>
-          </Card>
+            {/* Shortcut 3: Kamus Kesehatan */}
+            <Link
+              href="/kamus"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                  <BookOpen className="h-6 w-6" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                    Kamus Kesehatan
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
+                    Edukasi & Terapi Video
+                  </p>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+            </Link>
+
+            {/* Shortcut 4: Profil Saya */}
+            <Link
+              href="/profil"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                  <User className="h-6 w-6" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                    Profil Saya
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
+                    Riwayat Screening
+                  </p>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+            </Link>
+
+          </div>
         </section>
 
         {/* SECTION 2: DATA PROGRESS ATAU HASIL SCREENING TERAKHIR */}
@@ -200,7 +222,7 @@ export default function Beranda() {
                     </Badge>
 
                     <span className="text-xs text-slate-500">
-                      Skor Poedji Rochjati: <strong className="font-bold text-slate-900">{screeningResult.total_skor}</strong>
+                      Skor: <strong className="font-bold text-slate-900">{screeningResult.total_skor}</strong>
                     </span>
                   </div>
                 </div>
