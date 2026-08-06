@@ -52,7 +52,7 @@ export default function ProfilIndex() {
               <User className="h-3.5 w-3.5" />
               <span>Profil Saya & Pengaturan</span>
             </Badge>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
               Pengaturan Akun Pasien
             </h1>
             <p className="text-xs text-slate-500">

@@ -163,7 +163,7 @@ export default function KehamilanScreening() {
             <Activity className="h-3.5 w-3.5" />
             <span>Form & Hasil Screening Kehamilan</span>
           </Badge>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Deteksi Dini Komplikasi Kehamilan
           </h1>
           <p className="text-xs md:text-sm text-slate-500 mt-1 max-w-lg mx-auto">
@@ -191,12 +191,12 @@ export default function KehamilanScreening() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider opacity-90 block">Kategori Risiko Kehamilan:</span>
-                    <h2 className="text-2xl md:text-3xl font-black mt-1">
+                    <h2 className="text-2xl md:text-3xl font-bold mt-1">
                       {screeningResult.status_label}
                     </h2>
                   </div>
 
-                  <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center font-black text-2xl">
+                  <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-2xl">
                     {screeningResult.total_skor}
                   </div>
                 </div>
@@ -212,7 +212,7 @@ export default function KehamilanScreening() {
                 
                 {/* Rekomendasi Faskes & Rujukan */}
                 <div className="p-4 rounded-2xl bg-pink-50/70 border border-pink-100 space-y-2">
-                  <h4 className="font-extrabold text-rose-900 text-sm flex items-center gap-2">
+                  <h4 className="font-bold text-rose-900 text-sm flex items-center gap-2">
                     <Stethoscope className="h-4 w-4 text-rose-600" />
                     <span>Rekomendasi Tempat & Penolong Persalinan</span>
                   </h4>
@@ -244,7 +244,7 @@ export default function KehamilanScreening() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {screeningResult.saran_terapi.map((terapi, idx) => (
                       <div key={idx} className="p-3.5 rounded-2xl bg-pink-50/50 border border-pink-100 space-y-1.5 text-xs">
-                        <p className="font-extrabold text-rose-900 flex items-center gap-1.5">
+                        <p className="font-bold text-rose-900 flex items-center gap-1.5">
                           <CheckCircle2 className="h-4 w-4 text-rose-600 shrink-0" />
                           <span>{terapi}</span>
                         </p>
@@ -283,13 +283,13 @@ export default function KehamilanScreening() {
             {/* Step Indicator Progress */}
             <div className="mb-6">
               <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
-                <span className={currentStep >= 1 ? "text-rose-600 font-extrabold" : ""}>
+                <span className={currentStep >= 1 ? "text-rose-600 font-bold" : ""}>
                   1. Data Diri & HPHT
                 </span>
-                <span className={currentStep >= 2 ? "text-rose-600 font-extrabold" : ""}>
+                <span className={currentStep >= 2 ? "text-rose-600 font-bold" : ""}>
                   2. Tensi & Gejala
                 </span>
-                <span className={currentStep >= 3 ? "text-rose-600 font-extrabold" : ""}>
+                <span className={currentStep >= 3 ? "text-rose-600 font-bold" : ""}>
                   3. Bias Treatment
                 </span>
               </div>
@@ -572,7 +572,7 @@ export default function KehamilanScreening() {
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   ) : (
-                    <Button type="submit" variant="rose" size="sm" isLoading={isLoading} className="gap-2 shadow-soft-sm font-extrabold">
+                    <Button type="submit" variant="rose" size="sm" isLoading={isLoading} className="gap-2 shadow-soft-sm font-bold">
                       <CheckCircle2 className="h-4 w-4" />
                       <span>Proses & Lihat Hasil Screening</span>
                     </Button>

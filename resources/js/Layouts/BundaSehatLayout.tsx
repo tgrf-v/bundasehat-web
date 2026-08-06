@@ -175,7 +175,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             <div className="flex items-center gap-3">
               <Link
                 href="/login"
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-extrabold shadow-soft-sm transition-all active:scale-95 ${
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold shadow-soft-sm transition-all active:scale-95 ${
                   !isScrolled
                     ? "bg-white text-rose-600 hover:bg-pink-50"
                     : "bg-rose-500 text-white hover:bg-rose-600"

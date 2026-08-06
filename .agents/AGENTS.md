@@ -45,6 +45,10 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 ### 11. Brief Context After Code
 - Berikan penjelasan perubahan kode secara singkat dan to-the-point di **BAWAH** blok kode, bukan sebelum kode.
 
+### 12. No Extra-Bold Font Weight (Ketebalan Teks Maksimal Bold)
+- **DILARANG KERAS** menggunakan font weight extra bold (`font-extrabold`, `font-black`, `font-800`, `font-900`) di seluruh antarmuka (UI).
+- **WAJIB** membatasi ketebalan font maksimal sampai tingkat `font-bold` (`font-700`) agar tampilan UI tetap clean, elegan, professional, dan nyaman dibaca.
+
 ---
 
 ## 📌 Ringkasan Spesifikasi Proyek BundaSehat

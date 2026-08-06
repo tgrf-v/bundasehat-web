@@ -98,7 +98,7 @@ export default function PersalinanScreening() {
             <Stethoscope className="h-3.5 w-3.5" />
             <span>Form & Hasil Screening Persalinan</span>
           </Badge>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Penentuan Rekomendasi Tempat Persalinan
           </h1>
           <p className="text-xs md:text-sm text-slate-500 mt-1 max-w-md mx-auto">
@@ -124,7 +124,7 @@ export default function PersalinanScreening() {
                 <span className="text-xs font-bold uppercase tracking-wider block opacity-90">
                   Rekomendasi Utama Persalinan:
                 </span>
-                <h2 className="text-2xl font-black mt-1">
+                <h2 className="text-2xl font-bold mt-1">
                   {persalinanResult.rekomendasi_tempat}
                 </h2>
                 <p className="text-xs text-white/90 mt-2 font-medium">
@@ -134,7 +134,7 @@ export default function PersalinanScreening() {
 
               <CardContent className="p-6 space-y-5">
                 <div className="p-4 rounded-2xl bg-pink-50/70 border border-pink-100 space-y-2">
-                  <h4 className="font-extrabold text-rose-900 text-xs uppercase tracking-wider">
+                  <h4 className="font-bold text-rose-900 text-xs uppercase tracking-wider">
                     Analisis Kesiapan Ibu Bersalin:
                   </h4>
                   <p className="text-xs text-slate-700 leading-relaxed font-semibold">

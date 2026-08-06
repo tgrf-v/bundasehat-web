@@ -43,7 +43,7 @@ export default function Beranda() {
             <p className="text-[11px] text-slate-500 font-medium leading-none mb-0.5">
               Selamat Datang,
             </p>
-            <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight group-hover:text-rose-600 transition-colors">
+            <h1 className="text-sm font-bold text-slate-900 tracking-tight leading-tight group-hover:text-rose-600 transition-colors">
               Ibu Rahma Rahayu
             </h1>
           </Link>
@@ -54,7 +54,7 @@ export default function Beranda() {
           
           {/* Left Side: Title & Description (Rata Atas) */}
           <div className="lg:col-span-5 space-y-2.5 pt-1">
-            <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
               Layanan Utama <span className="text-rose-600">BundaSehat</span>
             </h2>
             <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-medium">
@@ -178,7 +178,7 @@ export default function Beranda() {
               </div>
               
               <div className="space-y-1 max-w-sm mx-auto">
-                <h3 className="font-extrabold text-slate-900 text-base">Belum Ada Data Screening Kehamilan</h3>
+                <h3 className="font-bold text-slate-900 text-base">Belum Ada Data Screening Kehamilan</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Lakukan screening fisik dan tensi darah pertama Anda untuk mengetahui tingkat risiko komplikasi dan panduan kesehatan.
                 </p>
@@ -186,85 +186,81 @@ export default function Beranda() {
 
               <Link
                 href="/screening/kehamilan"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-rose-500 text-white font-extrabold text-xs shadow-soft-sm hover:bg-rose-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-rose-500 text-white font-bold text-xs shadow-soft-sm hover:bg-rose-600 transition-all"
               >
                 <Plus className="h-4 w-4" />
                 <span>Mulai Screening Sekarang</span>
               </Link>
             </Card>
           ) : (
-            /* FILLED STATE: HASIL SCREENING TERAKHIR ADA */
-            <Card className="border-slate-200/80 shadow-soft-sm bg-white rounded-3xl p-6 space-y-6">
+            /* FILLED STATE: HASIL SCREENING TERAKHIR (MATCHING REFERENCE IMAGE STYLE) */
+            <Card className="border border-slate-200/80 shadow-soft-md bg-white rounded-3xl p-6 sm:p-8 space-y-6 text-center max-w-xl mx-auto">
               
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-                <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Hasil Terakhir:</span>
-                  <div className="flex items-center gap-3 mt-1">
-                    <Badge
-                      variant={
-                        screeningResult.kategori_risiko === "KRR"
-                          ? "ringan"
-                          : screeningResult.kategori_risiko === "KRT"
-                          ? "sedang"
-                          : "berat"
-                      }
-                      className="text-xs font-extrabold py-1 px-3"
+              {/* Header Context Line */}
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-slate-500">
+                  Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
+                </p>
+                <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
+                  screeningResult.kategori_risiko === "KRR"
+                    ? "text-emerald-700"
+                    : screeningResult.kategori_risiko === "KRT"
+                    ? "text-amber-700"
+                    : "text-rose-600"
+                }`}>
+                  {screeningResult.status_label}
+                </h2>
+              </div>
+
+              {/* Tri-Color Segmented Risk Gauge Meter with Floating Black Pin */}
+              <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
+                {/* Tri-Color Bar (Green - Yellow - Red - Clean Flush Rounded Ends) */}
+                <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
+                  <div className="flex-1 bg-[#64B565]" />
+                  <div className="flex-1 bg-[#F7D154]" />
+                  <div className="flex-1 bg-[#F83838]" />
+                </div>
+
+                {/* Floating Black Score Pin Pointer (Black Pill + Arrow) */}
+                {(() => {
+                  const score = screeningResult.total_skor || 2;
+                  const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
+                  return (
+                    <div
+                      className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
+                      style={{ left: `${percent}%` }}
                     >
-                      {screeningResult.status_label}
-                    </Badge>
-
-                    <span className="text-xs text-slate-500">
-                      Skor: <strong className="font-bold text-slate-900">{screeningResult.total_skor}</strong>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="text-left sm:text-right">
-                  <span className="text-xs font-bold text-slate-400 block">Taksiran Persalinan (HPL):</span>
-                  <span className="text-sm font-extrabold text-rose-600">{screeningResult.taksiran_hpl || "18 November 2026"}</span>
-                </div>
+                      {/* Triangle Pointer Up */}
+                      <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
+                      {/* Black Pill Badge */}
+                      <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
+                        {score}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
-              {/* Progress Gauge Bar */}
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs font-bold">
-                  <span className="text-slate-600">Tingkat Risiko Komplikasi:</span>
-                  <span className="text-rose-600">{screeningResult.total_skor} Poin</span>
-                </div>
-                <Progress
-                  value={Math.min((screeningResult.total_skor / 20) * 100, 100)}
-                  variant={screeningResult.kategori_risiko === "KRR" ? "emerald" : screeningResult.kategori_risiko === "KRT" ? "amber" : "rose"}
-                  className="h-3"
-                />
-              </div>
+              {/* Informational Subtext */}
+              <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-md mx-auto">
+                Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
+              </p>
 
-              {/* Detail Ringkasan */}
-              <div className="p-4 rounded-2xl bg-pink-50/60 border border-pink-100 space-y-2 text-xs text-rose-950">
-                <p className="font-bold text-rose-900 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-rose-600 shrink-0" />
-                  <span>Rekomendasi Tempat & Penolong Persalinan:</span>
-                </p>
-                <p className="font-semibold text-slate-800 leading-relaxed pl-5">
-                  {screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
+              {/* Bottom Action Footer (Left: Lihat Detail, Right: Screening Ulang) */}
+              <div className="flex items-center justify-between border-t border-slate-100 pt-5 px-1 sm:px-4">
                 <Link
                   href="/screening/kehamilan"
-                  className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1"
+                  className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors"
                 >
-                  <span>Lihat Detail Hasil Lengkap</span>
-                  <ChevronRight className="h-4 w-4" />
+                  Lihat Detail Hasil
                 </Link>
 
                 <Link
                   href="/screening/kehamilan"
-                  className="px-5 py-2.5 rounded-full bg-rose-500 text-white font-bold text-xs shadow-soft-sm hover:bg-rose-600 transition-all flex items-center gap-1.5"
+                  className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 transition-colors"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
-                  <span>Lakukan Screening Ulang</span>
+                  <span>Screening Ulang</span>
                 </Link>
               </div>
 

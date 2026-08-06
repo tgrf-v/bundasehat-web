@@ -67,7 +67,7 @@ export default function Login() {
           </div>
 
           <div>
-            <CardTitle className="text-2xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-1.5">
+            <CardTitle className="text-2xl font-bold text-slate-900 tracking-tight flex items-center justify-center gap-1.5">
               <span>{mode === "login" ? "Masuk ke" : "Daftar Akun"}</span>
               <span className="text-rose-500">BundaSehat</span>
             </CardTitle>
@@ -201,7 +201,7 @@ export default function Login() {
               variant="rose"
               size="lg"
               isLoading={isLoading}
-              className="w-full font-extrabold text-sm gap-2 shadow-soft-md mt-2"
+              className="w-full font-bold text-sm gap-2 shadow-soft-md mt-2"
             >
               {mode === "login" ? (
                 <>

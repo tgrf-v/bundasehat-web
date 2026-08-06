@@ -105,7 +105,7 @@ export default function HasilScreening() {
               </Badge>
               <span className="text-xs text-slate-500 font-medium">{result.created_at}</span>
             </div>
-            <h1 className="text-2xl font-extrabold text-slate-900 mt-1">
+            <h1 className="text-2xl font-bold text-slate-900 mt-1">
               Hasil Screening & Rekomendasi Medis
             </h1>
             <p className="text-xs text-slate-500">Pasien: <strong className="text-slate-800">{result.input_summary.nama_pasien}</strong> ({result.input_summary.umur} Tahun)</p>
@@ -155,7 +155,7 @@ export default function HasilScreening() {
               <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 TINGKAT RISIKO KOMPLIKASI
               </p>
-              <h2 className={`text-3xl sm:text-4xl font-black mt-1 ${
+              <h2 className={`text-3xl sm:text-4xl font-bold mt-1 ${
                 isBerat ? "text-rose-600" : isSedang ? "text-amber-600" : "text-emerald-600"
               }`}>
                 RISIKO {result.tingkat_risiko.toUpperCase()}
@@ -175,7 +175,7 @@ export default function HasilScreening() {
                 className="h-3.5"
               />
               <p className="text-xs font-semibold text-slate-700 pt-1">
-                Total Skor: <strong className="text-slate-900 font-extrabold">{result.skor_poedji_rochjati}</strong> | MAP: <strong className="text-slate-900 font-extrabold">{result.map_value} mmHg</strong>
+                Total Skor: <strong className="text-slate-900 font-bold">{result.skor_poedji_rochjati}</strong> | MAP: <strong className="text-slate-900 font-bold">{result.map_value} mmHg</strong>
               </p>
             </div>
 

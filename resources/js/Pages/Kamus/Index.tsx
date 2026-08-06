@@ -134,7 +134,7 @@ export default function KamusIndex() {
             <BookOpen className="h-3.5 w-3.5" />
             <span>Kamus Kesehatan & Edukasi Terapi</span>
           </Badge>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Katalog Medis & Terapi Komplementer Non-Obat
           </h1>
           <p className="text-xs md:text-sm text-slate-500 max-w-lg mx-auto">
@@ -210,12 +210,12 @@ export default function KamusIndex() {
                     <Badge variant="rose" className="text-[10px] font-bold">
                       {article.category}
                     </Badge>
-                    <span className="h-6 w-6 rounded-full bg-pink-50 text-rose-600 font-black text-xs flex items-center justify-center">
+                    <span className="h-6 w-6 rounded-full bg-pink-50 text-rose-600 font-bold text-xs flex items-center justify-center">
                       {article.letter}
                     </span>
                   </div>
 
-                  <h3 className="font-extrabold text-slate-900 text-base leading-snug">
+                  <h3 className="font-bold text-slate-900 text-base leading-snug">
                     {article.title}
                   </h3>
 
@@ -245,7 +245,7 @@ export default function KamusIndex() {
                     </button>
                   </div>
 
-                  <h3 className="font-extrabold text-slate-900 text-lg">
+                  <h3 className="font-bold text-slate-900 text-lg">
                     {selectedArticle.title}
                   </h3>
 
@@ -256,7 +256,7 @@ export default function KamusIndex() {
                     </div>
 
                     <div className="p-3.5 rounded-2xl bg-pink-50 border border-pink-100 space-y-1 text-rose-950">
-                      <span className="font-extrabold text-rose-900 flex items-center gap-1.5">
+                      <span className="font-bold text-rose-900 flex items-center gap-1.5">
                         <CheckCircle2 className="h-4 w-4 text-rose-600 shrink-0" />
                         <span>Pertolongan Pertama Mandiri:</span>
                       </span>
@@ -285,7 +285,7 @@ export default function KamusIndex() {
             <div className="p-4 rounded-3xl bg-pink-50 border border-pink-100 flex items-center gap-3 text-xs text-rose-900">
               <Sparkles className="h-5 w-5 text-rose-600 shrink-0" />
               <div>
-                <strong className="font-extrabold block">Apa itu Terapi Komplementer?</strong>
+                <strong className="font-bold block">Apa itu Terapi Komplementer?</strong>
                 <span>Metode pendamping non-farmakologi (seperti pijat oxytocin, aromaterapi, dan senam panggul) yang aman membantu memperlancar persalinan dan meredakan kecemasan.</span>
               </div>
             </div>
@@ -310,7 +310,7 @@ export default function KamusIndex() {
                       <span className="text-[11px] font-bold text-slate-400">{vid.duration}</span>
                     </div>
 
-                    <h4 className="font-extrabold text-slate-900 text-sm leading-snug">
+                    <h4 className="font-bold text-slate-900 text-sm leading-snug">
                       {vid.title}
                     </h4>
 
