@@ -13,8 +13,6 @@ import {
   CheckCircle2,
   RefreshCw,
   Plus,
-  ShieldCheck,
-  FileText,
 } from "lucide-react";
 import { ScreeningResult } from "@/types/screening";
 
@@ -36,20 +34,7 @@ export default function Beranda() {
     <BundaSehatLayout activeNav="beranda">
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
         
-        {/* Pure Text Profile Greeting Header (No Icon/Avatar) */}
-        <div>
-          <Link
-            href="/profil"
-            className="inline-block group cursor-pointer"
-          >
-            <p className="text-[11px] text-slate-500 font-medium leading-none mb-0.5">
-              Selamat Datang,
-            </p>
-            <h1 className="text-sm font-bold text-slate-900 tracking-tight leading-tight group-hover:text-rose-600 transition-colors">
-              Ibu Rahma Rahayu
-            </h1>
-          </Link>
-        </div>
+
 
         {/* SECTION 1: LAYANAN KAMI (HALODOC SIDE-BY-SIDE STYLE) */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
@@ -195,35 +180,30 @@ export default function Beranda() {
               </Link>
             </Card>
           ) : (
-            /* FILLED STATE: HASIL SCREENING TERAKHIR (MATCHING REFERENCE IMAGE FULL WIDTH LAYOUT) */
-            <Card className="border border-slate-200/80 shadow-soft-sm hover:shadow-soft-md bg-white rounded-3xl p-6 sm:p-8 space-y-6 w-full">
+            /* FILLED STATE: HASIL SCREENING TERAKHIR (CENTERED OVERLAY CARD WITH NEWBORN BANNER IMAGE) */
+            <div className="relative rounded-3xl overflow-hidden p-3 sm:p-6 pb-4">
               
-              <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-8">
-                
-                {/* Left Side Illustration / Badge (Visible on Medium & Larger Screens) */}
-                <div className="hidden md:flex items-center justify-center shrink-0">
-                  <div className="relative h-32 w-32 sm:h-36 sm:w-36 rounded-full bg-pink-50/70 border border-pink-100/60 flex items-center justify-center">
-                    {/* Floating sparkles */}
-                    <span className="absolute top-2 right-4 text-pink-300 text-xs font-bold">+</span>
-                    <span className="absolute bottom-4 left-3 text-pink-300 text-xs font-bold">+</span>
-                    
-                    {/* Rose Shield Badge with Heart */}
-                    <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-500 to-pink-400 text-white flex items-center justify-center shadow-soft-md relative transform -rotate-3">
-                      <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 text-white drop-shadow-xs" />
-                      <div className="absolute -bottom-1 -right-1 bg-white text-rose-600 rounded-full p-1 shadow-soft-xs">
-                        <CheckCircle2 className="h-4 w-4 fill-rose-600 text-white" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* Soft Background Banner Image Accent Header */}
+              <div
+                className="absolute inset-x-0 top-0 h-52 sm:h-64 bg-cover bg-center rounded-3xl -z-0 opacity-90"
+                style={{ backgroundImage: "url('/images/screening-banner.jpg?v=2')" }}
+              >
+                {/* Soft Gradient Overlay over Image to ensure contrast */}
+                <div className="absolute inset-0 bg-gradient-to-b from-rose-900/20 via-pink-900/30 to-slate-900/60 backdrop-blur-[1px] rounded-3xl" />
+              </div>
 
-                {/* Center Main Content Area */}
-                <div className="flex-1 w-full text-center space-y-4">
-                  {/* Header Context Line */}
+              {/* Floating White Card (Overlay, rounded-2xl, shadow-lg) */}
+              <Card className="relative z-10 border border-slate-200/80 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 space-y-6 text-center max-w-2xl mx-auto mt-20 sm:mt-28">
+                
+                {/* Centered Vertical Flow */}
+                <div className="flex flex-col items-center justify-center space-y-4 w-full">
+                  
+                  {/* Header Subtitle Context Line */}
                   <div>
                     <p className="text-xs sm:text-sm font-medium text-slate-500">
                       Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
                     </p>
+                    {/* Judul Risiko */}
                     <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
                       screeningResult.kategori_risiko === "KRR"
                         ? "text-emerald-700"
@@ -236,7 +216,7 @@ export default function Beranda() {
                   </div>
 
                   {/* Tri-Color Segmented Risk Gauge Meter with Floating Black Pin */}
-                  <div className="relative w-full max-w-lg mx-auto pt-2 pb-7">
+                  <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
                     {/* Tri-Color Bar (Green - Yellow - Red - Clean Flush Rounded Ends) */}
                     <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
                       <div className="flex-1 bg-[#64B565]" />
@@ -264,33 +244,33 @@ export default function Beranda() {
                     })()}
                   </div>
 
-                  {/* Informational Subtext */}
-                  <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-lg mx-auto">
+                  {/* Deskripsi Rekomendasi */}
+                  <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-md mx-auto">
                     Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
                   </p>
+
                 </div>
 
-              </div>
+                {/* Bottom Action Footer (Left: Lihat Detail, Right: Screening Ulang) */}
+                <div className="flex items-center justify-between border-t border-slate-100 pt-5 px-1 sm:px-4">
+                  <Link
+                    href="/screening/kehamilan"
+                    className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors"
+                  >
+                    Lihat Detail Hasil
+                  </Link>
 
-              {/* Bottom Action Footer (Left: Lihat Detail, Right: Screening Ulang) */}
-              <div className="flex items-center justify-between border-t border-slate-100 pt-5 px-1 sm:px-4">
-                <Link
-                  href="/screening/kehamilan"
-                  className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors"
-                >
-                  Lihat Detail Hasil
-                </Link>
+                  <Link
+                    href="/screening/kehamilan"
+                    className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 transition-colors"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    <span>Screening Ulang</span>
+                  </Link>
+                </div>
 
-                <Link
-                  href="/screening/kehamilan"
-                  className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 transition-colors"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  <span>Screening Ulang</span>
-                </Link>
-              </div>
-
-            </Card>
+              </Card>
+            </div>
           )}
         </section>
 
