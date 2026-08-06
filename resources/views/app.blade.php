@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <!-- Favicon Logo BundaSehat (PNG) -->
+        <link rel="icon" type="image/png" href="/bundasehat-logo.png?v=4" />
+        <link rel="shortcut icon" href="/bundasehat-logo.png?v=4" />
+
+        <title inertia>{{ config('app.name', 'BundaSehat') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
