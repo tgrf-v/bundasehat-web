@@ -113,58 +113,59 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             </div>
           )}
 
-          {/* Navigasi Desktop (Super Clean: Hanya Tampil Saat Logged In) */}
+          {/* Navigasi Desktop (Super Clean & Minimalist Text Only) */}
           {isLoggedIn && (
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-2">
               <Link
                 href="/beranda"
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "beranda"
-                    ? "bg-pink-50 text-rose-600 font-bold"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "text-rose-600 font-bold"
+                    : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
                 Beranda
               </Link>
               <Link
                 href="/screening/kehamilan"
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "kehamilan"
-                    ? "bg-pink-50 text-rose-600 font-bold"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "text-rose-600 font-bold"
+                    : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
                 Screening Kehamilan
               </Link>
               <Link
                 href="/screening/persalinan"
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "persalinan"
-                    ? "bg-pink-50 text-rose-600 font-bold"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "text-rose-600 font-bold"
+                    : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
                 Screening Persalinan
               </Link>
               <Link
                 href="/kamus"
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "kamus"
-                    ? "bg-pink-50 text-rose-600 font-bold"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "text-rose-600 font-bold"
+                    : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
                 Kamus Kesehatan
               </Link>
               <Link
                 href="/profil"
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                title="Profil Saya"
+                className={`ml-1 flex items-center justify-center h-9 w-9 rounded-full overflow-hidden border transition-all duration-200 group ${
                   activeNav === "profil"
-                    ? "bg-pink-50 text-rose-600 font-bold"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "border-rose-500 ring-2 ring-rose-500/20 bg-rose-50 text-rose-600"
+                    : "border-slate-200 bg-slate-100/80 text-slate-600 hover:border-rose-300 hover:text-rose-600 hover:scale-105"
                 }`}
               >
-                Profil Saya
+                <User className="h-4 w-4" />
               </Link>
             </nav>
           )}

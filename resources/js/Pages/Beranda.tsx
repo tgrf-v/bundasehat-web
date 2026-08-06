@@ -34,26 +34,18 @@ export default function Beranda() {
     <BundaSehatLayout activeNav="beranda">
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
         
-        {/* Extra Compact Profile Greeting Header (Ghost Link aligned flush to left) */}
+        {/* Pure Text Profile Greeting Header (No Icon/Avatar) */}
         <div>
           <Link
             href="/profil"
-            className="inline-flex items-center gap-2.5 group cursor-pointer"
+            className="inline-block group cursor-pointer"
           >
-            {/* User Avatar Circle */}
-            <div className="h-10 w-10 rounded-full overflow-hidden border border-rose-200 bg-pink-50 flex items-center justify-center shrink-0 shadow-soft-xs group-hover:scale-105 transition-transform">
-              <User className="h-5 w-5 text-rose-600" />
-            </div>
-
-            {/* Greeting Text Stack */}
-            <div>
-              <p className="text-[11px] text-slate-500 font-medium leading-none mb-0.5">
-                Selamat Datang,
-              </p>
-              <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight group-hover:text-rose-600 transition-colors">
-                Ibu Rahma Rahayu
-              </h1>
-            </div>
+            <p className="text-[11px] text-slate-500 font-medium leading-none mb-0.5">
+              Selamat Datang,
+            </p>
+            <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight group-hover:text-rose-600 transition-colors">
+              Ibu Rahma Rahayu
+            </h1>
           </Link>
         </div>
 
