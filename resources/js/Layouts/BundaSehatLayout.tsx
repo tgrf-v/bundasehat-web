@@ -61,17 +61,17 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         <div className="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-pink-300/55 via-rose-200/35 to-transparent rounded-full blur-3xl pointer-events-none" />
         <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] bg-gradient-to-t from-rose-300/45 via-pink-200/25 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        {/* Floating Plus Signs (+ Ornaments) & Sparkles (More Visible) */}
-        <div className="absolute top-36 left-12 text-rose-400/60 text-2xl font-normal select-none">
+        {/* Floating Plus Signs (+ Ornaments) & Sparkles (Soft Opacity) */}
+        <div className="absolute top-36 left-12 text-rose-400/20 text-2xl font-normal select-none">
           +
         </div>
-        <div className="absolute top-1/2 right-16 text-rose-400/50 text-3xl font-normal select-none">
+        <div className="absolute top-1/2 right-16 text-rose-400/15 text-3xl font-normal select-none">
           +
         </div>
-        <div className="absolute bottom-1/4 left-1/4 text-pink-400/55 text-2xl font-normal select-none">
+        <div className="absolute bottom-1/4 left-1/4 text-pink-400/20 text-2xl font-normal select-none">
           +
         </div>
-        <div className="absolute top-1/4 right-1/3 text-rose-400/60 text-xl select-none">
+        <div className="absolute top-1/4 right-1/3 text-rose-400/20 text-xl select-none">
           ✦
         </div>
       </div>
@@ -92,22 +92,13 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               variant={!isLoggedIn && !isScrolled ? "white" : "color"}
               className="h-9 w-auto object-contain group-hover:scale-105 transition-transform"
             />
-            <div>
-              <span
-                className={`font-extrabold text-lg tracking-tight flex items-center gap-1 transition-colors ${
-                  !isLoggedIn && !isScrolled ? "text-white" : "text-slate-900"
-                }`}
-              >
-                Bunda<span className={!isLoggedIn && !isScrolled ? "text-pink-200" : "text-rose-500"}>Sehat</span>
-              </span>
-              <p
-                className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${
-                  !isLoggedIn && !isScrolled ? "text-pink-100" : "text-rose-500"
-                }`}
-              >
-                Screening & Komplikasi Ibu Hamil
-              </p>
-            </div>
+            <span
+              className={`font-extrabold text-lg tracking-tight flex items-center gap-1 transition-colors ${
+                !isLoggedIn && !isScrolled ? "text-white" : "text-slate-900"
+              }`}
+            >
+              Bunda<span className={!isLoggedIn && !isScrolled ? "text-pink-200" : "text-rose-500"}>Sehat</span>
+            </span>
           </Link>
 
           {/* Navigasi Desktop (Super Clean: Hanya Tampil Saat Logged In) */}
@@ -167,9 +158,8 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           )}
 
           {/* Right Action Button */}
-          <div className="flex items-center gap-3">
-
-            {!isLoggedIn ? (
+          {!isLoggedIn && (
+            <div className="flex items-center gap-3">
               <Link
                 href="/login"
                 className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-extrabold shadow-soft-sm transition-all active:scale-95 ${
@@ -181,28 +171,8 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 <LogIn className="h-4 w-4" />
                 <span>Masuk / Login</span>
               </Link>
-            ) : (
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/profil"
-                  className="hidden sm:flex items-center gap-2 p-1.5 px-3 rounded-full bg-slate-100 hover:bg-pink-50 transition-colors border border-slate-200/80"
-                >
-                  <div className="h-7 w-7 rounded-full bg-rose-500 text-white font-bold text-xs flex items-center justify-center">
-                    R
-                  </div>
-                  <span className="text-xs font-bold text-slate-800 pr-1">Ibu Rahma</span>
-                </Link>
-
-                <button
-                  onClick={() => toggleAuthMode(false)}
-                  title="Logout"
-                  className="p-2 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" />
-                </button>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </header>
 
