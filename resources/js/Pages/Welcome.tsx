@@ -196,7 +196,7 @@ export default function Welcome() {
                       Screening bertahap kondisi fisik, HPHT, edema, tensi darah (MAP), dan gejala bahaya trimester untuk mengkategorikan tingkat risiko kehamilan secara akurat.
                     </p>
                     <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-rose-600">
-                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kartu Skor Poedji Rochjati (KSPR)</span>
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kartu Skor Risiko Komplikasi</span>
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kalkulasi Otomatis HPL</span>
                     </div>
                   </AccordionContent>

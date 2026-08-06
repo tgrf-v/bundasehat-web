@@ -41,7 +41,7 @@ export default function HasilScreening() {
         total_skor: 10,
         tingkat_risiko: "Sedang",
         kategori_risiko: "KRT",
-        status_label: "🟨 Risiko Tinggi / Sedang (KRT)",
+        status_label: "Risiko Tinggi / Sedang (KRT)",
         map_value: 96.33,
         potensi_komplikasi: [
           "Pre-Hipertensi Gestasional",
@@ -175,7 +175,7 @@ export default function HasilScreening() {
                 className="h-3.5"
               />
               <p className="text-xs font-semibold text-slate-700 pt-1">
-                Total Skor Poedji Rochjati: <strong className="text-slate-900 font-extrabold">{result.skor_poedji_rochjati}</strong> | MAP: <strong className="text-slate-900 font-extrabold">{result.map_value} mmHg</strong>
+                Total Skor: <strong className="text-slate-900 font-extrabold">{result.skor_poedji_rochjati}</strong> | MAP: <strong className="text-slate-900 font-extrabold">{result.map_value} mmHg</strong>
               </p>
             </div>
 

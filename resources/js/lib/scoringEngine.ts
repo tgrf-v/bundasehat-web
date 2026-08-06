@@ -149,15 +149,15 @@ export function evaluateScreening(input: ScreeningInput): ScreeningResult {
   if (score >= 12 || hasRedFlag) {
     riskLevel = "Berat";
     katRisiko = "KRST";
-    statusLabel = "🟥 Risiko Sangat Tinggi / Berat (KRST)";
+    statusLabel = "Risiko Sangat Tinggi / Berat";
   } else if (score >= 6) {
     riskLevel = "Sedang";
     katRisiko = "KRT";
-    statusLabel = "🟨 Risiko Tinggi / Sedang (KRT)";
+    statusLabel = "Risiko Tinggi / Sedang";
   } else {
     riskLevel = "Ringan";
     katRisiko = "KRR";
-    statusLabel = "🟩 Risiko Ringan / Rendah (KRR)";
+    statusLabel = "Risiko Ringan / Rendah";
   }
 
   let faskes = "";

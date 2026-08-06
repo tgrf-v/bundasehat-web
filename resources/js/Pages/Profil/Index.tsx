@@ -181,7 +181,7 @@ export default function ProfilIndex() {
                         2 Poin
                       </TableCell>
                       <TableCell className="text-right">
-                        <Badge variant="ringan" className="text-[10px]">🟩 KRR (Ringan)</Badge>
+                        <Badge variant="ringan" className="text-[10px]">KRR (Ringan)</Badge>
                       </TableCell>
                     </TableRow>
 
@@ -196,7 +196,7 @@ export default function ProfilIndex() {
                         2 Poin
                       </TableCell>
                       <TableCell className="text-right">
-                        <Badge variant="ringan" className="text-[10px]">🟩 KRR (Ringan)</Badge>
+                        <Badge variant="ringan" className="text-[10px]">KRR (Ringan)</Badge>
                       </TableCell>
                     </TableRow>
 
@@ -211,7 +211,7 @@ export default function ProfilIndex() {
                         6 Poin
                       </TableCell>
                       <TableCell className="text-right">
-                        <Badge variant="sedang" className="text-[10px]">🟨 KRT (Sedang)</Badge>
+                        <Badge variant="sedang" className="text-[10px]">KRT (Sedang)</Badge>
                       </TableCell>
                     </TableRow>
                   </TableBody>
