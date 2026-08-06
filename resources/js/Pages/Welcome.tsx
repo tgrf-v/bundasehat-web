@@ -3,6 +3,12 @@ import { router } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card } from "@/Components/ui/card";
 import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/Components/ui/accordion";
+import {
   Activity,
   Heart,
   BookOpen,
@@ -13,6 +19,7 @@ import {
   ShieldCheck,
   Calendar,
   Leaf,
+  CheckCircle2,
 } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
@@ -212,125 +219,180 @@ export default function Welcome() {
           </div>
         </section>
 
-        {/* SECTION 2: FITUR-FITUR DALAM WEB INI (FULL WIDTH / EDGE-TO-EDGE) */}
-        <section id="fitur" className="w-full bg-slate-900 text-white py-16 sm:py-24">
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 space-y-12">
+        {/* SECTION 2: FITUR-FITUR DALAM WEB INI (WHITE ACCORDION STYLE) */}
+        <section id="fitur" className="w-full bg-white text-slate-900 py-16 sm:py-24">
+          <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white">
-                Segala Yang Bunda Butuhkan Dalam Satu Tempat
+            <div className="text-center">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                Layanan & Fitur Unggulan
               </h2>
-              <p className="text-xs sm:text-sm text-slate-400">
-                Akses mudah fitur screening dan konsultasi edukasi kebidanan
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              {/* Feature 1 */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700/80 space-y-3">
-                <div className="h-12 w-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center">
-                  <Activity className="h-6 w-6" />
-                </div>
-                <h3 className="font-bold text-white text-base">Screening Kehamilan</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Screening bertahap kondisi fisik, HPHT, edema, tensi, dan gejala bahaya trimester.
-                </p>
-              </div>
+            {/* Accordion Fitur Kebidanan Clean Style */}
+            <div className="w-full">
+              <Accordion defaultValue="item-1">
+                
+                {/* Accordion Item 1 */}
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>
+                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
+                      <Activity className="h-5 w-5" />
+                    </div>
+                    <span className="text-base sm:text-lg font-extrabold text-slate-900">
+                      Screening Kehamilan
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pl-13 text-slate-600 space-y-2">
+                    <p>
+                      Screening bertahap kondisi fisik, HPHT, edema, tensi darah (MAP), dan gejala bahaya trimester untuk mengkategorikan tingkat risiko kehamilan secara akurat.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-rose-600">
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kartu Skor Poedji Rochjati (KSPR)</span>
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kalkulasi Otomatis HPL</span>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-              {/* Feature 2 */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700/80 space-y-3">
-                <div className="h-12 w-12 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center">
-                  <Stethoscope className="h-6 w-6" />
-                </div>
-                <h3 className="font-bold text-white text-base">Screening Persalinan</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Penentuan tingkat tenaga medis dan tempat persalinan aman (BPM / Puskesmas / RS SC).
-                </p>
-              </div>
+                {/* Accordion Item 2 */}
+                <AccordionItem value="item-2">
+                  <AccordionTrigger>
+                    <div className="h-10 w-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center font-bold shrink-0">
+                      <Stethoscope className="h-5 w-5" />
+                    </div>
+                    <span className="text-base sm:text-lg font-extrabold text-slate-900">
+                      Screening Persalinan
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pl-13 text-slate-600 space-y-2">
+                    <p>
+                      Penentuan tingkat rujukan tenaga medis dan tempat persalinan aman (Bidan Praktik Mandiri / Puskesmas / Rumah Sakit SC) untuk mencegah keterlambatan penanganan rujukan emergency.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-rose-600">
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Rekomendasi Penolong Bersalin</span>
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Deteksi Dini Komplikasi Salin</span>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-              {/* Feature 3 */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700/80 space-y-3">
-                <div className="h-12 w-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                  <BookOpen className="h-6 w-6" />
-                </div>
-                <h3 className="font-bold text-white text-base">Kamus Kesehatan A-Z</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Katalog edukasi lengkap seputar komplikasi kehamilan ala Halodoc dengan pencarian cepat.
-                </p>
-              </div>
+                {/* Accordion Item 3 */}
+                <AccordionItem value="item-3">
+                  <AccordionTrigger>
+                    <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold shrink-0">
+                      <BookOpen className="h-5 w-5" />
+                    </div>
+                    <span className="text-base sm:text-lg font-extrabold text-slate-900">
+                      Kamus Kesehatan
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pl-13 text-slate-600 space-y-2">
+                    <p>
+                      Katalog edukasi medis lengkap seputar komplikasi kehamilan ala Halodoc dengan sistem pencarian cepat kata kunci penyakit, gejala fisik, dan penanganan awal.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-emerald-600">
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Istilah Medis Mudah Dipahami</span>
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Filter Pencarian Instan</span>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-              {/* Feature 4 */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700/80 space-y-3">
-                <div className="h-12 w-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                  <Video className="h-6 w-6" />
-                </div>
-                <h3 className="font-bold text-white text-base">Video Terapi Komplementer</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Panduan video interaktif teknik terapi relaksasi, pijat, dan penanganan non-obat.
-                </p>
-              </div>
+                {/* Accordion Item 4 */}
+                <AccordionItem value="item-4">
+                  <AccordionTrigger>
+                    <div className="h-10 w-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold shrink-0">
+                      <Video className="h-5 w-5" />
+                    </div>
+                    <span className="text-base sm:text-lg font-extrabold text-slate-900">
+                      Video Terapi Komplementer
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pl-13 text-slate-600 space-y-2">
+                    <p>
+                      Panduan video interaktif teknik terapi relaksasi, pijat oxytocin, kompres hangat, dan penanganan non-obat yang tervalidasi oleh pakar kebidanan (Bu Asih & Nakes Wilayah).
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-amber-600">
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Tutorial Video HD Interaktif</span>
+                      <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Terbukti Aman & Bebas Efek Samping</span>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-            </div>
-
-            <div className="text-center pt-4">
-              <button
-                onClick={handleLoginDemo}
-                className="px-8 py-4 rounded-full bg-rose-500 text-white font-extrabold text-sm md:text-base shadow-soft-md hover:bg-rose-600 transition-all"
-              >
-                Coba Demo Sekarang
-              </button>
+              </Accordion>
             </div>
           </div>
         </section>
 
-        {/* SECTION 3: PENJELASAN TENTANG WEB INI (FULL WIDTH / EDGE-TO-EDGE) */}
+        {/* SECTION 3: TENTANG KAMI (ALTERNATING 2-ROW LAYOUT LIKE REFERENCE) */}
         <section id="tentang" className="w-full bg-white py-16 sm:py-24">
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
+            
+            {/* Section Title */}
+            <div className="text-center">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                Tentang Kami
+              </h2>
+            </div>
+
+            {/* Row 1: Left Image Box, Right Text Content */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
               
-              <div className="md:col-span-6 space-y-4">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900">
-                  Dikembangkan Berdasarkan Kepakaran Kebidanan Bu Asih
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  BundaSehat merupakan platform penelitian kebidanan yang menghubungkan tenaga kesehatan (Bidan Wilayah), dosen kebidanan (Bu Asih), dan Ibu Hamil untuk mempercepat deteksi dini faktor risiko tinggi (*Resti*) sebelum persalinan.
-                </p>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Dengan pengkategorian risiko yang transparan dan pencegahan bias data medis, BundaSehat membantu menurunkan angka kematian ibu dan bayi secara signifikan.
-                </p>
+              {/* Left Image Box */}
+              <div className="md:col-span-5 flex justify-center">
+                <div className="w-full h-64 sm:h-80 rounded-3xl bg-pink-50/80 p-8 flex flex-col items-center justify-center border border-pink-100 shadow-soft-sm">
+                  <ApplicationLogo className="h-20 sm:h-24 w-auto object-contain mb-3" />
+                  <span className="font-extrabold text-lg text-slate-900 tracking-tight">
+                    Bunda<span className="text-rose-500">Sehat</span>
+                  </span>
+                </div>
               </div>
 
-              <div className="md:col-span-6">
-                <Card className="p-6 sm:p-8 rounded-3xl border-pink-100 bg-pink-50/50 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-full bg-white p-2 border border-pink-200 flex items-center justify-center shadow-soft-sm">
-                      <ApplicationLogo className="h-8 w-8 object-contain" />
-                    </div>
-                    <div>
-                      <h4 className="font-extrabold text-slate-900 text-base">Tim Pakar Kebidanan BundaSehat</h4>
-                      <p className="text-xs text-rose-600 font-semibold">Pengawasan Ilmiah Bu Asih & Nakes Wilayah</p>
-                    </div>
-                  </div>
+              {/* Right Text Content */}
+              <div className="md:col-span-7 space-y-4 text-slate-700">
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  <strong className="font-extrabold text-slate-900">BundaSehat</strong> merupakan aplikasi berbasis website yang dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-rose-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
+                </p>
 
-                  <div className="space-y-2.5 text-xs text-slate-700 pt-2 border-t border-pink-200/50">
-                    <div className="flex items-center gap-2">
-                      <Heart className="h-4 w-4 text-rose-500 shrink-0" />
-                      <span>Terhubung langsung dengan rekomendasi Faskes Rujukan</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Heart className="h-4 w-4 text-rose-500 shrink-0" />
-                      <span>Rekomendasi non-obat terapi komplementer yang teruji</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Heart className="h-4 w-4 text-rose-500 shrink-0" />
-                      <span>Antarmuka ramah pengguna (Mobile-First Design)</span>
-                    </div>
-                  </div>
-                </Card>
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Platform ini dirancang dengan mengintegrasikan standar medis nasional Kartu Skor Poedji Rochjati (KSPR), pemantauan usia kehamilan & taksiran persalinan (HPL), serta rekomendasi penolong dan tempat persalinan yang aman.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Kami berkomitmen menjadikan BundaSehat sebagai platform pilihan utama ibu hamil dan bidan wilayah dalam mempercepat rujukan medis serta menekan angka komplikasi kehamilan secara digital dan transparan.
+                </p>
               </div>
 
             </div>
+
+            {/* Row 2: Left Text Content, Right Image Box */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Text Content */}
+              <div className="md:col-span-7 space-y-4 text-slate-700 order-2 md:order-1">
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  <strong className="font-extrabold text-slate-900">Kepakaran Kebidanan Bu Asih & Nakes Wilayah</strong> menjadi fondasi utama dalam penyusunan rekomendasi medis, edukasi kamus kesehatan A-Z, dan panduan terapi komplementer non-obat yang dihadirkan di dalam platform.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Visi kami adalah berkontribusi aktif dalam percepatan transformasi digital di bidang kesehatan ibu dan anak, dengan menghadirkan solusi teknologi yang menjawab permasalahan krusial kebidanan secara tepat dan berbasis bukti medis.
+                </p>
+
+                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                  Moto kami yakni <em className="font-extrabold text-rose-600">Inovasi Medis & Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
+                </p>
+              </div>
+
+              {/* Right Image Box */}
+              <div className="md:col-span-5 flex justify-center order-1 md:order-2">
+                <div className="w-full h-64 sm:h-80 rounded-3xl bg-pink-50/80 p-8 flex flex-col items-center justify-center border border-pink-100 shadow-soft-sm">
+                  <ApplicationLogo className="h-20 sm:h-24 w-auto object-contain mb-3" />
+                  <span className="font-extrabold text-lg text-slate-900 tracking-tight">
+                    Bunda<span className="text-rose-500">Sehat</span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
         </section>
 
