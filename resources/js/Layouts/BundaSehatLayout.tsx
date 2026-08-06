@@ -57,7 +57,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-clip">
 
       {/* Background Ambient Ornaments & Visible Gradient Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
