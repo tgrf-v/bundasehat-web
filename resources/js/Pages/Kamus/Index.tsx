@@ -154,27 +154,27 @@ export default function KamusIndex() {
         {activeTab === "artikel" && (
           <div className="space-y-6 animate-fadeIn">
             
-            {/* Alphabet Filter Pills (Halodoc Style) */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-center flex-wrap gap-1 max-w-3xl mx-auto pt-1">
+            {/* Alphabet Filter Pills (Segmented Horizontal Capsule Bar) */}
+            <div className="max-w-4xl mx-auto">
+              <div className="p-1.5 bg-slate-100/90 border border-slate-200/70 rounded-full shadow-inner flex items-center justify-between gap-0.5 overflow-x-auto scrollbar-none">
                 <button
                   onClick={() => setSelectedLetter("semua")}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all shrink-0 ${
                     selectedLetter === "semua"
-                      ? "bg-rose-500 text-white shadow-soft-sm"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-rose-500 text-white shadow-soft-xs"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-semibold"
                   }`}
                 >
-                  Semua (A-Z)
+                  Semua
                 </button>
                 {ALPHABET.map((char) => (
                   <button
                     key={char}
                     onClick={() => setSelectedLetter(char)}
-                    className={`h-7 w-7 rounded-full text-xs font-bold transition-all flex items-center justify-center ${
+                    className={`h-7 w-7 rounded-full text-xs font-bold transition-all flex items-center justify-center shrink-0 ${
                       selectedLetter === char
-                        ? "bg-rose-500 text-white shadow-soft-sm"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        ? "bg-rose-500 text-white shadow-soft-xs"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-semibold"
                     }`}
                   >
                     {char}
