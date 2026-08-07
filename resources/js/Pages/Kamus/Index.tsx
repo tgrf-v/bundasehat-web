@@ -183,10 +183,10 @@ export default function KamusIndex() {
               </div>
             </div>
 
-            {/* Classic Dictionary List Layout */}
-            <div className="bg-white rounded-3xl border border-slate-200/70 shadow-soft-xs divide-y divide-slate-100 overflow-hidden">
+            {/* Stacked Row List Layout (Baris 2-Tingkat) */}
+            <div className="space-y-3">
               {filteredArticles.length === 0 ? (
-                <div className="p-8 text-center text-xs text-slate-500 font-medium">
+                <div className="p-8 text-center text-xs text-slate-500 font-medium bg-white rounded-2xl border border-slate-100">
                   Tidak ada istilah komplikasi ditemukan untuk filter huruf ini.
                 </div>
               ) : (
@@ -194,25 +194,23 @@ export default function KamusIndex() {
                   <div
                     key={article.id}
                     onClick={() => setSelectedArticle(article)}
-                    className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-rose-50/40 transition-colors cursor-pointer group"
+                    className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-100/90 shadow-soft-xs hover:shadow-soft-sm hover:border-rose-200/80 transition-all cursor-pointer group space-y-2"
                   >
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="h-5 w-5 rounded-full bg-pink-100 text-rose-600 font-bold text-[11px] flex items-center justify-center shrink-0">
-                          {article.letter}
-                        </span>
-                        <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-rose-600 transition-colors truncate">
-                          {article.title}
-                        </h3>
-                      </div>
-                      <p className="text-xs text-slate-500 line-clamp-1 pl-7 leading-relaxed">
-                        {article.summary}
-                      </p>
+                    {/* Baris 1 (Atas): Judul Lengkap */}
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                        {article.title}
+                      </h3>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-rose-600 shrink-0 group-hover:translate-x-0.5 transition-transform">
-                      <span className="hidden sm:inline">Pertolongan Pertama</span>
-                      <ChevronRight className="h-4 w-4" />
+                    {/* Baris 2 (Bawah): Deskripsi ringkas 1-2 kalimat + Ikon Panah > */}
+                    <div className="flex items-end justify-between gap-4 pt-0.5">
+                      <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
+                        {article.summary}
+                      </p>
+                      <div className="text-slate-400 group-hover:text-rose-600 shrink-0 group-hover:translate-x-1 transition-transform pb-0.5">
+                        <ChevronRight className="h-5 w-5" />
+                      </div>
                     </div>
                   </div>
                 ))
