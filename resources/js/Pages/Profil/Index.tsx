@@ -3,9 +3,6 @@ import { Link, router } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import { DatePicker } from "@/Components/ui/date-picker";
 import { Badge } from "@/Components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import {
@@ -18,26 +15,23 @@ import {
   ShieldCheck,
   ChevronRight,
   Baby,
-  Bell,
-  BellRing,
   FileText,
   Headphones,
-  Info,
-  RefreshCw,
   ArrowLeft,
   X,
 } from "lucide-react";
 
 export default function ProfilIndex() {
-  const [activeView, setActiveView] = useState<"menu" | "edit_profil" | "riwayat">("menu");
-  const [activeModal, setActiveModal] = useState<"syarat" | "privasi" | "bantuan" | null>(null);
-  const [notificationActive, setNotificationActive] = useState<boolean>(false);
+  const [activeView, setActiveView] = useState<"menu" | "edit_profil" | "riwayat" | "syarat" | "privasi" | "bantuan">("menu");
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [profileData, setProfileData] = useState({
-    nama: "Ibu Rahma Rahayu",
+    nama: "Tegar Rifa'i",
+    tanggalLahir: "08/07/2026",
+    telepon: "",
+    pekerjaan: "Mahasiswa",
+    pendidikan: "S-1",
     nik: "3201928301920002",
     hpht: "2025-10-12",
-    telepon: "081234567890",
     puskesmas: "Puskesmas Wilayah 1 (Kecamatan A)",
   });
 
@@ -47,7 +41,7 @@ export default function ProfilIndex() {
     setTimeout(() => {
       setIsSaved(false);
       setActiveView("menu");
-    }, 1800);
+    }, 1500);
   };
 
   const handleLogout = () => {
@@ -55,15 +49,11 @@ export default function ProfilIndex() {
     router.visit("/");
   };
 
-  const toggleNotification = () => {
-    setNotificationActive(!notificationActive);
-  };
-
   return (
     <BundaSehatLayout activeNav="profil">
       <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8 space-y-6 animate-fadeIn">
         
-        {/* VIEW 1: MAIN MENU LAYOUT (TAMPILAN UTAMA SEPERTI DI GAMBAR) */}
+        {/* VIEW 1: MAIN MENU LAYOUT */}
         {activeView === "menu" && (
           <div className="space-y-6 animate-fadeIn">
             
@@ -98,12 +88,12 @@ export default function ProfilIndex() {
                 </button>
 
                 <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
-                  HPHT: 12 Okt 2025 · Usia Kehamilan 24 Minggu
+                  Belum Program Hamil
                 </p>
               </div>
             </div>
 
-            {/* Menu 1: Standalone Card - Riwayat Kehamilan */}
+            {/* Menu 1: Standalone Card - Riwayat */}
             <Card
               onClick={() => setActiveView("riwayat")}
               className="rounded-3xl border-slate-100 bg-white p-4 sm:p-5 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer group space-y-0"
@@ -114,7 +104,7 @@ export default function ProfilIndex() {
                     <Baby className="h-5 w-5 text-emerald-600" />
                   </div>
                   <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
-                    Riwayat Kehamilan
+                    Riwayat
                   </span>
                 </div>
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
@@ -124,38 +114,9 @@ export default function ProfilIndex() {
             {/* Menu 2: Grouped Menu Box Card */}
             <Card className="rounded-3xl border-slate-100 bg-white shadow-soft-sm divide-y divide-slate-100 overflow-hidden space-y-0">
               
-              {/* Row 1: Notifikasi */}
+              {/* Row 1: Syarat dan Ketentuan */}
               <div
-                onClick={toggleNotification}
-                className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-3.5">
-                  <div className={`h-10 w-10 rounded-2xl flex items-center justify-center shrink-0 transition-colors ${
-                    notificationActive ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-500"
-                  }`}>
-                    {notificationActive ? (
-                      <BellRing className="h-5 w-5 text-emerald-600" />
-                    ) : (
-                      <Bell className="h-5 w-5 text-amber-500" />
-                    )}
-                  </div>
-                  <div>
-                    <h4 className={`font-bold text-sm sm:text-base transition-colors ${
-                      notificationActive ? "text-slate-800 group-hover:text-emerald-600" : "text-amber-500 group-hover:text-amber-600"
-                    }`}>
-                      {notificationActive ? "Notifikasi Sudah Aktif" : "Notifikasi Belum Aktif"}
-                    </h4>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      {notificationActive ? "Pengingat jadwal kontrol & minum vitamin aktif" : "Klik untuk mengaktifkan notifikasi"}
-                    </p>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:translate-x-1 transition-transform" />
-              </div>
-
-              {/* Row 2: Syarat dan Ketentuan */}
-              <div
-                onClick={() => setActiveModal("syarat")}
+                onClick={() => setActiveView("syarat")}
                 className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3.5">
@@ -169,9 +130,9 @@ export default function ProfilIndex() {
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
               </div>
 
-              {/* Row 3: Kebijakan Privasi */}
+              {/* Row 2: Kebijakan Privasi */}
               <div
-                onClick={() => setActiveModal("privasi")}
+                onClick={() => setActiveView("privasi")}
                 className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3.5">
@@ -185,9 +146,9 @@ export default function ProfilIndex() {
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
               </div>
 
-              {/* Row 4: Bantuan */}
+              {/* Row 3: Bantuan */}
               <div
-                onClick={() => setActiveModal("bantuan")}
+                onClick={() => setActiveView("bantuan")}
                 className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3.5">
@@ -196,35 +157,6 @@ export default function ProfilIndex() {
                   </div>
                   <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
                     Bantuan
-                  </span>
-                </div>
-                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
-              </div>
-
-              {/* Row 5: Versi Aplikasi */}
-              <div className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group">
-                <div className="flex items-center gap-3.5">
-                  <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                    <Info className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <span className="font-bold text-slate-800 text-sm sm:text-base">
-                    Versi Aplikasi 3.16.0 (beta)
-                  </span>
-                </div>
-                <ChevronRight className="h-5 w-5 text-slate-400" />
-              </div>
-
-              {/* Row 6: Update Aplikasi */}
-              <div
-                onClick={() => alert("Aplikasi Anda sudah menggunakan versi terbaru (v3.16.0)!")}
-                className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-3.5">
-                  <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:rotate-180 transition-transform duration-500">
-                    <RefreshCw className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
-                    Update Aplikasi
                   </span>
                 </div>
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
@@ -251,118 +183,148 @@ export default function ProfilIndex() {
           </div>
         )}
 
-        {/* VIEW 2: EDIT DATA DIRI FORM */}
+        {/* VIEW 2: HALAMAN DEDIKASI EDIT DATA DIRI (DESAIN SESUAI REFERENSI GAMBAR) */}
         {activeView === "edit_profil" && (
           <div className="space-y-6 animate-fadeIn">
-            <button
-              type="button"
-              onClick={() => setActiveView("menu")}
-              className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-rose-600 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Kembali ke Menu Profil</span>
-            </button>
+            {/* Header Bar Navigation */}
+            <div className="flex items-center justify-between relative py-2">
+              <button
+                type="button"
+                onClick={() => setActiveView("menu")}
+                className="p-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors shrink-0"
+                aria-label="Kembali"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <h2 className="font-bold text-slate-900 text-base sm:text-lg flex-1 text-center pr-6">
+                Edit Data Diri
+              </h2>
+            </div>
 
-            <Card className="rounded-3xl border-slate-200/80 shadow-soft-sm bg-white overflow-hidden space-y-0">
-              <form onSubmit={handleSaveProfile}>
-                <CardHeader className="border-b border-slate-100 p-6">
-                  <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <User className="h-5 w-5 text-rose-600" />
-                    <span>Perbarui Data Diri Pasien</span>
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    Kelola data identitas, tanggal HPHT, dan Puskesmas rujukan domisili Anda
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="space-y-4 p-6">
-                  {isSaved && (
-                    <div className="p-3 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2 animate-fadeIn">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                      <span>Data profil berhasil diperbarui!</span>
-                    </div>
-                  )}
-
-                  <div>
-                    <Label htmlFor="nama_profil">Nama Lengkap Pasien</Label>
-                    <Input
-                      id="nama_profil"
-                      value={profileData.nama}
-                      onChange={(e) => setProfileData({ ...profileData, nama: e.target.value })}
-                      className="mt-1"
-                    />
+            {/* Form Container Card */}
+            <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-5 border-none sm:border">
+              <form onSubmit={handleSaveProfile} className="space-y-5">
+                {isSaved && (
+                  <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2 animate-fadeIn">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Data diri berhasil disimpan!</span>
                   </div>
+                )}
 
-                  <div>
-                    <Label htmlFor="nik_profil">Nomor NIK KTP</Label>
-                    <Input
-                      id="nik_profil"
-                      value={profileData.nik}
-                      onChange={(e) => setProfileData({ ...profileData, nik: e.target.value })}
-                      className="mt-1"
+                {/* Field 1: Nama */}
+                <div>
+                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                    Nama
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.nama}
+                    onChange={(e) => setProfileData({ ...profileData, nama: e.target.value })}
+                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                </div>
+
+                {/* Field 2: Tanggal Lahir */}
+                <div>
+                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                    Tanggal Lahir
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={profileData.tanggalLahir}
+                      onChange={(e) => setProfileData({ ...profileData, tanggalLahir: e.target.value })}
+                      className="w-full rounded-full h-12 pl-5 pr-12 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                     />
+                    <Calendar className="absolute right-4 top-3.5 h-5 w-5 text-slate-800" />
                   </div>
+                </div>
 
-                  <div>
-                    <Label htmlFor="hpht_profil">Hari Pertama Haid Terakhir (HPHT)</Label>
-                    <DatePicker
-                      id="hpht_profil"
-                      value={profileData.hpht}
-                      onChange={(val) => setProfileData({ ...profileData, hpht: val })}
-                      className="mt-1"
-                    />
-                  </div>
+                {/* Field 3: Nomor Handphone */}
+                <div>
+                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                    Nomor Handphone
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.telepon}
+                    placeholder="Nomor Handphone"
+                    onChange={(e) => setProfileData({ ...profileData, telepon: e.target.value })}
+                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                </div>
 
-                  <div>
-                    <Label htmlFor="puskesmas_profil">Puskesmas / Faskes Rujukan Domisili</Label>
-                    <Input
-                      id="puskesmas_profil"
-                      value={profileData.puskesmas}
-                      onChange={(e) => setProfileData({ ...profileData, puskesmas: e.target.value })}
-                      className="mt-1"
-                    />
-                  </div>
-                </CardContent>
+                {/* Field 4: Pekerjaan */}
+                <div>
+                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                    Pekerjaan
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.pekerjaan}
+                    onChange={(e) => setProfileData({ ...profileData, pekerjaan: e.target.value })}
+                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                </div>
 
-                <CardFooter className="border-t border-slate-100 p-4 bg-slate-50/50 flex justify-end gap-3">
-                  <Button
+                {/* Field 5: Pendidikan Terakhir */}
+                <div>
+                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                    Pendidikan Terakhir
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.pendidikan}
+                    onChange={(e) => setProfileData({ ...profileData, pendidikan: e.target.value })}
+                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-3 pt-4">
+                  <button
                     type="button"
-                    variant="outline"
                     onClick={() => setActiveView("menu")}
-                    className="font-bold text-xs"
+                    className="rounded-full px-7 h-12 border border-rose-400 text-rose-500 font-bold text-xs sm:text-sm hover:bg-rose-50 transition-colors uppercase shrink-0"
                   >
-                    Batal
-                  </Button>
-                  <Button type="submit" variant="rose" className="gap-2 font-bold text-xs shadow-soft-sm">
-                    <Save className="h-4 w-4" />
-                    <span>Simpan Perubahan</span>
-                  </Button>
-                </CardFooter>
+                    BATAL
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wide flex-1 text-center shadow-soft-sm transition-colors"
+                  >
+                    SIMPAN PERUBAHAN
+                  </button>
+                </div>
               </form>
             </Card>
           </div>
         )}
 
-        {/* VIEW 3: RIWAYAT KEHAMILAN / SCREENING */}
+        {/* VIEW 3: HALAMAN DEDIKASI RIWAYAT SCREENING */}
         {activeView === "riwayat" && (
           <div className="space-y-6 animate-fadeIn">
-            <button
-              type="button"
-              onClick={() => setActiveView("menu")}
-              className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-rose-600 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Kembali ke Menu Profil</span>
-            </button>
+            <div className="flex items-center justify-between relative py-2">
+              <button
+                type="button"
+                onClick={() => setActiveView("menu")}
+                className="p-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors shrink-0"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <h2 className="font-bold text-slate-900 text-base sm:text-lg flex-1 text-center pr-6">
+                Riwayat Skrining Kesehatan
+              </h2>
+            </div>
 
-            <Card className="rounded-3xl border-slate-200/80 shadow-soft-sm bg-white overflow-hidden space-y-0">
+            <Card className="rounded-3xl border-slate-100 bg-white overflow-hidden shadow-soft-sm space-y-0">
               <CardHeader className="border-b border-slate-100 p-6">
                 <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <History className="h-5 w-5 text-rose-600" />
-                  <span>Riwayat Kehamilan & Hasil Screening</span>
+                  <span>Daftar Pemantauan Skoring Risiko</span>
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  Daftar tanggal pemantauan skoring risiko yang telah dilakukan
+                  Riwayat penentuan skor Poedji Rochjati pada kehamilan & persalinan Anda
                 </CardDescription>
               </CardHeader>
 
@@ -428,66 +390,92 @@ export default function ProfilIndex() {
           </div>
         )}
 
-        {/* MODAL DIALOGS FOR SYARAT, PRIVASI & BANTUAN */}
-        {activeModal && (
-          <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-            <Card className="max-w-lg w-full rounded-3xl bg-white overflow-hidden shadow-soft-xl border-none space-y-0 animate-scaleUp">
-              <div className="p-5 flex items-center justify-between border-b border-slate-100 bg-slate-50/50">
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">
-                  {activeModal === "syarat" && "Syarat dan Ketentuan"}
-                  {activeModal === "privasi" && "Kebijakan Privasi"}
-                  {activeModal === "bantuan" && "Pusat Bantuan & Dukungan"}
-                </h3>
-                <button
-                  onClick={() => setActiveModal(null)}
-                  className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
+        {/* VIEW 4: HALAMAN DEDIKASI SYARAT DAN KETENTUAN */}
+        {activeView === "syarat" && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between relative py-2">
+              <button
+                type="button"
+                onClick={() => setActiveView("menu")}
+                className="p-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors shrink-0"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <h2 className="font-bold text-slate-900 text-base sm:text-lg flex-1 text-center pr-6">
+                Syarat dan Ketentuan
+              </h2>
+            </div>
 
-              <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {activeModal === "syarat" && (
-                  <>
-                    <p className="font-bold text-slate-800">1. Ketentuan Penggunaan Aplikasi BundaSehat</p>
-                    <p>Aplikasi ini ditujukan sebagai alat skrining awal mandiri kehamilan dan persalinan berbasis kartu Poedji Rochjati. Hasil skrining bukan pengganti diagnosis medis resmi dokter spesialis kandungan.</p>
-                    <p className="font-bold text-slate-800 pt-2">2. Tanggung Jawab Pengguna</p>
-                    <p>Pengguna wajib memasukkan data klinis HPHT, usia kehamilan, dan faktor risiko secara akurat demi mendapatkan rekomendasi rujukan faskes yang tepat.</p>
-                  </>
-                )}
+            <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <h3 className="font-bold text-slate-900 text-base">1. Ketentuan Penggunaan Aplikasi BundaSehat</h3>
+              <p>Aplikasi BundaSehat dikembangkan sebagai platform bantuan awal skrining mandiri kehamilan dan persalinan berbasis metode Poedji Rochjati. Seluruh kalkulasi skor bertujuan sebagai panduan deteksi dini risiko kebidanan dan bukan merupakan vonis medis final.</p>
 
-                {activeModal === "privasi" && (
-                  <>
-                    <p className="font-bold text-slate-800">1. Perlindungan Data Rekam Medis</p>
-                    <p>BundaSehat menjamin kerahasiaan data NIK, domisili, dan riwayat skrining kesehatan kehamilan Anda sesuai dengan regulasi perlindungan data pribadi medis nasional.</p>
-                    <p className="font-bold text-slate-800 pt-2">2. Penggunaan Data Klinis</p>
-                    <p>Data skrining hanya diakses oleh tenaga kesehatan di Puskesmas rujukan terdaftar untuk penanganan dan pemantauan risiko kehamilan Anda.</p>
-                  </>
-                )}
+              <h3 className="font-bold text-slate-900 text-base pt-2">2. Tanggung Jawab Pengguna</h3>
+              <p>Pengguna berkewajiban memasukkan informasi riwayat kesehatan, HPHT, dan indikator klinis secara jujur dan akurat untuk menjamin ketepatan rekomendasi rujukan faskes.</p>
 
-                {activeModal === "bantuan" && (
-                  <div className="space-y-4">
-                    <p>Butuh bantuan teknis atau memiliki pertanyaan seputar hasil skrining kehamilan Anda?</p>
-                    <div className="p-4 rounded-2xl bg-rose-50 text-rose-900 border border-rose-100 space-y-2">
-                      <div className="font-bold flex items-center gap-2 text-rose-700">
-                        <Headphones className="h-4 w-4" />
-                        <span>Layanan Bidan & Support 24/7</span>
-                      </div>
-                      <p className="text-xs">WhatsApp Hotline: +62 812-3456-7890</p>
-                      <p className="text-xs">Email: support@bundasehat.id</p>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <h3 className="font-bold text-slate-900 text-base pt-2">3. Kerahasiaan Rekam Medis</h3>
+              <p>Seluruh rekaman data pribadi dan skrining dilindungi dengan sistem enkripsi dan hanya digunakan untuk keperluan pelayanan medis resmi.</p>
+            </Card>
+          </div>
+        )}
 
-              <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
-                <Button
-                  onClick={() => setActiveModal(null)}
-                  variant="rose"
-                  className="font-bold text-xs shadow-soft-sm"
-                >
-                  Tutup
-                </Button>
+        {/* VIEW 5: HALAMAN DEDIKASI KEBIJAKAN PRIVASI */}
+        {activeView === "privasi" && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between relative py-2">
+              <button
+                type="button"
+                onClick={() => setActiveView("menu")}
+                className="p-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors shrink-0"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <h2 className="font-bold text-slate-900 text-base sm:text-lg flex-1 text-center pr-6">
+                Kebijakan Privasi
+              </h2>
+            </div>
+
+            <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <h3 className="font-bold text-slate-900 text-base">1. Pengumpulan Informasi Pribadi</h3>
+              <p>BundaSehat mengumpulkan data penting seperti Nama, NIK, tanggal HPHT, dan faskes rujukan domisili semata-mata untuk mengintegrasikan layanan rujukan kesehatan ibu dan anak.</p>
+
+              <h3 className="font-bold text-slate-900 text-base pt-2">2. Keamanan Data Pasien</h3>
+              <p>Kami tidak pernah menjual atau membagikan data rekam kesehatan pasien kepada pihak ketiga di luar jaringan Puskesmas dan Rumah Sakit Rujukan resmi terdaftar.</p>
+            </Card>
+          </div>
+        )}
+
+        {/* VIEW 6: HALAMAN DEDIKASI BANTUAN */}
+        {activeView === "bantuan" && (
+          <div className="space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-between relative py-2">
+              <button
+                type="button"
+                onClick={() => setActiveView("menu")}
+                className="p-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors shrink-0"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <h2 className="font-bold text-slate-900 text-base sm:text-lg flex-1 text-center pr-6">
+                Bantuan & Dukungan
+              </h2>
+            </div>
+
+            <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-4">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Memiliki kendala teknis atau pertanyaan seputar pemantauan kehamilan Anda? Tim medis dan support kami siap membantu.
+              </p>
+
+              <div className="p-5 rounded-3xl bg-emerald-50 text-emerald-900 border border-emerald-100 space-y-3">
+                <div className="font-bold flex items-center gap-2 text-emerald-700 text-sm">
+                  <Headphones className="h-5 w-5" />
+                  <span>Hotline Bidan & Consultation Center</span>
+                </div>
+                <div className="text-xs space-y-1 text-emerald-800">
+                  <p><strong>WhatsApp Support:</strong> +62 812-3456-7890</p>
+                  <p><strong>Jam Operasional:</strong> Senin - Minggu (24 Jam Emergency)</p>
+                  <p><strong>Email Resmi:</strong> help@bundasehat.id</p>
+                </div>
               </div>
             </Card>
           </div>
