@@ -7,7 +7,6 @@ import { Input } from "@/Components/ui/input";
 import { Tabs } from "@/Components/ui/tabs";
 import {
   BookOpen,
-  Search,
   Video,
   Heart,
   Sparkles,
@@ -132,10 +131,10 @@ export default function KamusIndex() {
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
-            Katalog Medis & Terapi Komplementer Non-Obat
+            Katalog Medis & Terapi Komplementer
           </h1>
           <p className="text-xs md:text-sm text-slate-500 max-w-lg mx-auto">
-            Pelajari istilah komplikasi kehamilan A-Z dan tonton video panduan terapi fisik mandiri yang aman untuk Ibu Hamil
+            Panduan istilah medis kehamilan A-Z & video terapi mandiri.
           </p>
         </div>
 
@@ -155,19 +154,8 @@ export default function KamusIndex() {
         {activeTab === "artikel" && (
           <div className="space-y-6 animate-fadeIn">
             
-            {/* Search Bar & Alphabet Filter (Halodoc Style) */}
+            {/* Alphabet Filter Pills (Halodoc Style) */}
             <div className="space-y-4">
-              <div className="relative max-w-xl mx-auto">
-                <Search className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
-                <Input
-                  placeholder="Cari istilah komplikasi (misal: preeklamsia, anemia, hipertensi)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-11 pr-4"
-                />
-              </div>
-
-              {/* Alphabet Filter Pills */}
               <div className="flex items-center justify-center flex-wrap gap-1 max-w-3xl mx-auto pt-1">
                 <button
                   onClick={() => setSelectedLetter("semua")}
