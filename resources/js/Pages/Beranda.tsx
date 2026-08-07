@@ -239,7 +239,7 @@ export default function Beranda() {
 
                     {/* Tri-Color Segmented Risk Gauge Meter with Floating Score Pin */}
                     <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
-                      <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
+                      <div className="h-4 sm:h-5 w-full rounded-full flex overflow-hidden">
                         <div className="flex-1 bg-[#64B565]" />
                         <div className="flex-1 bg-[#F7D154]" />
                         <div className="flex-1 bg-[#F83838]" />
