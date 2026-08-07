@@ -85,12 +85,14 @@ export default function Welcome() {
               {/* Column 1: Hero Text Content (Order 2 on Mobile, Order 1 on Desktop) */}
               <div className="lg:col-span-6 order-2 lg:order-1 space-y-6 text-center lg:text-left">
                 
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                  Pendamping Ibu Hamil & Persalinan Sehat Tanpa Komplikasi
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight space-y-2 sm:space-y-3">
+                  <span className="block">Pendamping</span>
+                  <span className="block">Kehamilan &</span>
+                  <span className="block">Persalinan Sehat</span>
                 </h1>
 
                 <p className="text-sm md:text-lg text-pink-50 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
-                  Pantau kesehatan janin, kalkulasi usia kehamilan & HPL, serta dapatkan rekomendasi terapi komplementer yang aman dan tervalidasi.
+                  Skrining risiko kehamilan, hitung HPL otomatis, dan panduan terapi komplementer terpercaya.
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
