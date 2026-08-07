@@ -31,7 +31,9 @@ interface ArticleItem {
 interface VideoItem {
   id: string;
   title: string;
+  badge: string;
   category: string;
+  instructor: string;
   youtubeId: string;
   duration: string;
   description: string;
@@ -188,42 +190,32 @@ const VIDEOS: VideoItem[] = [
   {
     id: "v1",
     title: "Teknik Pijat Oxytocin Ibu Hamil & Pelancar ASI",
-    category: "Pijat & Relaksasi",
-    youtubeId: "dQw4w9WgXcQ",
-    duration: "08:45",
-    description: "Panduan gerakan pijat sepanjang tulang belakang untuk merangsang hormon oksitosin dan melancarkan persalinan.",
+    badge: "TERAPI FISIK",
+    category: "Trimester 3 · Laktasi",
+    instructor: "👩‍⚕️ dr. Sari, Sp.OG",
+    youtubeId: "8F1Yj9tG134",
+    duration: "6:24",
+    description: "Panduan gerakan pijat sepanjang tulang belakang untuk merangsang hormon oksitosin dan mempersiapkan produksi ASI.",
   },
   {
     id: "v2",
     title: "Senam Hamil Trimester 3 Pelancar Pembukaan Persalinan",
-    category: "Olahraga Bumil",
+    badge: "SENAM HAMIL",
+    category: "Trimester 3 · Persalinan",
+    instructor: "👩‍⚕️ Bidan Anisa",
     youtubeId: "dQw4w9WgXcQ",
-    duration: "12:30",
-    description: "Gerakan squat ringan dan pelenturan panggul yang aman untuk membantu kepala janin turun ke pintu atas panggul.",
+    duration: "9:10",
+    description: "Gerakan squat ringan dan pelenturan panggul yang aman untuk membantu kepala janin turun ke pintu panggul.",
   },
   {
     id: "v3",
     title: "Terapi Napas Deep Breathing Meredakan Nyeri Kontraksi",
+    badge: "RELAKSASI",
     category: "Manajemen Nyeri",
-    youtubeId: "dQw4w9WgXcQ",
-    duration: "06:15",
-    description: "Teknik olah napas lambat untuk mengalihkan sensasi nyeri mulas saat pembengkakan edema atau kontraksi persalinan.",
-  },
-  {
-    id: "v4",
-    title: "Relaksasi Aromaterapi & Musik Afirmasi Positif Melahirkan",
-    category: "Mindfulness",
-    youtubeId: "dQw4w9WgXcQ",
-    duration: "15:00",
-    description: "Panduan afirmasi positif dan terapi musik lembut untuk meredakan kecemasan jelang proses persalinan di Faskes.",
-  },
-  {
-    id: "v5",
-    title: "Gerakan Gym Ball Ringan Mengatasi Nyeri Pinggang Bumil",
-    category: "Latihan Fisik",
-    youtubeId: "dQw4w9WgXcQ",
-    duration: "10:20",
-    description: "Gerakan memutar panggul di atas birth ball untuk mengurangi tekanan tulang belakang dan merenggangkan panggul.",
+    instructor: "👩‍⚕️ dr. Putri, Sp.OG",
+    youtubeId: "5qap5aO4i9A",
+    duration: "5:47",
+    description: "Teknik olah napas lambat untuk mengalihkan sensasi nyeri mulas saat pembukaan, edema, atau kontraksi awal.",
   },
 ];
 
@@ -234,7 +226,7 @@ export default function KamusIndex() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedLetter, setSelectedLetter] = useState<string>("semua");
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
-  const [selectedVideo, setSelectedVideo] = useState<VideoItem>(VIDEOS[0]);
+  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
   const filteredArticles = ARTICLES.filter((art) => {
     const matchesSearch =
@@ -385,87 +377,119 @@ export default function KamusIndex() {
           </div>
         )}
 
-        {/* TAB 2: VIDEO TERAPI KOMPLEMENTER (FEATURED MAIN PLAYER + PLAYLIST QUEUE) */}
+        {/* TAB 2: VIDEO TERAPI KOMPLEMENTER (NON-OBAT) */}
         {activeTab === "terapi" && (
-          <div className="space-y-8 animate-fadeIn">
+          <div className="space-y-6 animate-fadeIn">
             
-            {/* Featured Main Video Player */}
-            <div className="space-y-4">
-              <div className="relative aspect-video rounded-3xl overflow-hidden shadow-soft-md bg-slate-900 border border-slate-100/80">
-                <iframe
-                  className="w-full h-full"
-                  src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}`}
-                  title={selectedVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+            {/* Custom Video Grid matching User Design */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {VIDEOS.map((vid) => (
+                <Card
+                  key={vid.id}
+                  className="rounded-3xl border-slate-100 overflow-hidden shadow-soft-sm hover:shadow-soft-md transition-all bg-white group cursor-pointer flex flex-col justify-between"
+                  onClick={() => setSelectedVideo(vid)}
+                >
+                  <div className="flex flex-col h-full">
+                    {/* Thumbnail Container with Top Badge, Play Button, and Duration */}
+                    <div className="relative aspect-video bg-slate-900 overflow-hidden">
+                      <img
+                        src={`https://img.youtube.com/vi/${vid.youtubeId}/hqdefault.jpg`}
+                        alt={vid.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      
+                      {/* Top-Left Badge (TERAPI FISIK / SENAM HAMIL / RELAKSASI) */}
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold tracking-wider uppercase shadow-soft-xs border border-white/20">
+                        {vid.badge}
+                      </span>
 
-              {/* Featured Video Meta Details */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-100/90 shadow-soft-xs space-y-2">
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-xs font-bold text-rose-600 bg-pink-50 border border-pink-100 px-3 py-1 rounded-full">
-                    {selectedVideo.category}
-                  </span>
-                  <span className="text-xs font-bold text-slate-400">
-                    Durasi: {selectedVideo.duration}
-                  </span>
-                </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-xl">
-                  {selectedVideo.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {selectedVideo.description}
-                </p>
-              </div>
-            </div>
-
-            {/* Playlist Queue Section */}
-            <div className="space-y-3">
-              <h4 className="font-bold text-slate-900 text-sm sm:text-base">
-                Daftar Video Terapi Komplementer (Playlist)
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {VIDEOS.map((vid) => {
-                  const isPlaying = selectedVideo.id === vid.id;
-                  return (
-                    <div
-                      key={vid.id}
-                      onClick={() => setSelectedVideo(vid)}
-                      className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group ${
-                        isPlaying
-                          ? "border-rose-500 bg-pink-50/60 shadow-soft-xs"
-                          : "border-slate-100 bg-white hover:border-rose-200 hover:bg-slate-50/80"
-                      }`}
-                    >
-                      <div className={`h-10 w-10 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
-                        isPlaying ? "bg-rose-500 text-white" : "bg-pink-100 text-rose-600"
-                      }`}>
-                        <PlayCircle className="h-5 w-5" />
+                      {/* White Circle Play Button in Center */}
+                      <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/30 transition-colors flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full bg-white text-rose-600 shadow-soft-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="#e11d48">
+                            <path d="M8 5v14l11-7z"></path>
+                          </svg>
+                        </div>
                       </div>
 
-                      <div className="space-y-0.5 min-w-0 flex-1">
-                        <h5 className={`font-bold text-xs sm:text-sm line-clamp-1 transition-colors ${
-                          isPlaying ? "text-rose-600" : "text-slate-900 group-hover:text-rose-600"
-                        }`}>
+                      {/* Bottom-Right Duration */}
+                      <span className="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-slate-900/80 text-white text-[11px] font-semibold backdrop-blur-sm">
+                        {vid.duration}
+                      </span>
+                    </div>
+
+                    {/* Card Body Container */}
+                    <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                      <div className="space-y-1.5">
+                        {/* Category Subtitle */}
+                        <div className="text-[11px] font-semibold text-rose-600 uppercase tracking-wide">
+                          {vid.category}
+                        </div>
+
+                        {/* Title */}
+                        <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-rose-600 transition-colors">
                           {vid.title}
-                        </h5>
-                        <p className="text-[11px] text-slate-500">
-                          {vid.duration} • {vid.category}
+                        </h4>
+
+                        {/* Description */}
+                        <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed pt-0.5">
+                          {vid.description}
                         </p>
                       </div>
 
-                      {isPlaying && (
-                        <span className="text-[10px] font-bold text-rose-600 bg-white border border-rose-200 px-2 py-0.5 rounded-full shrink-0">
-                          Diputar
+                      {/* Card Footer */}
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span className="font-medium text-slate-700 flex items-center gap-1">
+                          {vid.instructor}
                         </span>
-                      )}
+                        <span className="font-bold text-rose-600 flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                          Tonton &rarr;
+                        </span>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                </Card>
+              ))}
             </div>
+
+            {/* Video Modal Player Pop-up */}
+            {selectedVideo && (
+              <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+                <Card className="max-w-3xl w-full rounded-3xl bg-white overflow-hidden shadow-soft-xl space-y-0 border-none">
+                  {/* Modal Header */}
+                  <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-100 bg-slate-50/50">
+                    <h3 className="font-bold text-slate-900 text-base sm:text-lg truncate pr-4">
+                      {selectedVideo.title}
+                    </h3>
+                    <button
+                      onClick={() => setSelectedVideo(null)}
+                      className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0"
+                      aria-label="Tutup"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+
+                  {/* Video Player */}
+                  <div className="relative aspect-video bg-slate-900">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1`}
+                      title={selectedVideo.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+
+                  {/* Modal Footer Description */}
+                  <div className="p-4 sm:p-5 bg-white">
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      {selectedVideo.description}
+                    </p>
+                  </div>
+                </Card>
+              </div>
+            )}
 
           </div>
         )}
