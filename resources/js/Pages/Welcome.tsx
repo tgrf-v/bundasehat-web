@@ -90,7 +90,7 @@ export default function Welcome() {
                 </h1>
 
                 <p className="text-sm md:text-lg text-pink-50 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
-                  Pantau kesehatan janin, kalkulasi usia kehamilan & HPL, serta dapatkan rekomendasi terapi komplementer non-obat yang aman dan tervalidasi.
+                  Pantau kesehatan janin, kalkulasi usia kehamilan & HPL, serta dapatkan rekomendasi terapi komplementer yang aman dan tervalidasi.
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -98,7 +98,7 @@ export default function Welcome() {
                     onClick={handleLoginDemo}
                     className="px-8 py-4 rounded-full bg-white text-rose-600 font-bold text-sm md:text-base shadow-soft-md hover:bg-pink-50 transition-all active:scale-95 flex items-center gap-2"
                   >
-                    <span>Masuk ke Beranda Pasien</span>
+                    <span>Masuk</span>
                     <ArrowRight className="h-5 w-5" />
                   </button>
                 </div>
@@ -168,7 +168,7 @@ export default function Welcome() {
         </section>
 
         {/* SECTION FITUR (LAYANAN & FITUR UNGGULAN RADIX ACCORDION) */}
-        <section id="fitur" className="w-full bg-white text-slate-900 py-16 sm:py-24">
+        <section id="fitur" className="w-full bg-white text-slate-900 pt-12 sm:pt-16 pb-6 sm:pb-8">
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
             <div className="text-center">
@@ -271,7 +271,7 @@ export default function Welcome() {
         </section>
 
         {/* SECTION 3: TENTANG KAMI (ALTERNATING 2-ROW LAYOUT LIKE REFERENCE) */}
-        <section id="tentang" className="w-full bg-white py-16 sm:py-24">
+        <section id="tentang" className="w-full bg-white pt-6 sm:pt-8 pb-16 sm:pb-24">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
             
             {/* Section Title */}

@@ -158,7 +158,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           )}
 
           {/* User Profile & Auth Action Buttons */}
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/profil"
@@ -168,20 +168,6 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   IR
                 </div>
                 <span className="text-xs font-bold text-slate-800">Ibu Rahma</span>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <Link
-                href="/login"
-                className={`px-5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 shadow-soft-sm ${
-                  !isLoggedIn && !isScrolled
-                    ? "bg-white text-rose-600 hover:bg-pink-50"
-                    : "bg-rose-500 text-white hover:bg-rose-600"
-                }`}
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Masuk / Login</span>
               </Link>
             </div>
           )}
