@@ -162,12 +162,16 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/profil"
-                className="flex items-center gap-2.5 p-1.5 pr-3.5 rounded-full bg-slate-100 hover:bg-slate-200/80 transition-colors group"
+                className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-rose-100 transition-all shadow-soft-xs"
+                title="Profil Saya (Tegar Rifa'i)"
               >
-                <div className="h-7 w-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs shadow-soft-xs group-hover:scale-105 transition-transform">
-                  IR
+                <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-slate-200 shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
+                    alt="Tegar Rifa'i"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="text-xs font-bold text-slate-800">Ibu Rahma</span>
               </Link>
             </div>
           )}
