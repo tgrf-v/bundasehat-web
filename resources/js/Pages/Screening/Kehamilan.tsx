@@ -266,7 +266,7 @@ export default function KehamilanScreening() {
                     </Card>
 
                     {/* Banner Cyan Informasi & Cetak Laporan */}
-                    <div className="p-3.5 rounded-xl bg-cyan-50 border border-cyan-100/80 flex items-center justify-between gap-3 text-xs">
+                    <div className="p-3.5 px-5 rounded-full bg-cyan-50 border border-cyan-100/80 flex items-center justify-between gap-3 text-xs">
                       <div className="flex items-center gap-2 text-cyan-900">
                         <Info className="h-4 w-4 text-cyan-600 shrink-0" />
                         <span className="text-[11px] sm:text-xs">Gunakan laporan rincian perhitungan ini untuk referensi Anda.</span>
@@ -288,7 +288,7 @@ export default function KehamilanScreening() {
                       </p>
 
                       <div className="space-y-2 pt-1 text-xs">
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#64B565] shrink-0 mt-0.5" />
                           <div>
                             <p className="font-bold text-slate-800">Skor 2 - Risiko Rendah (KRR)</p>
@@ -296,7 +296,7 @@ export default function KehamilanScreening() {
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#F7D154] shrink-0 mt-0.5" />
                           <div>
                             <p className="font-bold text-slate-800">Skor 6-10 - Risiko Tinggi (KRT)</p>
@@ -304,7 +304,7 @@ export default function KehamilanScreening() {
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#F83838] shrink-0 mt-0.5" />
                           <div>
                             <p className="font-bold text-slate-800">Skor &ge; 12 - Risiko Sangat Tinggi (KRST)</p>
@@ -318,15 +318,15 @@ export default function KehamilanScreening() {
                     <div className="space-y-2 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi umum</h4>
                       <div className="space-y-2 text-xs">
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Umur</span>
                           <span className="font-bold text-rose-600">{formData.umur} thn : 2 poin</span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Jumlah Hamil / Melahirkan (Paritas)</span>
                           <span className="font-bold text-slate-800">Anak ke-{formData.paritas} : {formData.paritas >= 4 ? "4 poin" : "0 poin"}</span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Taksiran HPL</span>
                           <span className="font-bold text-slate-800">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
                         </div>
@@ -337,13 +337,13 @@ export default function KehamilanScreening() {
                     <div className="space-y-2 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi kesehatan</h4>
                       <div className="space-y-2 text-xs">
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Tekanan Darah (Tensi)</span>
                           <span className={`font-bold ${calculateMAP(formData.sistolik, formData.diastolik) >= 90 ? "text-rose-600" : "text-slate-800"}`}>
                             {formData.sistolik}/{formData.diastolik} mmHg (MAP: {calculateMAP(formData.sistolik, formData.diastolik)} mmHg) : {calculateMAP(formData.sistolik, formData.diastolik) >= 90 ? "4 poin" : "0 poin"}
                           </span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Bengkak Kaki / Wajah (Edema)</span>
                           <span className="font-bold text-slate-800">
                             {formData.edema_level === "none" ? "Tidak Ada : 0 poin" : `${formData.edema_level} : 4 poin`}
@@ -357,12 +357,12 @@ export default function KehamilanScreening() {
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Faktor risiko & keluhan terdeteksi</h4>
                       <div className="space-y-2 text-xs">
                         {screeningResult.detail_skor.length === 0 ? (
-                          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 text-slate-500 text-center font-medium">
+                          <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 text-slate-500 text-center font-medium">
                             Tidak ada faktor risiko komplikasi terdeteksi
                           </div>
                         ) : (
                           screeningResult.detail_skor.map((factor, idx) => (
-                            <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                            <div key={idx} className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                               <span className="font-medium text-slate-700">{factor.deskripsi}</span>
                               <span className="font-bold text-rose-600">+ {factor.skor} poin</span>
                             </div>

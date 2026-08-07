@@ -278,7 +278,7 @@ export default function PersalinanScreening() {
                     </Card>
 
                     {/* Banner Cyan Informasi & Cetak Laporan */}
-                    <div className="p-3.5 rounded-xl bg-cyan-50 border border-cyan-100/80 flex items-center justify-between gap-3 text-xs">
+                    <div className="p-3.5 px-5 rounded-full bg-cyan-50 border border-cyan-100/80 flex items-center justify-between gap-3 text-xs">
                       <div className="flex items-center gap-2 text-cyan-900">
                         <Info className="h-4 w-4 text-cyan-600 shrink-0" />
                         <span className="text-[11px] sm:text-xs">Gunakan laporan rincian perhitungan ini untuk referensi tempat persalinan.</span>
@@ -300,7 +300,7 @@ export default function PersalinanScreening() {
                       </p>
 
                       <div className="space-y-2 pt-1 text-xs">
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#64B565] shrink-0 mt-0.5" />
                           <div>
                             <p className="font-bold text-slate-800">Skor 2 - Risiko Rendah (KRR)</p>
@@ -308,7 +308,7 @@ export default function PersalinanScreening() {
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#F7D154] shrink-0 mt-0.5" />
                           <div>
                             <p className="font-bold text-slate-800">Skor 6-10 - Risiko Tinggi (KRT)</p>
@@ -316,7 +316,7 @@ export default function PersalinanScreening() {
                           </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#F83838] shrink-0 mt-0.5" />
                           <div>
                             <p className="font-bold text-slate-800">Skor &ge; 12 - Risiko Sangat Tinggi (KRST)</p>
@@ -330,15 +330,15 @@ export default function PersalinanScreening() {
                     <div className="space-y-2 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi umum</h4>
                       <div className="space-y-2 text-xs">
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Umur</span>
                           <span className="font-bold text-rose-600">{formData.umur} thn : 2 poin</span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Jumlah Hamil / Melahirkan (Paritas)</span>
                           <span className="font-bold text-slate-800">Anak ke-{formData.paritas} : {formData.paritas >= 4 ? "4 poin" : "0 poin"}</span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Presentasi / Posisi Janin</span>
                           <span className={`font-bold ${formData.posisi_janin !== "kepala_bawah" ? "text-rose-600" : "text-slate-800"}`}>
                             {formData.posisi_janin === "kepala_bawah" ? "Kepala di Bawah (Normal) : 0 poin" : `${formData.posisi_janin} : 8 poin`}
@@ -351,19 +351,19 @@ export default function PersalinanScreening() {
                     <div className="space-y-2 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi kesehatan</h4>
                       <div className="space-y-2 text-xs">
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Tekanan Darah (Tensi)</span>
                           <span className={`font-bold ${calculateMAP(formData.sistolik, formData.diastolik) >= 90 ? "text-rose-600" : "text-slate-800"}`}>
                             {formData.sistolik}/{formData.diastolik} mmHg (MAP: {calculateMAP(formData.sistolik, formData.diastolik)} mmHg) : {calculateMAP(formData.sistolik, formData.diastolik) >= 90 ? "4 poin" : "0 poin"}
                           </span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Riwayat Operasi SC</span>
                           <span className={`font-bold ${formData.ada_riwayat_sc ? "text-rose-600" : "text-slate-800"}`}>
                             {formData.ada_riwayat_sc ? "Ada Riwayat SC : 8 poin" : "Tidak Ada : 0 poin"}
                           </span>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                           <span className="font-medium text-slate-700">Kondisi Ketuban</span>
                           <span className={`font-bold ${formData.kondisi_ketuban === "pecah" ? "text-rose-600" : "text-slate-800"}`}>
                             {formData.kondisi_ketuban === "utuh" ? "Utuh : 0 poin" : "Ketuban Pecah Dini : 4 poin"}
@@ -377,12 +377,12 @@ export default function PersalinanScreening() {
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Faktor risiko & keluhan terdeteksi</h4>
                       <div className="space-y-2 text-xs">
                         {persalinanResult.detail_skor.length === 0 ? (
-                          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 text-slate-500 text-center font-medium">
+                          <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 text-slate-500 text-center font-medium">
                             Tidak ada faktor risiko komplikasi persalinan terdeteksi
                           </div>
                         ) : (
                           persalinanResult.detail_skor.map((factor, idx) => (
-                            <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                            <div key={idx} className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                               <span className="font-medium text-slate-700">{factor.deskripsi}</span>
                               <span className="font-bold text-rose-600">+ {factor.skor} poin</span>
                             </div>
