@@ -209,6 +209,22 @@ const VIDEOS: VideoItem[] = [
     duration: "06:15",
     description: "Teknik olah napas lambat untuk mengalihkan sensasi nyeri mulas saat pembengkakan edema atau kontraksi persalinan.",
   },
+  {
+    id: "v4",
+    title: "Relaksasi Aromaterapi & Musik Afirmasi Positif Melahirkan",
+    category: "Mindfulness",
+    youtubeId: "dQw4w9WgXcQ",
+    duration: "15:00",
+    description: "Panduan afirmasi positif dan terapi musik lembut untuk meredakan kecemasan jelang proses persalinan di Faskes.",
+  },
+  {
+    id: "v5",
+    title: "Gerakan Gym Ball Ringan Mengatasi Nyeri Pinggang Bumil",
+    category: "Latihan Fisik",
+    youtubeId: "dQw4w9WgXcQ",
+    duration: "10:20",
+    description: "Gerakan memutar panggul di atas birth ball untuk mengurangi tekanan tulang belakang dan merenggangkan panggul.",
+  },
 ];
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -218,6 +234,7 @@ export default function KamusIndex() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedLetter, setSelectedLetter] = useState<string>("semua");
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<VideoItem>(VIDEOS[0]);
 
   const filteredArticles = ARTICLES.filter((art) => {
     const matchesSearch =
@@ -368,39 +385,86 @@ export default function KamusIndex() {
           </div>
         )}
 
-        {/* TAB 2: VIDEO TERAPI KOMPLEMENTER (NON-OBAT) */}
+        {/* TAB 2: VIDEO TERAPI KOMPLEMENTER (FEATURED MAIN PLAYER + PLAYLIST QUEUE) */}
         {activeTab === "terapi" && (
-          <div className="space-y-6 animate-fadeIn">
+          <div className="space-y-8 animate-fadeIn">
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {VIDEOS.map((vid) => (
-                <Card key={vid.id} className="rounded-3xl border-slate-100 overflow-hidden shadow-soft-sm bg-white space-y-3">
-                  {/* Embedded Video Placeholder / Player */}
-                  <div className="relative aspect-video bg-slate-900 flex items-center justify-center group cursor-pointer">
-                    <iframe
-                      className="w-full h-full"
-                      src={`https://www.youtube.com/embed/${vid.youtubeId}`}
-                      title={vid.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
+            {/* Featured Main Video Player */}
+            <div className="space-y-4">
+              <div className="relative aspect-video rounded-3xl overflow-hidden shadow-soft-md bg-slate-900 border border-slate-100/80">
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}`}
+                  title={selectedVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
 
-                  <div className="p-4 space-y-2">
-                    <div className="flex items-center justify-end">
-                      <span className="text-[11px] font-bold text-slate-400">{vid.duration}</span>
+              {/* Featured Video Meta Details */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-100/90 shadow-soft-xs space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-xs font-bold text-rose-600 bg-pink-50 border border-pink-100 px-3 py-1 rounded-full">
+                    {selectedVideo.category}
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">
+                    Durasi: {selectedVideo.duration}
+                  </span>
+                </div>
+                <h3 className="font-bold text-slate-900 text-base sm:text-xl">
+                  {selectedVideo.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {selectedVideo.description}
+                </p>
+              </div>
+            </div>
+
+            {/* Playlist Queue Section */}
+            <div className="space-y-3">
+              <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+                Daftar Video Terapi Komplementer (Playlist)
+              </h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {VIDEOS.map((vid) => {
+                  const isPlaying = selectedVideo.id === vid.id;
+                  return (
+                    <div
+                      key={vid.id}
+                      onClick={() => setSelectedVideo(vid)}
+                      className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group ${
+                        isPlaying
+                          ? "border-rose-500 bg-pink-50/60 shadow-soft-xs"
+                          : "border-slate-100 bg-white hover:border-rose-200 hover:bg-slate-50/80"
+                      }`}
+                    >
+                      <div className={`h-10 w-10 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
+                        isPlaying ? "bg-rose-500 text-white" : "bg-pink-100 text-rose-600"
+                      }`}>
+                        <PlayCircle className="h-5 w-5" />
+                      </div>
+
+                      <div className="space-y-0.5 min-w-0 flex-1">
+                        <h5 className={`font-bold text-xs sm:text-sm line-clamp-1 transition-colors ${
+                          isPlaying ? "text-rose-600" : "text-slate-900 group-hover:text-rose-600"
+                        }`}>
+                          {vid.title}
+                        </h5>
+                        <p className="text-[11px] text-slate-500">
+                          {vid.duration} • {vid.category}
+                        </p>
+                      </div>
+
+                      {isPlaying && (
+                        <span className="text-[10px] font-bold text-rose-600 bg-white border border-rose-200 px-2 py-0.5 rounded-full shrink-0">
+                          Diputar
+                        </span>
+                      )}
                     </div>
-
-                    <h4 className="font-bold text-slate-900 text-sm leading-snug">
-                      {vid.title}
-                    </h4>
-
-                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                      {vid.description}
-                    </p>
-                  </div>
-                </Card>
-              ))}
+                  );
+                })}
+              </div>
             </div>
 
           </div>
