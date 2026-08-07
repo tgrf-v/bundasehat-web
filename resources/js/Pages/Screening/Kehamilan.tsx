@@ -190,14 +190,14 @@ export default function KehamilanScreening() {
               <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
               
               {/* Header Kolom Kanan */}
-              <div className="mb-6">
+              <div className="mb-6 text-center">
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
-                  Deteksi Dini Komplikasi Kehamilan
+                  Screening Kehamilan
                 </h1>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   {hasScreened
-                    ? "Berikut adalah hasil analisis tingkat risiko kehamilan dan saran terapi komplementer Anda"
-                    : "Isi data fisik, tensi darah, dan keluhan untuk mengkalkulasi tingkat risiko & rujukan Faskes"}
+                    ? "Hasil analisis risiko kehamilan & panduan terapi Bunda."
+                    : "Cek tingkat risiko kehamilan & rujukan Faskes Bunda."}
                 </p>
               </div>
 

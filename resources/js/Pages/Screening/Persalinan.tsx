@@ -187,7 +187,7 @@ export default function PersalinanScreening() {
             {/* Kolom Kiri (Gambar Locked / Static - 50%) */}
             <div className="relative lg:col-span-6 h-[240px] lg:h-full overflow-hidden">
               <img
-                src="/images/pregnancy-screening.jpg"
+                src="/images/persalinan-screening.jpg"
                 alt="Screening Persalinan"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -202,14 +202,14 @@ export default function PersalinanScreening() {
               <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
               
               {/* Header Kolom Kanan */}
-              <div className="mb-6">
+              <div className="mb-6 text-center">
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
-                  Deteksi Dini & Rekomendasi Persalinan
+                  Screening Persalinan
                 </h1>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   {hasScreened
-                    ? "Berikut adalah hasil analisis tingkat risiko persalinan dan rekomendasi tempat/penolong persalinan Anda"
-                    : "Isi data fisik, tensi darah, posisi janin & keluhan untuk mengkalkulasi tingkat risiko & rekomendasi Faskes"}
+                    ? "Hasil analisis & rekomendasi tempat persalinan Bunda."
+                    : "Cek kesiapan bersalin & rekomendasi Faskes rujukan."}
                 </p>
               </div>
 
