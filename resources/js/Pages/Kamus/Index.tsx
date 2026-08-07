@@ -403,9 +403,9 @@ export default function KamusIndex() {
                         {vid.badge}
                       </span>
 
-                      {/* White Circle Play Button in Center */}
-                      <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/30 transition-colors flex items-center justify-center">
-                        <div className="h-10 w-10 rounded-full bg-white text-rose-600 shadow-soft-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                      {/* White Circle Play Button in Center (Visible on Hover Only) */}
+                      <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/30 transition-all duration-300 flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 shadow-soft-md flex items-center justify-center opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300">
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="#e11d48">
                             <path d="M8 5v14l11-7z"></path>
                           </svg>
