@@ -752,7 +752,7 @@ export default function PersalinanScreening() {
                           className="gap-2 text-xs font-bold shadow-soft-sm"
                         >
                           <CheckCircle2 className="h-4 w-4" />
-                          <span>Kalkulasi Rekomendasi Persalinan</span>
+                          <span>Lihat Hasil</span>
                         </Button>
                       )}
                     </div>

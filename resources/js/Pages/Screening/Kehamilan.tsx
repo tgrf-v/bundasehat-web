@@ -744,7 +744,7 @@ export default function KehamilanScreening() {
                       ) : (
                         <Button type="submit" variant="rose" size="sm" isLoading={isLoading} className="gap-2 shadow-soft-sm font-bold text-xs">
                           <CheckCircle2 className="h-4 w-4" />
-                          <span>Proses & Lihat Hasil Screening</span>
+                          <span>Lihat Hasil</span>
                         </Button>
                       )}
                     </div>
