@@ -18,6 +18,12 @@ import { Badge } from "@/Components/ui/badge";
 import { Progress } from "@/Components/ui/progress";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Separator } from "@/Components/ui/separator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/Components/ui/accordion";
 import { ScreeningInput, EdemaLevel, ScreeningResult } from "@/types/screening";
 import { calculateGestationalAge, calculateMAP, evaluateScreening } from "@/lib/scoringEngine";
 import {
@@ -461,28 +467,25 @@ export default function KehamilanScreening() {
                     </div>
                   </div>
 
-                  {/* Card 4: Saran Terapi Komplementer Non-Obat Khusus Bunda (Pola List Clean dengan Shadcn Separator) */}
+                  {/* Card 4: Saran Terapi Komplementer Non-Obat Khusus Bunda (Accordion) */}
                   <div className="space-y-3 pt-2">
                     <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
                       <Heart className="h-4.5 w-4.5 text-rose-600 shrink-0" />
                       <span>Saran Terapi Komplementer Non-Obat Khusus Bunda</span>
                     </h4>
 
-                    <div className="space-y-2 pl-6 sm:pl-6.5">
+                    <Accordion type="single" collapsible defaultValue="terapi-0" className="w-full">
                       {screeningResult.saran_terapi.map((terapi, idx) => (
-                        <React.Fragment key={idx}>
-                          {idx > 0 && <Separator className="my-2 bg-slate-200/70" />}
-                          <div className="text-xs py-0.5 space-y-0.5">
-                            <p className="font-bold text-slate-900 text-xs">
-                              {terapi}
-                            </p>
-                            <p className="text-[11px] text-slate-500 leading-relaxed">
-                              Metode aman non-farmakologi untuk meredakan ketegangan dan mengoptimalkan kondisi fisik ibu hamil.
-                            </p>
-                          </div>
-                        </React.Fragment>
+                        <AccordionItem key={idx} value={`terapi-${idx}`} className="border-b border-slate-100 py-0.5">
+                          <AccordionTrigger className="py-2.5 text-xs font-bold text-slate-900 hover:text-rose-600">
+                            {terapi}
+                          </AccordionTrigger>
+                          <AccordionContent className="text-[11px] text-slate-500 pb-2.5 pt-0 leading-relaxed">
+                            Metode aman non-farmakologi untuk meredakan ketegangan dan mengoptimalkan kondisi fisik ibu hamil.
+                          </AccordionContent>
+                        </AccordionItem>
                       ))}
-                    </div>
+                    </Accordion>
                   </div>
 
                 </div>
