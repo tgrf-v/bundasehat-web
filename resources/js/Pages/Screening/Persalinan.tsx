@@ -497,7 +497,7 @@ export default function PersalinanScreening() {
                     <div className="space-y-3 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
                         <Heart className="h-4.5 w-4.5 text-rose-600 shrink-0" />
-                        <span>Saran Kesiapan & Terapi Persalinan Bunda</span>
+                        <span>Saran Kesiapan & Terapi Persalinan</span>
                       </h4>
 
                       <Accordion type="single" collapsible defaultValue="terapi-0" className="w-full">

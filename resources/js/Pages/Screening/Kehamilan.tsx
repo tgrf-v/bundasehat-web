@@ -471,7 +471,7 @@ export default function KehamilanScreening() {
                   <div className="space-y-3 pt-2">
                     <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
                       <Heart className="h-4.5 w-4.5 text-rose-600 shrink-0" />
-                      <span>Saran Terapi Komplementer Non-Obat Khusus Bunda</span>
+                      <span>Saran Terapi Komplementer</span>
                     </h4>
 
                     <Accordion type="single" collapsible defaultValue="terapi-0" className="w-full">
