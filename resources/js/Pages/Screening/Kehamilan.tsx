@@ -730,7 +730,7 @@ export default function KehamilanScreening() {
                       {currentStep > 1 ? (
                         <Button type="button" variant="outline" size="sm" onClick={handlePrevStep} className="gap-1 text-xs">
                           <ChevronLeft className="h-4 w-4" />
-                          <span>Sebelumnya</span>
+                          <span>Kembali</span>
                         </Button>
                       ) : (
                         <div />
@@ -738,7 +738,7 @@ export default function KehamilanScreening() {
 
                       {currentStep < 3 ? (
                         <Button type="button" variant="default" size="sm" onClick={handleNextStep} className="gap-1 text-xs">
-                          <span>Lanjut Langkah {currentStep + 1}</span>
+                          <span>Lanjut</span>
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       ) : (

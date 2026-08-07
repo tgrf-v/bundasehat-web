@@ -741,7 +741,7 @@ export default function PersalinanScreening() {
                           onClick={handleNextStep}
                           className="gap-1.5 text-xs font-bold shadow-soft-sm"
                         >
-                          <span>Lanjut Langkah {currentStep + 1}</span>
+                          <span>Lanjut</span>
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       ) : (
