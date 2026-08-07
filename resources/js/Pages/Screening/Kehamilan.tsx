@@ -291,7 +291,7 @@ export default function KehamilanScreening() {
                         <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#64B565] shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-bold text-slate-800">Skor 2 - Risiko Rendah (KRR)</p>
+                            <p className="font-bold text-slate-800">Skor 2 - Risiko Rendah</p>
                             <p className="text-[11px] text-slate-500 leading-normal">Kehamilan fisiologis tanpa komplikasi terdeteksi.</p>
                           </div>
                         </div>
@@ -299,7 +299,7 @@ export default function KehamilanScreening() {
                         <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#F7D154] shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-bold text-slate-800">Skor 6-10 - Risiko Tinggi (KRT)</p>
+                            <p className="font-bold text-slate-800">Skor 6-10 - Risiko Tinggi</p>
                             <p className="text-[11px] text-slate-500 leading-normal">Pengawasan rutin Bidan / Dokter umum Puskesmas.</p>
                           </div>
                         </div>
@@ -307,7 +307,7 @@ export default function KehamilanScreening() {
                         <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
                           <div className="h-4 w-4 rounded bg-[#F83838] shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-bold text-slate-800">Skor &ge; 12 - Risiko Sangat Tinggi (KRST)</p>
+                            <p className="font-bold text-slate-800">Skor &ge; 12 - Risiko Sangat Tinggi</p>
                             <p className="text-[11px] text-slate-500 leading-normal">Rujukan ke Rumah Sakit & Dokter Spesialis Kebidanan (SpOG).</p>
                           </div>
                         </div>

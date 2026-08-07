@@ -157,7 +157,7 @@ export default function DesignSystem() {
                   </div>
                   <div>
                     <h3 className="font-bold text-sm text-amber-900">Risiko Sedang</h3>
-                    <p className="text-[10px] text-amber-700">KRT (Kelompok Risiko Tinggi) 6-11</p>
+                    <p className="text-[10px] text-amber-700">Skor Risiko 6-11</p>
                   </div>
                 </div>
                 <Badge variant="sedang">Puskesmas / Type C</Badge>
