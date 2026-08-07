@@ -180,97 +180,116 @@ export default function Beranda() {
               </Link>
             </Card>
           ) : (
-            /* FILLED STATE: HASIL SCREENING TERAKHIR (CENTERED OVERLAY CARD WITH NEWBORN BANNER IMAGE) */
-            <div className="relative rounded-3xl overflow-hidden p-3 sm:p-6 pb-4">
-              
-              {/* Soft Background Banner Image Accent Header */}
-              <div
-                className="absolute inset-x-0 top-0 h-52 sm:h-64 bg-cover bg-center rounded-3xl -z-0 opacity-90"
-                style={{ backgroundImage: "url('/images/screening-banner.jpg?v=2')" }}
-              >
-                {/* Soft Gradient Overlay over Image to ensure contrast */}
-                <div className="absolute inset-0 bg-gradient-to-b from-rose-900/20 via-pink-900/30 to-slate-900/60 backdrop-blur-[1px] rounded-3xl" />
-              </div>
-
-              {/* Floating White Card (Overlay, rounded-2xl, shadow-lg) */}
-              <Card className="relative z-10 border border-slate-200/80 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 space-y-6 text-center max-w-2xl mx-auto mt-20 sm:mt-28">
+            /* FILLED STATE: HASIL SCREENING TERAKHIR (FULL WIDTH SPLIT CARD: LEFT IMAGE WITH FADING GRADIENT + RIGHT RESULTS) */
+            <Card className="w-full rounded-3xl border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all bg-white overflow-hidden space-y-0">
+              <div className="grid grid-cols-1 md:grid-cols-12 min-h-[280px]">
                 
-                {/* Centered Vertical Flow */}
-                <div className="flex flex-col items-center justify-center space-y-4 w-full">
+                {/* Left Side: Image with Ultra Smooth Fade Gradient Overlay into White Content */}
+                <div
+                  className="md:col-span-5 relative h-56 md:h-auto w-full bg-cover bg-center overflow-hidden min-h-[240px]"
+                  style={{ backgroundImage: "url('/images/screening-banner.jpg?v=2')" }}
+                >
+                  {/* Soft Dark Accent Overlay on Left */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(76, 5, 25, 0.45) 0%, rgba(136, 19, 55, 0.15) 50%, transparent 100%)",
+                    }}
+                  />
                   
-                  {/* Header Subtitle Context Line */}
-                  <div>
-                    <p className="text-xs sm:text-sm font-medium text-slate-500">
-                      Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
-                    </p>
-                    {/* Judul Risiko */}
-                    <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
-                      screeningResult.kategori_risiko === "KRR"
-                        ? "text-emerald-700"
-                        : screeningResult.kategori_risiko === "KRT"
-                        ? "text-amber-700"
-                        : "text-rose-600"
-                    }`}>
-                      {screeningResult.status_label}
-                    </h2>
-                  </div>
+                  {/* Ultra Smooth Fade Transition into White Content (Desktop: Wide Right Fade, Mobile: Wide Bottom Fade) */}
+                  <div
+                    className="hidden md:block absolute inset-y-0 right-0 w-1/2 pointer-events-none z-10"
+                    style={{
+                      background: "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.35) 45%, rgba(255,255,255,0.75) 75%, #ffffff 100%)",
+                    }}
+                  />
+                  <div
+                    className="md:hidden absolute inset-x-0 bottom-0 h-28 pointer-events-none z-10"
+                    style={{
+                      background: "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.2) 30%, rgba(255,255,255,0.75) 70%, #ffffff 100%)",
+                    }}
+                  />
 
-                  {/* Tri-Color Segmented Risk Gauge Meter with Floating Black Pin */}
-                  <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
-                    {/* Tri-Color Bar (Green - Yellow - Red - Clean Flush Rounded Ends) */}
-                    <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
-                      <div className="flex-1 bg-[#64B565]" />
-                      <div className="flex-1 bg-[#F7D154]" />
-                      <div className="flex-1 bg-[#F83838]" />
+                  {/* Floating Tag Overlay */}
+                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-slate-900/70 backdrop-blur-md text-white text-[11px] font-bold tracking-wide shadow-soft-xs">
+                    Hasil Skrining Terakhir
+                  </div>
+                </div>
+
+                {/* Right Side: Screening Results Details (Centered Layout) */}
+                <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-5 bg-white text-center">
+                  <div className="space-y-4 text-center flex flex-col items-center justify-center">
+                    {/* Header Context */}
+                    <div>
+                      <p className="text-xs sm:text-sm font-medium text-slate-500">
+                        Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
+                      </p>
+                      {/* Judul Risiko */}
+                      <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
+                        screeningResult.kategori_risiko === "KRR"
+                          ? "text-emerald-700"
+                          : screeningResult.kategori_risiko === "KRT"
+                          ? "text-amber-700"
+                          : "text-rose-600"
+                      }`}>
+                        {screeningResult.status_label}
+                      </h2>
                     </div>
 
-                    {/* Floating Black Score Pin Pointer (Black Pill + Arrow) */}
-                    {(() => {
-                      const score = screeningResult.total_skor || 2;
-                      const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
-                      return (
-                        <div
-                          className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
-                          style={{ left: `${percent}%` }}
-                        >
-                          {/* Triangle Pointer Up */}
-                          <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
-                          {/* Black Pill Badge */}
-                          <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
-                            {score}
+                    {/* Tri-Color Segmented Risk Gauge Meter with Floating Score Pin */}
+                    <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
+                      <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
+                        <div className="flex-1 bg-[#64B565]" />
+                        <div className="flex-1 bg-[#F7D154]" />
+                        <div className="flex-1 bg-[#F83838]" />
+                      </div>
+
+                      {/* Floating Black Score Pin Pointer */}
+                      {(() => {
+                        const score = screeningResult.total_skor || 2;
+                        const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
+                        return (
+                          <div
+                            className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
+                            style={{ left: `${percent}%` }}
+                          >
+                            <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
+                            <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
+                              {score}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })()}
+                        );
+                      })()}
+                    </div>
+
+                    {/* Deskripsi Rekomendasi */}
+                    <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-md mx-auto">
+                      Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
+                    </p>
                   </div>
 
-                  {/* Deskripsi Rekomendasi */}
-                  <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-md mx-auto">
-                    Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
-                  </p>
+                  {/* Bottom Action Footer */}
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                    <Link
+                      href="/screening/kehamilan"
+                      className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors"
+                    >
+                      Lihat Detail Hasil
+                    </Link>
 
+                    <Link
+                      href="/screening/kehamilan"
+                      className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 transition-colors"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      <span>Screening Ulang</span>
+                    </Link>
+                  </div>
                 </div>
 
-                {/* Bottom Action Footer (Left: Lihat Detail, Right: Screening Ulang) */}
-                <div className="flex items-center justify-between border-t border-slate-100 pt-5 px-1 sm:px-4">
-                  <Link
-                    href="/screening/kehamilan"
-                    className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors"
-                  >
-                    Lihat Detail Hasil
-                  </Link>
-
-                  <Link
-                    href="/screening/kehamilan"
-                    className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 transition-colors"
-                  >
-                    <RefreshCw className="h-3.5 w-3.5" />
-                    <span>Screening Ulang</span>
-                  </Link>
-                </div>
-
-              </Card>
-            </div>
+              </div>
+            </Card>
           )}
         </section>
 
