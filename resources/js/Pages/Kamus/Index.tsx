@@ -183,28 +183,40 @@ export default function KamusIndex() {
               </div>
             </div>
 
-            {/* Article Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredArticles.map((article) => (
-                <Card
-                  key={article.id}
-                  className="p-5 rounded-3xl border-slate-100 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer bg-white space-y-3"
-                  onClick={() => setSelectedArticle(article)}
-                >
-                  <h3 className="font-bold text-slate-900 text-base leading-snug">
-                    {article.title}
-                  </h3>
+            {/* Classic Dictionary List Layout */}
+            <div className="bg-white rounded-3xl border border-slate-200/70 shadow-soft-xs divide-y divide-slate-100 overflow-hidden">
+              {filteredArticles.length === 0 ? (
+                <div className="p-8 text-center text-xs text-slate-500 font-medium">
+                  Tidak ada istilah komplikasi ditemukan untuk filter huruf ini.
+                </div>
+              ) : (
+                filteredArticles.map((article) => (
+                  <div
+                    key={article.id}
+                    onClick={() => setSelectedArticle(article)}
+                    className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-rose-50/40 transition-colors cursor-pointer group"
+                  >
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="h-5 w-5 rounded-full bg-pink-100 text-rose-600 font-bold text-[11px] flex items-center justify-center shrink-0">
+                          {article.letter}
+                        </span>
+                        <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-rose-600 transition-colors truncate">
+                          {article.title}
+                        </h3>
+                      </div>
+                      <p className="text-xs text-slate-500 line-clamp-1 pl-7 leading-relaxed">
+                        {article.summary}
+                      </p>
+                    </div>
 
-                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                    {article.summary}
-                  </p>
-
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-rose-600">
-                    <span>Baca Pertolongan Pertama</span>
-                    <ChevronRight className="h-4 w-4" />
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-rose-600 shrink-0 group-hover:translate-x-0.5 transition-transform">
+                      <span className="hidden sm:inline">Pertolongan Pertama</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </div>
                   </div>
-                </Card>
-              ))}
+                ))
+              )}
             </div>
 
             {/* Article Detail Modal Dialog */}
