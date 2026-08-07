@@ -172,7 +172,7 @@ export default function KehamilanScreening() {
 
   return (
     <BundaSehatLayout activeNav="kehamilan">
-      <div className="max-w-[1400px] mx-auto px-0 sm:px-6 lg:px-12 py-0 min-h-[calc(100vh-65px)] lg:h-[calc(100vh-65px)] flex flex-col justify-center">
+      <div className="max-w-[1400px] mx-auto px-0 sm:px-6 lg:px-12 py-0 min-h-[calc(100vh-144px)] lg:h-[calc(100vh-65px)] flex flex-col justify-center">
         
         {/* Modern Split Card with Image Fade Overlay (2 Kolom - Aligned with Navbar Logo) */}
         <div className="w-full mx-auto bg-white rounded-none border-0 sm:border border-slate-200 overflow-hidden h-full lg:h-full">
