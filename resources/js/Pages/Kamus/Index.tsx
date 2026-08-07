@@ -438,10 +438,7 @@ export default function KamusIndex() {
                       </div>
 
                       {/* Card Footer */}
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                        <span className="font-medium text-slate-700 flex items-center gap-1">
-                          {vid.instructor}
-                        </span>
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-end text-xs">
                         <span className="font-bold text-rose-600 flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
                           Tonton &rarr;
                         </span>
@@ -452,26 +449,36 @@ export default function KamusIndex() {
               ))}
             </div>
 
-            {/* Video Modal Player Pop-up */}
+            {/* Video Modal Player Pop-up (Cinema Mode / Dark Lightbox) */}
             {selectedVideo && (
-              <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-                <Card className="max-w-3xl w-full rounded-3xl bg-white overflow-hidden shadow-soft-xl space-y-0 border-none">
-                  {/* Modal Header */}
-                  <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-100 bg-slate-50/50">
-                    <h3 className="font-bold text-slate-900 text-base sm:text-lg truncate pr-4">
-                      {selectedVideo.title}
-                    </h3>
+              <div
+                className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn"
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) setSelectedVideo(null);
+                }}
+              >
+                <div className="max-w-3xl w-full rounded-3xl bg-slate-900 border border-slate-800/80 overflow-hidden shadow-2xl space-y-0 text-white animate-scaleUp">
+                  {/* Dark Cinema Header */}
+                  <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800 bg-slate-900/90">
+                    <div className="space-y-0.5 min-w-0 pr-4">
+                      <div className="text-[10px] font-bold text-rose-400 uppercase tracking-wider">
+                        {selectedVideo.category} · {selectedVideo.badge}
+                      </div>
+                      <h3 className="font-bold text-white text-base sm:text-lg truncate">
+                        {selectedVideo.title}
+                      </h3>
+                    </div>
                     <button
                       onClick={() => setSelectedVideo(null)}
-                      className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0"
+                      className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition-colors shrink-0"
                       aria-label="Tutup"
                     >
                       <X className="h-5 w-5" />
                     </button>
                   </div>
 
-                  {/* Video Player */}
-                  <div className="relative aspect-video bg-slate-900">
+                  {/* Seamless 16:9 Video Player */}
+                  <div className="relative aspect-video bg-black">
                     <iframe
                       className="w-full h-full"
                       src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1`}
@@ -481,13 +488,13 @@ export default function KamusIndex() {
                     />
                   </div>
 
-                  {/* Modal Footer Description */}
-                  <div className="p-4 sm:p-5 bg-white">
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {/* Dark Cinema Footer Description */}
+                  <div className="p-4 sm:p-5 bg-slate-900/90 space-y-2 border-t border-slate-800/60">
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                       {selectedVideo.description}
                     </p>
                   </div>
-                </Card>
+                </div>
               </div>
             )}
 
