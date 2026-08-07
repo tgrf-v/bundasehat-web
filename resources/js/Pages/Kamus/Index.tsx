@@ -270,14 +270,6 @@ export default function KamusIndex() {
         {activeTab === "terapi" && (
           <div className="space-y-6 animate-fadeIn">
             
-            <div className="p-4 rounded-3xl bg-pink-50 border border-pink-100 flex items-center gap-3 text-xs text-rose-900">
-              <Sparkles className="h-5 w-5 text-rose-600 shrink-0" />
-              <div>
-                <strong className="font-bold block">Apa itu Terapi Komplementer?</strong>
-                <span>Metode pendamping non-farmakologi (seperti pijat oxytocin, aromaterapi, dan senam panggul) yang aman membantu memperlancar persalinan dan meredakan kecemasan.</span>
-              </div>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {VIDEOS.map((vid) => (
                 <Card key={vid.id} className="rounded-3xl border-slate-100 overflow-hidden shadow-soft-sm bg-white space-y-3">
