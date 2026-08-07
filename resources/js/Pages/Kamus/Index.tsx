@@ -17,6 +17,7 @@ import {
   FileText,
   AlertTriangle,
   Stethoscope,
+  X,
 } from "lucide-react";
 
 interface ArticleItem {
@@ -130,10 +131,6 @@ export default function KamusIndex() {
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <Badge variant="rose" className="gap-1.5 mb-1">
-            <BookOpen className="h-3.5 w-3.5" />
-            <span>Kamus Kesehatan & Edukasi Terapi</span>
-          </Badge>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             Katalog Medis & Terapi Komplementer Non-Obat
           </h1>
@@ -206,15 +203,6 @@ export default function KamusIndex() {
                   className="p-5 rounded-3xl border-slate-100 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer bg-white space-y-3"
                   onClick={() => setSelectedArticle(article)}
                 >
-                  <div className="flex items-center justify-between">
-                    <Badge variant="rose" className="text-[10px] font-bold">
-                      {article.category}
-                    </Badge>
-                    <span className="h-6 w-6 rounded-full bg-pink-50 text-rose-600 font-bold text-xs flex items-center justify-center">
-                      {article.letter}
-                    </span>
-                  </div>
-
                   <h3 className="font-bold text-slate-900 text-base leading-snug">
                     {article.title}
                   </h3>
@@ -235,13 +223,13 @@ export default function KamusIndex() {
             {selectedArticle && (
               <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
                 <Card className="max-w-lg w-full rounded-3xl bg-white p-6 space-y-4 shadow-soft-lg">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <Badge variant="rose">{selectedArticle.category}</Badge>
+                  <div className="flex items-center justify-end border-b border-slate-100 pb-3">
                     <button
                       onClick={() => setSelectedArticle(null)}
-                      className="text-xs font-bold text-slate-400 hover:text-slate-700 p-1"
+                      className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors"
+                      aria-label="Tutup"
                     >
-                      Tutup [X]
+                      <X className="h-5 w-5" />
                     </button>
                   </div>
 
@@ -305,8 +293,7 @@ export default function KamusIndex() {
                   </div>
 
                   <div className="p-4 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Badge variant="rose" className="text-[10px]">{vid.category}</Badge>
+                    <div className="flex items-center justify-end">
                       <span className="text-[11px] font-bold text-slate-400">{vid.duration}</span>
                     </div>
 

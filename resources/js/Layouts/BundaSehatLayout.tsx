@@ -79,11 +79,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         <div className="absolute top-1/4 right-1/3 text-rose-400/20 text-xl select-none">
           ✦
         </div>
-      </div>
-
-      {/* Main Header Desktop (Super Clean & Seamless Scroll Behavior) */}
+      </div>      {/* Main Header Desktop (Fixed Top Navbar) */}
       <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           !isLoggedIn && !isScrolled
             ? "bg-transparent border-transparent shadow-none text-white"
             : "bg-white/80 backdrop-blur-xl border-b border-white/50 shadow-soft-sm text-slate-900"
@@ -156,27 +154,28 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               >
                 Kamus Kesehatan
               </Link>
-              <Link
-                href="/profil"
-                title="Profil Saya"
-                className={`ml-1 flex items-center justify-center h-9 w-9 rounded-full overflow-hidden border transition-all duration-200 group ${
-                  activeNav === "profil"
-                    ? "border-rose-500 ring-2 ring-rose-500/20 bg-rose-50 text-rose-600"
-                    : "border-slate-200 bg-slate-100/80 text-slate-600 hover:border-rose-300 hover:text-rose-600 hover:scale-105"
-                }`}
-              >
-                <User className="h-4 w-4" />
-              </Link>
             </nav>
           )}
 
-          {/* Right Action Button */}
-          {!isLoggedIn && (
+          {/* User Profile & Auth Action Buttons */}
+          {isLoggedIn ? (
+            <div className="hidden md:flex items-center gap-3">
+              <Link
+                href="/profil"
+                className="flex items-center gap-2.5 p-1.5 pr-3.5 rounded-full bg-slate-100 hover:bg-slate-200/80 transition-colors group"
+              >
+                <div className="h-7 w-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs shadow-soft-xs group-hover:scale-105 transition-transform">
+                  IR
+                </div>
+                <span className="text-xs font-bold text-slate-800">Ibu Rahma</span>
+              </Link>
+            </div>
+          ) : (
             <div className="flex items-center gap-3">
               <Link
                 href="/login"
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold shadow-soft-sm transition-all active:scale-95 ${
-                  !isScrolled
+                className={`px-5 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-2 shadow-soft-sm ${
+                  !isLoggedIn && !isScrolled
                     ? "bg-white text-rose-600 hover:bg-pink-50"
                     : "bg-rose-500 text-white hover:bg-rose-600"
                 }`}
@@ -190,7 +189,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 pb-20 md:pb-0">{children}</main>
+      <main className="relative z-10 flex-1 pt-16 pb-20 md:pb-0">{children}</main>
 
       {/* Mobile Bottom Navigation Bar (Softglasses Style) */}
       {isLoggedIn && (
