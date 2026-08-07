@@ -473,12 +473,12 @@ export default function PersalinanScreening() {
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base mb-1">Rincian Faktor Risiko Terdeteksi:</h4>
                       <div className="space-y-1.5">
                         {persalinanResult.detail_skor.length === 0 ? (
-                          <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs text-slate-500 text-center font-medium">
+                          <div className="p-2.5 px-4 rounded-full bg-slate-50 border border-slate-200/70 text-xs text-slate-500 text-center font-medium">
                             Kondisi janin & fisik normal tanpa komplikasi
                           </div>
                         ) : (
                           persalinanResult.detail_skor.map((factor, idx) => (
-                            <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
+                            <div key={idx} className="p-2.5 px-4 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
                               <span className="font-medium text-slate-800">{factor.deskripsi}</span>
                               <span className="font-bold text-rose-600 text-xs shrink-0">+ {factor.skor} Poin</span>
                             </div>

@@ -279,32 +279,28 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         </footer>
       )}
 
-      {/* Floating Demo Switcher Widget (Pojok Kanan Bawah) */}
-      <div className="fixed bottom-16 right-3 md:bottom-6 md:right-6 z-50 animate-fadeIn">
-        <div className="flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-1 px-2.5 rounded-full border border-slate-700/80 shadow-soft-lg text-white">
-          <div className="flex items-center gap-1.5 pr-1 text-slate-300">
-            <Sparkles className="h-3.5 w-3.5 text-rose-400 animate-pulse" />
-            <span className="hidden sm:inline text-[11px] font-bold">Simulasi Penguji:</span>
-          </div>
+      {/* Floating Demo Switcher Widget (Pojok Kanan Bawah - Ultra Compact) */}
+      <div className="fixed bottom-3 right-3 md:bottom-4 md:right-4 z-50 animate-fadeIn opacity-75 hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-0.5 px-1 rounded-full border border-slate-700/80 shadow-soft-sm text-white">
           <button
             onClick={() => toggleAuthMode(false)}
-            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold transition-all ${
+            className={`px-2 py-0.5 rounded-full text-[9px] font-bold transition-all ${
               !isLoggedIn
                 ? "bg-amber-500 text-slate-950 shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
-            Sebelum Login
+            Guest
           </button>
           <button
             onClick={() => toggleAuthMode(true)}
-            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold transition-all ${
+            className={`px-2 py-0.5 rounded-full text-[9px] font-bold transition-all ${
               isLoggedIn
                 ? "bg-rose-500 text-white shadow-sm"
                 : "text-slate-400 hover:text-white"
             }`}
           >
-            Setelah Login
+            User
           </button>
         </div>
       </div>
