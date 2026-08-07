@@ -281,7 +281,7 @@ export default function ProfilIndex() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-3 pt-4">
+                <div className="flex items-center justify-between pt-4">
                   <button
                     type="button"
                     onClick={() => setActiveView("menu")}
@@ -291,7 +291,7 @@ export default function ProfilIndex() {
                   </button>
                   <button
                     type="submit"
-                    className="rounded-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wide flex-1 text-center shadow-soft-sm transition-colors"
+                    className="rounded-full px-8 h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wide text-center shadow-soft-sm transition-colors shrink-0"
                   >
                     SIMPAN PERUBAHAN
                   </button>
