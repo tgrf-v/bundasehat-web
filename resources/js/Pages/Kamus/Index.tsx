@@ -260,13 +260,13 @@ export default function KamusIndex() {
             
             {/* Alphabet Filter Pills (Segmented Horizontal Capsule Bar) */}
             <div className="max-w-4xl mx-auto">
-              <div className="p-1.5 bg-slate-100/90 border border-slate-200/70 rounded-full shadow-inner flex items-center justify-between gap-0.5 overflow-x-auto scrollbar-none">
+              <div className="p-1.5 bg-white border border-slate-200/80 rounded-full shadow-soft-xs flex items-center justify-between gap-0.5 overflow-x-auto scrollbar-none">
                 <button
                   onClick={() => setSelectedLetter("semua")}
                   className={`px-3 py-1 rounded-full text-xs font-bold transition-all shrink-0 ${
                     selectedLetter === "semua"
                       ? "bg-rose-500 text-white shadow-soft-xs"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-semibold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold"
                   }`}
                 >
                   Semua
@@ -278,7 +278,7 @@ export default function KamusIndex() {
                     className={`h-7 w-7 rounded-full text-xs font-bold transition-all flex items-center justify-center shrink-0 ${
                       selectedLetter === char
                         ? "bg-rose-500 text-white shadow-soft-xs"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-white/60 font-semibold"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold"
                     }`}
                   >
                     {char}
