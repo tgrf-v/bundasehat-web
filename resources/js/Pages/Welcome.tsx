@@ -117,7 +117,7 @@ export default function Welcome() {
                   {/* Layer 2: Scaled-Up Woman Graphic (Flipped Horizontal with scale-x-[-1]) */}
                   <img
                     src="/pregnant-woman.svg"
-                    alt="Ilustrasi Ibu Hamil BundaSehat"
+                    alt="Ilustrasi Ibu Hamil"
                     className="relative z-10 h-full max-h-[440px] sm:max-h-[540px] md:max-h-[600px] w-auto object-contain drop-shadow-2xl scale-x-[-1]"
                   />
 
@@ -288,10 +288,10 @@ export default function Welcome() {
               
               {/* Left Image Box */}
               <div className="md:col-span-5 flex justify-center">
-                <div className="w-full h-64 sm:h-80 rounded-3xl bg-pink-50/80 p-8 flex flex-col items-center justify-center border border-pink-100 shadow-soft-sm">
-                  <ApplicationLogo className="h-20 sm:h-24 w-auto object-contain mb-3" />
-                  <span className="font-bold text-lg text-slate-900 tracking-tight">
-                    Bunda<span className="text-rose-500">Sehat</span>
+                <div className="w-full h-64 sm:h-80 rounded-3xl bg-slate-100/80 p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
+                  <ApplicationLogo className="h-20 sm:h-24 w-20 sm:w-24 mb-3" />
+                  <span className="font-bold text-xl text-slate-800 tracking-wide">
+                    Logo
                   </span>
                 </div>
               </div>
@@ -299,7 +299,7 @@ export default function Welcome() {
               {/* Right Text Content */}
               <div className="md:col-span-7 space-y-4 text-slate-700">
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
-                  <strong className="font-bold text-slate-900">BundaSehat</strong> merupakan aplikasi berbasis website yang dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-rose-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
+                  Aplikasi berbasis website ini dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-rose-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
                 </p>
 
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
@@ -307,7 +307,7 @@ export default function Welcome() {
                 </p>
 
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
-                  Kami berkomitmen menjadikan BundaSehat sebagai platform pilihan utama ibu hamil dan bidan wilayah dalam mempercepat rujukan medis serta menekan angka komplikasi kehamilan secara digital dan transparan.
+                  Kami berkomitmen menjadikan platform pilihan utama ibu hamil dan bidan wilayah dalam mempercepat rujukan medis serta menekan angka komplikasi kehamilan secara digital dan transparan.
                 </p>
               </div>
 
@@ -333,10 +333,10 @@ export default function Welcome() {
 
               {/* Right Image Box */}
               <div className="md:col-span-5 flex justify-center order-1 md:order-2">
-                <div className="w-full h-64 sm:h-80 rounded-3xl bg-pink-50/80 p-8 flex flex-col items-center justify-center border border-pink-100 shadow-soft-sm">
-                  <ApplicationLogo className="h-20 sm:h-24 w-auto object-contain mb-3" />
-                  <span className="font-bold text-lg text-slate-900 tracking-tight">
-                    Bunda<span className="text-rose-500">Sehat</span>
+                <div className="w-full h-64 sm:h-80 rounded-3xl bg-slate-100/80 p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
+                  <ApplicationLogo className="h-20 sm:h-24 w-20 sm:w-24 mb-3" />
+                  <span className="font-bold text-xl text-slate-800 tracking-wide">
+                    Logo
                   </span>
                 </div>
               </div>

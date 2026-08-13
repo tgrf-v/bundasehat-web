@@ -90,17 +90,17 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between gap-4">
           
           {/* Logo Brand & Title */}
-          <Link href={isLoggedIn ? "/beranda" : "/"} className="flex items-center gap-3 group shrink-0">
+          <Link href={isLoggedIn ? "/beranda" : "/"} className="flex items-center gap-2.5 group shrink-0">
             <ApplicationLogo
               variant={!isLoggedIn && !isScrolled ? "white" : "color"}
-              className="h-9 w-auto object-contain group-hover:scale-105 transition-transform"
+              className="h-8 w-8 group-hover:scale-105 transition-transform"
             />
             <span
-              className={`font-bold text-lg tracking-tight flex items-center gap-1 transition-colors ${
-                !isLoggedIn && !isScrolled ? "text-white" : "text-slate-900"
+              className={`font-bold text-base tracking-wide transition-colors ${
+                !isLoggedIn && !isScrolled ? "text-white" : "text-slate-800"
               }`}
             >
-              Bunda<span className={!isLoggedIn && !isScrolled ? "text-pink-200" : "text-rose-500"}>Sehat</span>
+              Logo
             </span>
           </Link>
 
@@ -253,9 +253,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         <footer className="bg-white border-t border-slate-100 py-8 px-4 mt-auto hidden md:block">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div className="flex items-center gap-2">
-              <ApplicationLogo className="h-5 w-auto" />
+              <ApplicationLogo className="h-5 w-5" />
               <span className="font-semibold text-slate-700">
-                BundaSehat &copy; {new Date().getFullYear()}
+                Logo &copy; {new Date().getFullYear()}
               </span>
               <span>- Platform Screening Komplikasi Kehamilan & Persalinan Sehat</span>
             </div>

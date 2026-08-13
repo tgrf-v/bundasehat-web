@@ -42,7 +42,7 @@ export default function Beranda() {
           {/* Left Side: Title & Description (Rata Atas) */}
           <div className="lg:col-span-5 space-y-2.5 pt-1">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
-              Layanan Utama <span className="text-rose-600">BundaSehat</span>
+              Layanan Utama <span className="text-rose-600">Aplikasi</span>
             </h2>
             <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-medium">
               Akses cepat layanan screening kehamilan, kesiapan persalinan, serta edukasi kesehatan kebidanan secara terintegrasi.

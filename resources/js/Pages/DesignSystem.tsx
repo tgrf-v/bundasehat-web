@@ -64,7 +64,7 @@ export default function DesignSystem() {
               <span>Preview Style Guide & Design System</span>
             </div>
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-              BundaSehat Design System Showcase
+              Design System Showcase
             </h1>
             <p className="text-xs md:text-sm text-slate-500 mt-1">
               Dokumentasi komponen UI, skema warna, tipografi, dan indikator risiko (Halodoc x Hamilku.ID)
@@ -404,7 +404,7 @@ export default function DesignSystem() {
         >
           <div className="space-y-4 py-2 text-xs text-slate-600">
             <p className="leading-relaxed">
-              Semua modal dan popup di BundaSehat menggunakan komponen Dialog ini untuk pengalaman pengguna yang sangat responsif.
+              Semua modal dan popup di aplikasi ini menggunakan komponen Dialog ini untuk pengalaman pengguna yang sangat responsif.
             </p>
             <div className="p-3 bg-emerald-50 text-emerald-800 rounded-xl font-medium">
               Komponen ini terisolasi dan modular di <code className="font-mono bg-emerald-100 px-1 py-0.5 rounded text-emerald-900">resources/js/Components/ui/dialog.tsx</code>

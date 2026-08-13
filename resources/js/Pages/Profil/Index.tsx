@@ -407,8 +407,8 @@ export default function ProfilIndex() {
             </div>
 
             <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
-              <h3 className="font-bold text-slate-900 text-base">1. Ketentuan Penggunaan Aplikasi BundaSehat</h3>
-              <p>Aplikasi BundaSehat dikembangkan sebagai platform bantuan awal skrining mandiri kehamilan dan persalinan berbasis metode Poedji Rochjati. Seluruh kalkulasi skor bertujuan sebagai panduan deteksi dini risiko kebidanan dan bukan merupakan vonis medis final.</p>
+              <h3 className="font-bold text-slate-900 text-base">1. Ketentuan Penggunaan Aplikasi</h3>
+              <p>Aplikasi ini dikembangkan sebagai platform bantuan awal skrining mandiri kehamilan dan persalinan berbasis metode Poedji Rochjati. Seluruh kalkulasi skor bertujuan sebagai panduan deteksi dini risiko kebidanan dan bukan merupakan vonis medis final.</p>
 
               <h3 className="font-bold text-slate-900 text-base pt-2">2. Tanggung Jawab Pengguna</h3>
               <p>Pengguna berkewajiban memasukkan informasi riwayat kesehatan, HPHT, dan indikator klinis secara jujur dan akurat untuk menjamin ketepatan rekomendasi rujukan faskes.</p>
@@ -437,7 +437,7 @@ export default function ProfilIndex() {
 
             <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
               <h3 className="font-bold text-slate-900 text-base">1. Pengumpulan Informasi Pribadi</h3>
-              <p>BundaSehat mengumpulkan data penting seperti Nama, NIK, tanggal HPHT, dan faskes rujukan domisili semata-mata untuk mengintegrasikan layanan rujukan kesehatan ibu dan anak.</p>
+              <p>Aplikasi ini mengumpulkan data penting seperti Nama, NIK, tanggal HPHT, dan faskes rujukan domisili semata-mata untuk mengintegrasikan layanan rujukan kesehatan ibu dan anak.</p>
 
               <h3 className="font-bold text-slate-900 text-base pt-2">2. Keamanan Data Pasien</h3>
               <p>Kami tidak pernah menjual atau membagikan data rekam kesehatan pasien kepada pihak ketiga di luar jaringan Puskesmas dan Rumah Sakit Rujukan resmi terdaftar.</p>
@@ -474,7 +474,7 @@ export default function ProfilIndex() {
                 <div className="text-xs space-y-1 text-emerald-800">
                   <p><strong>WhatsApp Support:</strong> +62 812-3456-7890</p>
                   <p><strong>Jam Operasional:</strong> Senin - Minggu (24 Jam Emergency)</p>
-                  <p><strong>Email Resmi:</strong> help@bundasehat.id</p>
+                  <p><strong>Email Resmi:</strong> help@aplikasi.id</p>
                 </div>
               </div>
             </Card>

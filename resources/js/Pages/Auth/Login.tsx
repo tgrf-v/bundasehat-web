@@ -20,7 +20,7 @@ import {
 export default function Login() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [nama, setNama] = useState<string>("");
-  const [email, setEmail] = useState<string>("rahma.pasien@bundasehat.id");
+  const [email, setEmail] = useState<string>("rahma.pasien@email.com");
   const [password, setPassword] = useState<string>("password123");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -68,8 +68,7 @@ export default function Login() {
 
           <div>
             <CardTitle className="text-2xl font-bold text-slate-900 tracking-tight flex items-center justify-center gap-1.5">
-              <span>{mode === "login" ? "Masuk ke" : "Daftar Akun"}</span>
-              <span className="text-rose-500">BundaSehat</span>
+              <span>{mode === "login" ? "Masuk ke Akun" : "Daftar Akun Baru"}</span>
             </CardTitle>
             <CardDescription className="text-xs font-medium text-slate-500 mt-0.5">
               Pendamping Ibu Hamil &amp; Persalinan
@@ -110,7 +109,7 @@ export default function Login() {
                 <Input
                   id="email_input"
                   type="email"
-                  placeholder="nama@bundasehat.id"
+                  placeholder="nama@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
