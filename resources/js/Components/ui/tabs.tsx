@@ -27,7 +27,7 @@ const Tabs: React.FC<TabsProps> = ({ items, activeTab, onChange, className }) =>
             className={cn(
               "inline-flex items-center justify-center gap-2 rounded-full py-1.5 px-4 text-xs md:text-sm font-semibold transition-all duration-200 select-none whitespace-nowrap",
               isActive
-                ? "bg-white text-rose-600 shadow-soft-sm font-bold"
+                ? "bg-white text-emerald-700 shadow-soft-sm font-bold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
             )}
           >

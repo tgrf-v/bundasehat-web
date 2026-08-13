@@ -422,13 +422,12 @@ export default function KehamilanScreening() {
                     <p className="text-xs text-slate-500 leading-relaxed font-medium max-w-sm mx-auto">
                       Skor KSPR: <strong className="text-slate-800 font-bold">{screeningResult.total_skor} Poin</strong> • Tensi: <strong className="text-slate-800 font-bold">{formData.sistolik}/{formData.diastolik} mmHg</strong> (MAP: {calculateMAP(formData.sistolik, formData.diastolik)} mmHg)
                     </p>
-
                     {/* Bottom Link Actions (Lihat Perhitungan & Cek Ulang) */}
-                    <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-2 text-xs font-bold text-rose-600">
+                    <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-2 text-xs font-bold text-emerald-700">
                       <button
                         type="button"
                         onClick={() => setRightPanelView("detail")}
-                        className="hover:text-rose-700 transition-colors"
+                        className="hover:text-emerald-800 transition-colors"
                       >
                         Lihat Perhitungan
                       </button>
@@ -436,7 +435,7 @@ export default function KehamilanScreening() {
                       <button
                         type="button"
                         onClick={handleRescreen}
-                        className="hover:text-rose-700 flex items-center gap-1.5 transition-colors"
+                        className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors"
                       >
                         <RefreshCw className="h-3.5 w-3.5" />
                         <span>Cek Ulang</span>
@@ -445,8 +444,8 @@ export default function KehamilanScreening() {
                   </Card>
 
                   {/* Card 2: Rekomendasi Tempat & Penolong Persalinan */}
-                  <Card className="p-4 sm:p-5 rounded-2xl bg-pink-50/60 border border-pink-100/80 space-y-1.5 text-left shadow-soft-xs">
-                    <h4 className="font-bold text-rose-900 text-sm sm:text-base">
+                  <Card className="p-4 sm:p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100/80 space-y-1.5 text-left shadow-soft-xs">
+                    <h4 className="font-bold text-emerald-900 text-sm sm:text-base">
                       Rekomendasi Tempat & Penolong Persalinan
                     </h4>
                     <p className="text-xs text-slate-700 leading-relaxed font-semibold">
@@ -461,7 +460,7 @@ export default function KehamilanScreening() {
                       {screeningResult.detail_skor.map((factor, idx) => (
                         <div key={idx} className="p-2.5 px-4 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
                           <span className="font-medium text-slate-800">{factor.deskripsi}</span>
-                          <span className="font-bold text-rose-600 text-xs shrink-0">+ {factor.skor} Poin</span>
+                          <span className="font-bold text-emerald-700 text-xs shrink-0">+ {factor.skor} Poin</span>
                         </div>
                       ))}
                     </div>
@@ -470,18 +469,27 @@ export default function KehamilanScreening() {
                   {/* Card 4: Saran Terapi Komplementer Non-Obat Khusus Bunda (Accordion) */}
                   <div className="space-y-3 pt-2">
                     <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                      <Heart className="h-4.5 w-4.5 text-rose-600 shrink-0" />
+                      <Heart className="h-4.5 w-4.5 text-emerald-700 shrink-0" />
                       <span>Saran Terapi Komplementer</span>
                     </h4>
 
                     <Accordion type="single" collapsible defaultValue="terapi-0" className="w-full">
                       {screeningResult.saran_terapi.map((terapi, idx) => (
                         <AccordionItem key={idx} value={`terapi-${idx}`} className="border-b border-slate-100 py-0.5">
-                          <AccordionTrigger className="py-2.5 text-xs font-bold text-slate-900 hover:text-rose-600">
+                          <AccordionTrigger className="py-2.5 text-xs font-bold text-slate-900 hover:text-emerald-700">
                             {terapi}
                           </AccordionTrigger>
-                          <AccordionContent className="text-[11px] text-slate-500 pb-2.5 pt-0 leading-relaxed">
-                            Metode aman non-farmakologi untuk meredakan ketegangan dan mengoptimalkan kondisi fisik ibu hamil.
+                          <AccordionContent className="text-xs text-slate-600 space-y-2 pb-3">
+                            <p>
+                              Panduan terapi relaksasi terbukti efektif secara klinis menurunkan tingkat kecemasan, mengontrol tekanan darah sistolik/diastolik, serta membantu kenyamanan fisik ibu.
+                            </p>
+                            <a
+                              href="/kamus#video-relaksasi"
+                              className="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:underline"
+                            >
+                              <span>Tonton Video Panduan Terapi</span>
+                              <ChevronRight className="h-3.5 w-3.5" />
+                            </a>
                           </AccordionContent>
                         </AccordionItem>
                       ))}
@@ -489,21 +497,21 @@ export default function KehamilanScreening() {
                   </div>
 
                 </div>
-                )
-              ) : (
+              )
+            ) : (
                 /* CONDITION 2: BELUM SCREENED ATAU KLIK SCREENING ULANG -> DISPLAY FORM INPUT 3-STEP */
                 <div className="space-y-5">
                   
                   {/* Step Indicator Progress */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
-                      <span className={currentStep >= 1 ? "text-teal-700 font-bold" : ""}>
+                      <span className={currentStep >= 1 ? "text-emerald-700 font-bold" : ""}>
                         1. Data Diri & HPHT
                       </span>
-                      <span className={currentStep >= 2 ? "text-teal-700 font-bold" : ""}>
+                      <span className={currentStep >= 2 ? "text-emerald-700 font-bold" : ""}>
                         2. Tensi & Gejala
                       </span>
-                      <span className={currentStep >= 3 ? "text-teal-700 font-bold" : ""}>
+                      <span className={currentStep >= 3 ? "text-emerald-700 font-bold" : ""}>
                         3. Bias Treatment
                       </span>
                     </div>
@@ -517,7 +525,7 @@ export default function KehamilanScreening() {
                       <div className="space-y-4 animate-fadeIn">
                         <div className="border-b border-slate-100 pb-2">
                           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                            <User className="h-4 w-4 text-teal-600" />
+                            <User className="h-4 w-4 text-emerald-700" />
                             <span>Langkah 1: Identitas & Riwayat Kehamilan</span>
                           </h3>
                         </div>

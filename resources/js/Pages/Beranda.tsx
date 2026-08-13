@@ -171,7 +171,7 @@ export default function Beranda() {
             {screeningResult && (
               <Link
                 href="/screening/kehamilan"
-                className="text-xs font-bold text-rose-600 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 <span>Screening Ulang</span>
@@ -182,7 +182,7 @@ export default function Beranda() {
           {!screeningResult ? (
             /* EMPTY STATE: BELUM ADA DATA SCREENING */
             <Card className="p-8 border-dashed border-slate-200 bg-white text-center rounded-3xl space-y-4">
-              <div className="h-16 w-16 rounded-full bg-pink-50 text-rose-500 flex items-center justify-center mx-auto">
+              <div className="h-16 w-16 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto">
                 <Activity className="h-8 w-8" />
               </div>
               
@@ -195,7 +195,7 @@ export default function Beranda() {
 
               <Link
                 href="/screening/kehamilan"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-rose-500 text-white font-bold text-xs shadow-soft-sm hover:bg-rose-600 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-700 text-white font-bold text-xs shadow-soft-sm hover:bg-emerald-800 transition-all"
               >
                 <Plus className="h-4 w-4" />
                 <span>Mulai Screening Sekarang</span>
@@ -215,7 +215,7 @@ export default function Beranda() {
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: "linear-gradient(135deg, rgba(76, 5, 25, 0.45) 0%, rgba(136, 19, 55, 0.15) 50%, transparent 100%)",
+                      background: "linear-gradient(135deg, rgba(37, 55, 47, 0.45) 0%, rgba(62, 91, 77, 0.15) 50%, transparent 100%)",
                     }}
                   />
                   

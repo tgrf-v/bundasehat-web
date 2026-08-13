@@ -405,8 +405,8 @@ export default function KamusIndex() {
 
                       {/* White Circle Play Button in Center (Visible on Hover Only) */}
                       <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/30 transition-all duration-300 flex items-center justify-center">
-                        <div className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm text-rose-600 shadow-soft-md flex items-center justify-center opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="#e11d48">
+                        <div className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm text-emerald-700 shadow-soft-md flex items-center justify-center opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="#3E5B4D">
                             <path d="M8 5v14l11-7z"></path>
                           </svg>
                         </div>
@@ -422,12 +422,12 @@ export default function KamusIndex() {
                     <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                       <div className="space-y-1.5">
                         {/* Category Subtitle */}
-                        <div className="text-[11px] font-semibold text-rose-600 uppercase tracking-wide">
+                        <div className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide">
                           {vid.category}
                         </div>
 
                         {/* Title */}
-                        <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-rose-600 transition-colors">
+                        <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-emerald-700 transition-colors">
                           {vid.title}
                         </h4>
 
@@ -439,7 +439,7 @@ export default function KamusIndex() {
 
                       {/* Card Footer */}
                       <div className="pt-3 border-t border-slate-100 flex items-center justify-end text-xs">
-                        <span className="font-bold text-rose-600 flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
+                        <span className="font-bold text-emerald-700 flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
                           Tonton &rarr;
                         </span>
                       </div>

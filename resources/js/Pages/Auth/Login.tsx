@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, router } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -13,7 +13,6 @@ import {
   User,
   Eye,
   EyeOff,
-  ArrowLeft,
   UserPlus,
 } from "lucide-react";
 
@@ -45,17 +44,6 @@ export default function Login() {
       {/* Background Subtle Ornaments */}
       <div className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-coral-500/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Top Back Link */}
-      <div className="w-full max-w-md mb-4 flex items-center justify-between">
-        <Link
-          href="/tentang-kami"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Tentang Kami</span>
-        </Link>
-      </div>
 
       {/* Login / Register Card */}
       <Card className="w-full max-w-md rounded-3xl border-emerald-100 shadow-soft-lg bg-white/95 backdrop-blur-md overflow-hidden">

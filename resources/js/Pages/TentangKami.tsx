@@ -279,7 +279,7 @@ export default function TentangKami() {
               {/* Right Text Content */}
               <div className="md:col-span-7 space-y-4 text-slate-700">
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
-                  Aplikasi berbasis website ini dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-rose-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
+                  Aplikasi berbasis website ini dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-coral-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
                 </p>
 
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
@@ -307,7 +307,7 @@ export default function TentangKami() {
                 </p>
 
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
-                  Moto kami yakni <em className="font-bold text-rose-600">Inovasi Medis & Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
+                  Moto kami yakni <em className="font-bold text-emerald-700">Inovasi Medis & Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
                 </p>
               </div>
 

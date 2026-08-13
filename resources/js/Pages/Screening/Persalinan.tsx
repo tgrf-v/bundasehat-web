@@ -444,11 +444,11 @@ export default function PersalinanScreening() {
                       </p>
 
                       {/* Bottom Link Actions */}
-                      <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-2 text-xs font-bold text-rose-600">
+                      <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-2 text-xs font-bold text-emerald-700">
                         <button
                           type="button"
                           onClick={() => setRightPanelView("detail")}
-                          className="hover:text-rose-700 transition-colors"
+                          className="hover:text-emerald-800 transition-colors"
                         >
                           Lihat Perhitungan
                         </button>
@@ -456,7 +456,7 @@ export default function PersalinanScreening() {
                         <button
                           type="button"
                           onClick={handleRescreen}
-                          className="hover:text-rose-700 flex items-center gap-1.5 transition-colors"
+                          className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors"
                         >
                           <RefreshCw className="h-3.5 w-3.5" />
                           <span>Cek Ulang</span>
@@ -465,8 +465,8 @@ export default function PersalinanScreening() {
                     </Card>
 
                     {/* Card 2: Rekomendasi Tempat & Penolong Persalinan */}
-                    <Card className="p-4 sm:p-5 rounded-2xl bg-pink-50/60 border border-pink-100/80 space-y-1.5 text-left shadow-soft-xs">
-                      <h4 className="font-bold text-rose-900 text-sm sm:text-base">
+                    <Card className="p-4 sm:p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100/80 space-y-1.5 text-left shadow-soft-xs">
+                      <h4 className="font-bold text-emerald-900 text-sm sm:text-base">
                         Rekomendasi Tempat & Penolong Persalinan
                       </h4>
                       <p className="text-xs text-slate-700 leading-relaxed font-semibold">
@@ -486,7 +486,7 @@ export default function PersalinanScreening() {
                           persalinanResult.detail_skor.map((factor, idx) => (
                             <div key={idx} className="p-2.5 px-4 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
                               <span className="font-medium text-slate-800">{factor.deskripsi}</span>
-                              <span className="font-bold text-rose-600 text-xs shrink-0">+ {factor.skor} Poin</span>
+                              <span className="font-bold text-emerald-700 text-xs shrink-0">+ {factor.skor} Poin</span>
                             </div>
                           ))
                         )}
@@ -496,14 +496,14 @@ export default function PersalinanScreening() {
                     {/* Card 4: Saran Terapi Komplementer Non-Obat Khusus Persalinan (Accordion) */}
                     <div className="space-y-3 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                        <Heart className="h-4.5 w-4.5 text-rose-600 shrink-0" />
+                        <Heart className="h-4.5 w-4.5 text-emerald-700 shrink-0" />
                         <span>Saran Kesiapan & Terapi Persalinan</span>
                       </h4>
 
                       <Accordion type="single" collapsible defaultValue="terapi-0" className="w-full">
                         {persalinanResult.saran_terapi.map((terapi, idx) => (
                           <AccordionItem key={idx} value={`terapi-${idx}`} className="border-b border-slate-100 py-0.5">
-                            <AccordionTrigger className="py-2.5 text-xs font-bold text-slate-900 hover:text-rose-600">
+                            <AccordionTrigger className="py-2.5 text-xs font-bold text-slate-900 hover:text-emerald-700">
                               {terapi}
                             </AccordionTrigger>
                             <AccordionContent className="text-[11px] text-slate-500 pb-2.5 pt-0 leading-relaxed">
@@ -523,13 +523,13 @@ export default function PersalinanScreening() {
                   {/* Step Indicator Progress */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
-                      <span className={currentStep >= 1 ? "text-rose-600 font-bold" : ""}>
+                      <span className={currentStep >= 1 ? "text-emerald-700 font-bold" : ""}>
                         1. Data Diri & Paritas
                       </span>
-                      <span className={currentStep >= 2 ? "text-rose-600 font-bold" : ""}>
+                      <span className={currentStep >= 2 ? "text-emerald-700 font-bold" : ""}>
                         2. Tensi & Posisi Janin
                       </span>
-                      <span className={currentStep >= 3 ? "text-rose-600 font-bold" : ""}>
+                      <span className={currentStep >= 3 ? "text-emerald-700 font-bold" : ""}>
                         3. Riwayat SC & Keluhan
                       </span>
                     </div>
