@@ -23,19 +23,19 @@ import {
 } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
-export default function Welcome() {
+export default function TentangKami() {
   const handleLoginDemo = () => {
     localStorage.setItem("bundasehat_auth", "true");
-    router.visit("/beranda");
+    router.visit("/");
   };
 
   return (
-    <BundaSehatLayout activeNav="landing">
+    <BundaSehatLayout activeNav="tentang-kami">
       <div className="w-full">
 
         {/* HERO BANNER INFORMASI KESEHATAN KEHAMILAN (FULL VIEWPORT HEIGHT WITH SEAMLESS NAVBAR) */}
         <section id="banner" className="w-full min-h-screen -mt-16 pt-20 lg:pt-24 bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 text-white flex items-center relative overflow-hidden shadow-soft-md">
-          
+
           {/* Background Design Attributes & Ornaments (Waves, Concentric Circles, Plus Signs, Sparkles) */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
             {/* Glowing Ambient Ornaments */}
@@ -81,10 +81,10 @@ export default function Welcome() {
           {/* Inner Centered Container with Max-W-[1400px] */}
           <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10 my-auto py-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-              
+
               {/* Column 1: Hero Text Content (Order 2 on Mobile, Order 1 on Desktop) */}
               <div className="lg:col-span-6 order-2 lg:order-1 space-y-6 text-center lg:text-left">
-                
+
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight space-y-2 sm:space-y-3">
                   <span className="block">Pendamping</span>
                   <span className="block">Kehamilan &</span>
@@ -110,7 +110,7 @@ export default function Welcome() {
               {/* Column 2: Large Woman Illustration + Scaled-Up Floating Cards (Right Side Layout Shifted Right) */}
               <div className="lg:col-span-6 order-1 lg:order-2 w-full flex justify-center lg:justify-end lg:translate-x-6">
                 <div className="relative w-full max-w-lg sm:max-w-xl h-[420px] sm:h-[520px] md:h-[580px] flex items-center justify-center">
-                  
+
                   {/* Layer 1: Ambient Background Glowing Soft Circle */}
                   <div className="absolute w-80 h-80 sm:w-[450px] sm:h-[450px] bg-gradient-to-tr from-white/25 to-pink-300/35 rounded-full blur-3xl pointer-events-none" />
 
@@ -172,7 +172,7 @@ export default function Welcome() {
         {/* SECTION FITUR (LAYANAN & FITUR UNGGULAN RADIX ACCORDION) */}
         <section id="fitur" className="w-full bg-white text-slate-900 pt-12 sm:pt-16 pb-6 sm:pb-8">
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            
+
             <div className="text-center">
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
                 Layanan & Fitur Unggulan
@@ -182,7 +182,7 @@ export default function Welcome() {
             {/* Accordion Fitur Kebidanan Clean Style */}
             <div className="w-full">
               <Accordion type="single" collapsible defaultValue="item-1">
-                
+
                 {/* Accordion Item 1 */}
                 <AccordionItem value="item-1">
                   <AccordionTrigger>
@@ -275,7 +275,7 @@ export default function Welcome() {
         {/* SECTION 3: TENTANG KAMI (ALTERNATING 2-ROW LAYOUT LIKE REFERENCE) */}
         <section id="tentang" className="w-full bg-white pt-6 sm:pt-8 pb-16 sm:pb-24">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
-            
+
             {/* Section Title */}
             <div className="text-center">
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
@@ -285,7 +285,7 @@ export default function Welcome() {
 
             {/* Row 1: Left Image Box, Right Text Content */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
-              
+
               {/* Left Image Box */}
               <div className="md:col-span-5 flex justify-center">
                 <div className="w-full h-64 sm:h-80 rounded-3xl bg-slate-100/80 p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
@@ -315,7 +315,7 @@ export default function Welcome() {
 
             {/* Row 2: Left Text Content, Right Image Box */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
-              
+
               {/* Left Text Content */}
               <div className="md:col-span-7 space-y-4 text-slate-700 order-2 md:order-1">
                 <p className="text-sm sm:text-base leading-relaxed font-medium">

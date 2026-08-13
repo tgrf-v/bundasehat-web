@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   RefreshCw,
   Plus,
+  Info,
 } from "lucide-react";
 import { ScreeningResult } from "@/types/screening";
 
@@ -115,7 +116,28 @@ export default function Beranda() {
               <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
-            {/* Shortcut 4: Profil Saya */}
+            {/* Shortcut 4: Tentang Kami */}
+            <Link
+              href="/tentang-kami"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                  <Info className="h-6 w-6" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                    Tentang Kami
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
+                    Informasi &amp; Profil Platform
+                  </p>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+            </Link>
+
+            {/* Shortcut 5: Profil Saya */}
             <Link
               href="/profil"
               className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"

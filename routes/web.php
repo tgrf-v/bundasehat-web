@@ -3,20 +3,25 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Landing Page (Sebelum Login)
+// Path Root / -> Beranda Utama
 Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('welcome');
+    return Inertia::render('Beranda');
+})->name('beranda');
 
-// Form Login
+// Form Login (Halaman Akses Tamu / Belum Login)
 Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->name('login');
 
-// Beranda (Setelah Login)
+// Redirect Alias /beranda ke /
 Route::get('/beranda', function () {
-    return Inertia::render('Beranda');
-})->name('beranda');
+    return redirect('/');
+});
+
+// Halaman Dedicated Tentang Kami
+Route::get('/tentang-kami', function () {
+    return Inertia::render('TentangKami');
+})->name('tentang-kami');
 
 // Screening Kehamilan
 Route::get('/screening/kehamilan', function () {

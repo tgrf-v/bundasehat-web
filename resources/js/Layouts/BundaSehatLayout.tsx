@@ -16,7 +16,7 @@ import { GlobalSearch } from "@/Components/GlobalSearch";
 
 interface LayoutProps {
   children: React.ReactNode;
-  activeNav?: "landing" | "beranda" | "kehamilan" | "persalinan" | "kamus" | "profil";
+  activeNav?: "landing" | "beranda" | "kehamilan" | "persalinan" | "kamus" | "profil" | "tentang-kami";
 }
 
 export const BundaSehatLayout: React.FC<LayoutProps> = ({
@@ -29,8 +29,10 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
   useEffect(() => {
     const savedAuth = localStorage.getItem("bundasehat_auth");
-    if (savedAuth !== null) {
-      setIsLoggedIn(savedAuth === "true");
+    const isAuth = savedAuth === "true";
+    setIsLoggedIn(isAuth);
+    if (!isAuth && window.location.pathname !== "/login") {
+      router.visit("/login");
     }
   }, []);
 
@@ -50,9 +52,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
     setIsLoggedIn(mode);
     localStorage.setItem("bundasehat_auth", mode ? "true" : "false");
     if (mode) {
-      router.visit("/beranda");
-    } else {
       router.visit("/");
+    } else {
+      router.visit("/login");
     }
   };
 
@@ -90,7 +92,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between gap-4">
           
           {/* Logo Brand & Title */}
-          <Link href={isLoggedIn ? "/beranda" : "/"} className="flex items-center gap-2.5 group shrink-0">
+          <Link href={isLoggedIn ? "/" : "/login"} className="flex items-center gap-2.5 group shrink-0">
             <ApplicationLogo
               variant={!isLoggedIn && !isScrolled ? "white" : "color"}
               className="h-8 w-8 group-hover:scale-105 transition-transform"
@@ -115,7 +117,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           {isLoggedIn && (
             <nav className="hidden md:flex items-center gap-2">
               <Link
-                href="/beranda"
+                href="/"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "beranda"
                     ? "text-rose-600 font-bold"
@@ -154,6 +156,16 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               >
                 Kamus Kesehatan
               </Link>
+              <Link
+                href="/tentang-kami"
+                className={`px-3 py-1.5 text-sm transition-colors ${
+                  activeNav === "tentang-kami"
+                    ? "text-rose-600 font-bold"
+                    : "text-slate-500 font-medium hover:text-slate-900"
+                }`}
+              >
+                Tentang Kami
+              </Link>
             </nav>
           )}
 
@@ -186,7 +198,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/75 backdrop-blur-xl border-t border-white/50 shadow-soft-lg px-4 py-2">
           <div className="grid grid-cols-5 gap-1 text-center">
             <Link
-              href="/beranda"
+              href="/"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "beranda"
                   ? "text-rose-600 font-bold"
