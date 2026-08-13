@@ -128,7 +128,7 @@ export default function HasilScreening() {
         {/* RISK STATUS HERO CARD (Halodoc Risk Gauge Style) */}
         <Card className={`border-2 overflow-hidden shadow-soft-lg ${
           isBerat
-            ? "border-rose-300 bg-gradient-to-b from-rose-50/80 to-white"
+            ? "border-coral-300 bg-gradient-to-b from-coral-50/80 to-white"
             : isSedang
             ? "border-amber-300 bg-gradient-to-b from-amber-50/80 to-white"
             : "border-emerald-300 bg-gradient-to-b from-emerald-50/80 to-white"
@@ -137,7 +137,7 @@ export default function HasilScreening() {
             
             <div className="flex justify-center">
               {isBerat ? (
-                <div className="p-3 bg-rose-600 text-white rounded-full animate-bounce shadow-soft-md">
+                <div className="p-3 bg-coral-500 text-white rounded-full animate-bounce shadow-soft-md">
                   <ShieldAlert className="h-10 w-10" />
                 </div>
               ) : isSedang ? (
@@ -145,7 +145,7 @@ export default function HasilScreening() {
                   <AlertTriangle className="h-10 w-10" />
                 </div>
               ) : (
-                <div className="p-3 bg-emerald-500 text-white rounded-full shadow-soft-md">
+                <div className="p-3 bg-emerald-700 text-white rounded-full shadow-soft-md">
                   <CheckCircle2 className="h-10 w-10" />
                 </div>
               )}
@@ -156,7 +156,7 @@ export default function HasilScreening() {
                 TINGKAT RISIKO KOMPLIKASI
               </p>
               <h2 className={`text-3xl sm:text-4xl font-bold mt-1 ${
-                isBerat ? "text-rose-600" : isSedang ? "text-amber-600" : "text-emerald-600"
+                isBerat ? "text-coral-600" : isSedang ? "text-amber-600" : "text-emerald-700"
               }`}>
                 RISIKO {result.tingkat_risiko.toUpperCase()}
               </h2>
@@ -167,7 +167,7 @@ export default function HasilScreening() {
               <div className="flex justify-between text-[11px] font-bold text-slate-600">
                 <span className="text-emerald-700">Ringan (&le;5)</span>
                 <span className="text-amber-700">Sedang (6-11)</span>
-                <span className="text-rose-700">Berat (&ge;12)</span>
+                <span className="text-coral-600">Tinggi (&ge;12)</span>
               </div>
               <Progress
                 value={(result.skor_poedji_rochjati / 20) * 100}

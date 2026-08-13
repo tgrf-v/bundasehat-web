@@ -507,7 +507,7 @@ export default function KehamilanScreening() {
                         3. Bias Treatment
                       </span>
                     </div>
-                    <Progress value={(currentStep / 3) * 100} variant="rose" className="h-2" />
+                    <Progress value={(currentStep / 3) * 100} variant="default" className="h-2" />
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -742,7 +742,7 @@ export default function KehamilanScreening() {
                           <ChevronRight className="h-4 w-4" />
                         </Button>
                       ) : (
-                        <Button type="submit" variant="rose" size="sm" isLoading={isLoading} className="gap-2 shadow-soft-sm font-bold text-xs">
+                        <Button type="submit" variant="default" size="sm" isLoading={isLoading} className="gap-2 shadow-soft-sm font-bold text-xs">
                           <CheckCircle2 className="h-4 w-4" />
                           <span>Lihat Hasil</span>
                         </Button>

@@ -12,15 +12,15 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
     const getBarColor = () => {
-      if (variant === "emerald") return "bg-emerald-500";
+      if (variant === "emerald") return "bg-emerald-600";
       if (variant === "amber") return "bg-amber-500";
-      if (variant === "rose") return "bg-rose-600";
+      if (variant === "rose") return "bg-coral-500";
       if (variant === "riskGauge") {
-        if (percentage <= 33) return "bg-emerald-500";
+        if (percentage <= 33) return "bg-emerald-600";
         if (percentage <= 66) return "bg-amber-500";
-        return "bg-rose-600";
+        return "bg-coral-500";
       }
-      return "bg-emerald-600";
+      return "bg-emerald-700";
     };
 
     return (

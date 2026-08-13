@@ -737,7 +737,7 @@ export default function PersalinanScreening() {
                       {currentStep < 3 ? (
                         <Button
                           type="button"
-                          variant="rose"
+                          variant="default"
                           onClick={handleNextStep}
                           className="gap-1.5 text-xs font-bold shadow-soft-sm"
                         >
@@ -747,7 +747,7 @@ export default function PersalinanScreening() {
                       ) : (
                         <Button
                           type="submit"
-                          variant="rose"
+                          variant="default"
                           isLoading={isLoading}
                           className="gap-2 text-xs font-bold shadow-soft-sm"
                         >

@@ -40,25 +40,25 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-slate-50 to-pink-100 flex flex-col justify-center items-center p-4 font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50/60 via-stone-50 to-sage-100/60 flex flex-col justify-center items-center p-4 font-sans relative overflow-hidden">
       
       {/* Background Subtle Ornaments */}
-      <div className="absolute -top-20 -left-20 w-96 h-96 bg-rose-400/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-coral-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Back Link */}
       <div className="w-full max-w-md mb-4 flex items-center justify-between">
         <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-rose-600 transition-colors"
+          href="/tentang-kami"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-emerald-700 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Kembali ke Landing Page</span>
+          <span>Tentang Kami</span>
         </Link>
       </div>
 
       {/* Login / Register Card */}
-      <Card className="w-full max-w-md rounded-3xl border-pink-100 shadow-soft-lg bg-white/95 backdrop-blur-md overflow-hidden">
+      <Card className="w-full max-w-md rounded-3xl border-emerald-100 shadow-soft-lg bg-white/95 backdrop-blur-md overflow-hidden">
         
         {/* Header Branding */}
         <CardHeader className="text-center pt-6 pb-2 px-6 space-y-2">
@@ -129,7 +129,7 @@ export default function Login() {
                   <a
                     href="#forgot"
                     onClick={(e) => { e.preventDefault(); alert('Gunakan password demo yang tersedia.'); }}
-                    className="text-[11px] font-bold text-rose-600 hover:underline"
+                    className="text-[11px] font-bold text-emerald-700 hover:underline"
                   >
                     Lupa password?
                   </a>
@@ -197,10 +197,10 @@ export default function Login() {
             {/* Submit Button */}
             <Button
               type="submit"
-              variant="rose"
+              variant="default"
               size="lg"
               isLoading={isLoading}
-              className="w-full font-bold text-sm gap-2 shadow-soft-md mt-2"
+              className="w-full font-bold text-sm gap-2 shadow-soft-md mt-2 bg-emerald-700 hover:bg-emerald-800 text-white"
             >
               {mode === "login" ? (
                 <>
@@ -225,7 +225,7 @@ export default function Login() {
               Belum memiliki akun?{" "}
               <button
                 onClick={() => setMode("register")}
-                className="font-bold text-rose-600 hover:underline"
+                className="font-bold text-emerald-700 hover:underline"
               >
                 Daftar sekarang
               </button>
@@ -235,7 +235,7 @@ export default function Login() {
               Sudah memiliki akun?{" "}
               <button
                 onClick={() => setMode("login")}
-                className="font-bold text-rose-600 hover:underline"
+                className="font-bold text-emerald-700 hover:underline"
               >
                 Masuk sekarang
               </button>

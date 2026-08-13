@@ -64,21 +64,21 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       {/* Background Ambient Ornaments & Visible Gradient Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {/* Visible Soft Radial Gradient Blobs */}
-        <div className="absolute -right-28 -top-10 w-[650px] h-[650px] bg-gradient-to-br from-rose-300/65 via-pink-200/45 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-pink-300/55 via-rose-200/35 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] bg-gradient-to-t from-rose-300/45 via-pink-200/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -right-28 -top-10 w-[650px] h-[650px] bg-gradient-to-br from-emerald-200/45 via-sage-100/35 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-sage-200/40 via-emerald-100/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] bg-gradient-to-t from-emerald-200/35 via-sage-100/20 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         {/* Floating Plus Signs (+ Ornaments) & Sparkles (Soft Opacity) */}
-        <div className="absolute top-36 left-12 text-rose-400/20 text-2xl font-normal select-none">
+        <div className="absolute top-36 left-12 text-emerald-600/20 text-2xl font-normal select-none">
           +
         </div>
-        <div className="absolute top-1/2 right-16 text-rose-400/15 text-3xl font-normal select-none">
+        <div className="absolute top-1/2 right-16 text-emerald-600/15 text-3xl font-normal select-none">
           +
         </div>
-        <div className="absolute bottom-1/4 left-1/4 text-pink-400/20 text-2xl font-normal select-none">
+        <div className="absolute bottom-1/4 left-1/4 text-sage-600/20 text-2xl font-normal select-none">
           +
         </div>
-        <div className="absolute top-1/4 right-1/3 text-rose-400/20 text-xl select-none">
+        <div className="absolute top-1/4 right-1/3 text-emerald-600/20 text-xl select-none">
           ✦
         </div>
       </div>      {/* Main Header Desktop (Fixed Top Navbar) */}
@@ -120,7 +120,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "beranda"
-                    ? "text-rose-600 font-bold"
+                    ? "text-emerald-700 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -130,7 +130,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/screening/kehamilan"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "kehamilan"
-                    ? "text-rose-600 font-bold"
+                    ? "text-emerald-700 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -140,7 +140,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/screening/persalinan"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "persalinan"
-                    ? "text-rose-600 font-bold"
+                    ? "text-emerald-700 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -150,7 +150,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/kamus"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "kamus"
-                    ? "text-rose-600 font-bold"
+                    ? "text-emerald-700 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -160,7 +160,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/tentang-kami"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "tentang-kami"
-                    ? "text-rose-600 font-bold"
+                    ? "text-emerald-700 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -201,7 +201,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "beranda"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -213,7 +213,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/screening/kehamilan"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "kehamilan"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -225,7 +225,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/screening/persalinan"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "persalinan"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -237,7 +237,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/kamus"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "kamus"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -249,7 +249,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/profil"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "profil"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >

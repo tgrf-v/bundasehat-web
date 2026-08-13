@@ -1,7 +1,5 @@
 import React from "react";
-import { router } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
-import { Card } from "@/Components/ui/card";
 import {
   Accordion,
   AccordionItem,
@@ -10,10 +8,7 @@ import {
 } from "@/Components/ui/accordion";
 import {
   Activity,
-  Heart,
   BookOpen,
-  ArrowRight,
-  HelpCircle,
   Video,
   Stethoscope,
   ShieldCheck,
@@ -24,27 +19,22 @@ import {
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function TentangKami() {
-  const handleLoginDemo = () => {
-    localStorage.setItem("bundasehat_auth", "true");
-    router.visit("/");
-  };
-
   return (
     <BundaSehatLayout activeNav="tentang-kami">
       <div className="w-full">
 
         {/* HERO BANNER INFORMASI KESEHATAN KEHAMILAN (FULL VIEWPORT HEIGHT WITH SEAMLESS NAVBAR) */}
-        <section id="banner" className="w-full min-h-screen -mt-16 pt-20 lg:pt-24 bg-gradient-to-br from-pink-500 via-rose-500 to-pink-600 text-white flex items-center relative overflow-hidden shadow-soft-md">
+        <section id="banner" className="w-full min-h-screen -mt-16 pt-20 lg:pt-24 bg-gradient-to-br from-emerald-800 via-sage-700 to-emerald-900 text-white flex items-center relative overflow-hidden shadow-soft-md">
 
           {/* Background Design Attributes & Ornaments (Waves, Concentric Circles, Plus Signs, Sparkles) */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
             {/* Glowing Ambient Ornaments */}
             <div className="absolute -right-10 -bottom-10 w-[650px] h-[650px] bg-white/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute right-20 top-0 w-96 h-96 bg-rose-400/20 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute right-20 top-0 w-96 h-96 bg-coral-400/20 rounded-full blur-2xl pointer-events-none" />
 
             {/* Concentric Circles Rings */}
             <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-[720px] h-[720px] bg-white/5 rounded-full border border-white/10 pointer-events-none" />
-            <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-pink-300/10 rounded-full border border-white/15 pointer-events-none" />
+            <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-[560px] h-[560px] bg-emerald-300/10 rounded-full border border-white/15 pointer-events-none" />
 
             {/* Organic Waves SVG (Gelombang) */}
             <svg
@@ -70,7 +60,7 @@ export default function TentangKami() {
             </div>
 
             {/* Sparkles / Shining Stars */}
-            <div className="absolute top-20 right-[35%] text-pink-200/50 text-xl animate-pulse">
+            <div className="absolute top-20 right-[35%] text-amber-200/50 text-xl animate-pulse">
               ✦
             </div>
             <div className="absolute bottom-28 left-[28%] text-white/30 text-lg">
@@ -91,19 +81,9 @@ export default function TentangKami() {
                   <span className="block">Persalinan Sehat</span>
                 </h1>
 
-                <p className="text-sm md:text-lg text-pink-50 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
+                <p className="text-sm md:text-lg text-emerald-100 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
                   Skrining risiko kehamilan, hitung HPL otomatis, dan panduan terapi komplementer terpercaya.
                 </p>
-
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-                  <button
-                    onClick={handleLoginDemo}
-                    className="px-8 py-4 rounded-full bg-white text-rose-600 font-bold text-sm md:text-base shadow-soft-md hover:bg-pink-50 transition-all active:scale-95 flex items-center gap-2"
-                  >
-                    <span>Masuk</span>
-                    <ArrowRight className="h-5 w-5" />
-                  </button>
-                </div>
 
               </div>
 
@@ -112,7 +92,7 @@ export default function TentangKami() {
                 <div className="relative w-full max-w-lg sm:max-w-xl h-[420px] sm:h-[520px] md:h-[580px] flex items-center justify-center">
 
                   {/* Layer 1: Ambient Background Glowing Soft Circle */}
-                  <div className="absolute w-80 h-80 sm:w-[450px] sm:h-[450px] bg-gradient-to-tr from-white/25 to-pink-300/35 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute w-80 h-80 sm:w-[450px] sm:h-[450px] bg-gradient-to-tr from-white/25 to-emerald-300/25 rounded-full blur-3xl pointer-events-none" />
 
                   {/* Layer 2: Scaled-Up Woman Graphic (Flipped Horizontal with scale-x-[-1]) */}
                   <img
@@ -126,12 +106,12 @@ export default function TentangKami() {
                   {/* Floating Card 1: Top Left */}
                   <div className="absolute top-6 left-0 sm:left-4 z-20 group cursor-pointer">
                     <div className="flex items-center gap-0 group-hover:gap-3 p-2 bg-white/95 backdrop-blur-md rounded-full shadow-soft-lg border border-white/60 transition-all duration-300 group-hover:px-5 group-hover:py-2.5">
-                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0 shadow-soft-xs">
-                        <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0 shadow-soft-xs">
+                        <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7 text-emerald-700" />
                       </div>
                       <div className="max-w-0 opacity-0 group-hover:max-w-[200px] group-hover:opacity-100 overflow-hidden transition-all duration-300 whitespace-nowrap text-left">
-                        <h4 className="text-xs sm:text-sm font-bold text-rose-950">Deteksi Risiko Dini</h4>
-                        <p className="text-[11px] font-bold text-rose-600/80">Kalkulasi MAP & KSPR</p>
+                        <h4 className="text-xs sm:text-sm font-bold text-slate-900">Deteksi Risiko Dini</h4>
+                        <p className="text-[11px] font-bold text-emerald-700">Kalkulasi MAP & KSPR</p>
                       </div>
                     </div>
                   </div>
@@ -139,12 +119,12 @@ export default function TentangKami() {
                   {/* Floating Card 2: Top Right */}
                   <div className="absolute top-12 right-0 sm:right-4 z-20 group cursor-pointer">
                     <div className="flex items-center gap-0 group-hover:gap-3 p-2 bg-white/95 backdrop-blur-md rounded-full shadow-soft-lg border border-white/60 transition-all duration-300 group-hover:px-5 group-hover:py-2.5">
-                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0 shadow-soft-xs">
-                        <Calendar className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-coral-100 text-coral-600 flex items-center justify-center font-bold shrink-0 shadow-soft-xs">
+                        <Calendar className="h-6 w-6 sm:h-7 sm:w-7 text-coral-600" />
                       </div>
                       <div className="max-w-0 opacity-0 group-hover:max-w-[200px] group-hover:opacity-100 overflow-hidden transition-all duration-300 whitespace-nowrap text-left">
-                        <h4 className="text-xs sm:text-sm font-bold text-rose-950">Prediksi HPL Akurat</h4>
-                        <p className="text-[11px] font-bold text-rose-600/80">Perhitungan Otomatis</p>
+                        <h4 className="text-xs sm:text-sm font-bold text-slate-900">Prediksi HPL Akurat</h4>
+                        <p className="text-[11px] font-bold text-coral-600">Perhitungan Otomatis</p>
                       </div>
                     </div>
                   </div>
@@ -152,8 +132,8 @@ export default function TentangKami() {
                   {/* Floating Card 3: Bottom Left */}
                   <div className="absolute bottom-6 left-0 sm:left-4 z-20 group cursor-pointer">
                     <div className="flex items-center gap-0 group-hover:gap-3 p-2 bg-white/95 backdrop-blur-md rounded-full shadow-soft-lg border border-white/60 transition-all duration-300 group-hover:px-5 group-hover:py-2.5">
-                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold shrink-0 shadow-soft-xs">
-                        <Leaf className="h-6 w-6 sm:h-7 sm:w-7 text-emerald-600" />
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0 shadow-soft-xs">
+                        <Leaf className="h-6 w-6 sm:h-7 sm:w-7 text-emerald-700" />
                       </div>
                       <div className="max-w-0 opacity-0 group-hover:max-w-[200px] group-hover:opacity-100 overflow-hidden transition-all duration-300 whitespace-nowrap text-left">
                         <h4 className="text-xs sm:text-sm font-bold text-slate-900">Terapi Komplementer</h4>
@@ -186,7 +166,7 @@ export default function TentangKami() {
                 {/* Accordion Item 1 */}
                 <AccordionItem value="item-1">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
                       <Activity className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-bold text-slate-900">
@@ -197,7 +177,7 @@ export default function TentangKami() {
                     <p>
                       Screening bertahap kondisi fisik, HPHT, edema, tensi darah (MAP), dan gejala bahaya trimester untuk mengkategorikan tingkat risiko kehamilan secara akurat.
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-rose-600">
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-emerald-700">
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kartu Skor Risiko Komplikasi</span>
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Kalkulasi Otomatis HPL</span>
                     </div>
@@ -207,7 +187,7 @@ export default function TentangKami() {
                 {/* Accordion Item 2 */}
                 <AccordionItem value="item-2">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
                       <Stethoscope className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-bold text-slate-900">
@@ -218,7 +198,7 @@ export default function TentangKami() {
                     <p>
                       Penentuan tingkat rujukan tenaga medis dan tempat persalinan aman (Bidan Praktik Mandiri / Puskesmas / Rumah Sakit SC) untuk mencegah keterlambatan penanganan rujukan emergency.
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-rose-600">
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-emerald-700">
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Rekomendasi Penolong Bersalin</span>
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Deteksi Dini Komplikasi Salin</span>
                     </div>
@@ -228,7 +208,7 @@ export default function TentangKami() {
                 {/* Accordion Item 3 */}
                 <AccordionItem value="item-3">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold shrink-0">
                       <BookOpen className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-bold text-slate-900">
@@ -239,7 +219,7 @@ export default function TentangKami() {
                     <p>
                       Katalog edukasi medis lengkap seputar komplikasi kehamilan ala Halodoc dengan sistem pencarian cepat kata kunci penyakit, gejala fisik, dan penanganan awal.
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-emerald-600">
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-emerald-700">
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Istilah Medis Mudah Dipahami</span>
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Filter Pencarian Instan</span>
                     </div>
@@ -249,7 +229,7 @@ export default function TentangKami() {
                 {/* Accordion Item 4 */}
                 <AccordionItem value="item-4">
                   <AccordionTrigger>
-                    <div className="h-10 w-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-coral-100 text-coral-600 flex items-center justify-center font-bold shrink-0">
                       <Video className="h-5 w-5" />
                     </div>
                     <span className="text-base sm:text-lg font-bold text-slate-900">
@@ -260,7 +240,7 @@ export default function TentangKami() {
                     <p>
                       Panduan video interaktif teknik terapi relaksasi, pijat oxytocin, kompres hangat, dan penanganan non-obat yang tervalidasi oleh pakar kebidanan (Bu Asih & Nakes Wilayah).
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-amber-600">
+                    <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-semibold text-coral-600">
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Tutorial Video HD Interaktif</span>
                       <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Terbukti Aman & Bebas Efek Samping</span>
                     </div>

@@ -56,14 +56,14 @@ export default function Beranda() {
             {/* Shortcut 1: Screening Kehamilan */}
             <Link
               href="/screening/kehamilan"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
                   <Activity className="h-6 w-6" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
                     Screening Kehamilan
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
@@ -71,20 +71,20 @@ export default function Beranda() {
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
             {/* Shortcut 2: Screening Persalinan */}
             <Link
               href="/screening/persalinan"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
                   <Stethoscope className="h-6 w-6" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
                     Screening Persalinan
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
@@ -92,41 +92,41 @@ export default function Beranda() {
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
             {/* Shortcut 3: Kamus Kesehatan */}
             <Link
               href="/kamus"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
                   <BookOpen className="h-6 w-6" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
                     Kamus Kesehatan
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
-                    Edukasi & Terapi Video
+                    Edukasi &amp; Terapi Video
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
             {/* Shortcut 4: Tentang Kami */}
             <Link
               href="/tentang-kami"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-coral-200 transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                <div className="h-12 w-12 rounded-full bg-coral-50 text-coral-600 flex items-center justify-center border border-coral-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
                   <Info className="h-6 w-6" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-coral-600 transition-colors truncate">
                     Tentang Kami
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
@@ -134,28 +134,28 @@ export default function Beranda() {
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-coral-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
             {/* Shortcut 5: Profil Saya */}
             <Link
               href="/profil"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-pink-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-pink-50 text-rose-600 flex items-center justify-center border border-pink-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
+                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
                   <User className="h-6 w-6" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
                     Profil Saya
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
-                    Riwayat Screening
+                    Riwayat &amp; Data Akun
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
           </div>

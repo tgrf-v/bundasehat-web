@@ -274,7 +274,7 @@ export default function KamusIndex() {
                   onClick={() => setSelectedLetter("semua")}
                   className={`px-3 py-1 rounded-full text-xs font-bold transition-all shrink-0 ${
                     selectedLetter === "semua"
-                      ? "bg-rose-500 text-white shadow-soft-xs"
+                      ? "bg-emerald-700 text-white shadow-soft-xs"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold"
                   }`}
                 >
@@ -286,7 +286,7 @@ export default function KamusIndex() {
                     onClick={() => setSelectedLetter(char)}
                     className={`h-7 w-7 rounded-full text-xs font-bold transition-all flex items-center justify-center shrink-0 ${
                       selectedLetter === char
-                        ? "bg-rose-500 text-white shadow-soft-xs"
+                        ? "bg-emerald-700 text-white shadow-soft-xs"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 font-semibold"
                     }`}
                   >
@@ -307,11 +307,11 @@ export default function KamusIndex() {
                   <div
                     key={article.id}
                     onClick={() => setSelectedArticle(article)}
-                    className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-100/90 shadow-soft-xs hover:shadow-soft-sm hover:border-rose-200/80 transition-all cursor-pointer group space-y-2"
+                    className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-100/90 shadow-soft-xs hover:shadow-soft-sm hover:border-emerald-200/80 transition-all cursor-pointer group space-y-2"
                   >
                     {/* Baris 1 (Atas): Judul Lengkap */}
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                      <h3 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
                         {article.title}
                       </h3>
                     </div>

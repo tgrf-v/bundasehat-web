@@ -123,11 +123,11 @@ export default function ProfilIndex() {
                   <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                     <FileText className="h-5 w-5 text-emerald-600" />
                   </div>
-                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
                     Syarat dan Ketentuan
                   </span>
                 </div>
-                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
               </div>
 
               {/* Row 2: Kebijakan Privasi */}
@@ -139,11 +139,11 @@ export default function ProfilIndex() {
                   <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                     <ShieldCheck className="h-5 w-5 text-emerald-600" />
                   </div>
-                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
                     Kebijakan Privasi
                   </span>
                 </div>
-                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
               </div>
 
               {/* Row 3: Bantuan */}
@@ -155,11 +155,11 @@ export default function ProfilIndex() {
                   <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                     <Headphones className="h-5 w-5 text-emerald-600" />
                   </div>
-                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
                     Bantuan
                   </span>
                 </div>
-                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
               </div>
 
               {/* Logout Button Row */}

@@ -4,29 +4,33 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-rose-500 text-white shadow-soft-sm hover:bg-rose-600 hover:shadow-soft-md",
+          "bg-emerald-700 text-white shadow-soft-sm hover:bg-emerald-800 hover:shadow-soft-md",
+        sage:
+          "bg-emerald-700 text-white shadow-soft-sm hover:bg-emerald-800 hover:shadow-soft-md",
+        coral:
+          "bg-coral-500 text-white shadow-soft-sm hover:bg-coral-600 hover:shadow-soft-md",
         rose:
-          "bg-rose-500 text-white shadow-soft-sm hover:bg-rose-600 hover:shadow-soft-md",
+          "bg-coral-500 text-white shadow-soft-sm hover:bg-coral-600 hover:shadow-soft-md",
         emerald:
-          "bg-emerald-600 text-white shadow-soft-sm hover:bg-emerald-700 hover:shadow-soft-md",
+          "bg-emerald-700 text-white shadow-soft-sm hover:bg-emerald-800 hover:shadow-soft-md",
         pink:
-          "bg-pink-500 text-white shadow-soft-sm hover:bg-pink-600 hover:shadow-soft-md",
+          "bg-coral-500 text-white shadow-soft-sm hover:bg-coral-600 hover:shadow-soft-md",
         destructive:
           "bg-red-600 text-white shadow-soft-sm hover:bg-red-700 hover:shadow-soft-md",
         outline:
-          "border border-slate-200 bg-white text-slate-700 shadow-soft-sm hover:bg-pink-50 hover:text-rose-700 hover:border-pink-200",
+          "border border-slate-200 bg-white text-slate-700 shadow-soft-sm hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200",
         secondary:
-          "bg-pink-50 text-rose-700 hover:bg-pink-100 border border-pink-100/80",
+          "bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-100/80",
         roseSecondary:
-          "bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-100",
+          "bg-coral-50 text-coral-600 hover:bg-coral-100 border border-coral-100",
         ghost:
-          "text-slate-600 hover:bg-pink-50 hover:text-rose-700",
-        link: "text-rose-600 underline-offset-4 hover:underline p-0 h-auto font-medium",
+          "text-slate-600 hover:bg-emerald-50 hover:text-emerald-800",
+        link: "text-emerald-700 underline-offset-4 hover:underline p-0 h-auto font-medium",
       },
       size: {
         default: "h-11 px-5 py-2.5 rounded-full",

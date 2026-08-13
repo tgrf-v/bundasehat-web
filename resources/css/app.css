@@ -4,36 +4,36 @@
 
 @layer base {
   :root {
-    --background: 327 73% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 140 15% 98%;
+    --foreground: 155 25% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 155 25% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 155 25% 12%;
 
-    /* Primary Main: #F43F5E (rose-500 - Terang & Ramah) */
-    --primary: 351 89% 60%;
+    /* Primary Main: #4F7361 (Sage Green - Alami & Menenangkan) */
+    --primary: 150 18% 38%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary Maternity Emerald: #10B981 (emerald-500) */
-    --secondary: 160 84% 39%;
+    /* Secondary Accent: #E06145 (Warm Coral) */
+    --secondary: 11 73% 57%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 327 50% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 140 15% 94%;
+    --muted-foreground: 155 10% 40%;
 
-    /* Accent Pink/Coral Soft */
-    --accent: 327 73% 97%;
-    --accent-foreground: 351 89% 50%;
+    /* Accent Warm Coral Soft */
+    --accent: 11 73% 96%;
+    --accent-foreground: 11 73% 50%;
 
     --destructive: 346 84% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 351 89% 60%;
+    --border: 140 12% 88%;
+    --input: 140 12% 88%;
+    --ring: 150 18% 38%;
 
     --radius: 0.75rem;
   }
