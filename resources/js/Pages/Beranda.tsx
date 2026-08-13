@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "@inertiajs/react";
+import React from "react";
+import { Link, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
@@ -17,19 +17,59 @@ import {
 } from "lucide-react";
 import { ScreeningResult } from "@/types/screening";
 
-export default function Beranda() {
-  const [screeningResult, setScreeningResult] = useState<ScreeningResult | null>(null);
+interface LatestScreeningSummary {
+  kode_screening: string;
+  tingkat_risiko: string;
+  kategori_risiko: string;
+  skor_kspr: number;
+  map_value: number;
+  created_at: string;
+}
 
-  useEffect(() => {
-    const savedResult = sessionStorage.getItem("latest_screening_result");
-    if (savedResult) {
-      try {
-        setScreeningResult(JSON.parse(savedResult));
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }, []);
+interface BerandaPageProps {
+  auth: {
+    user: {
+      id: number;
+      name: string;
+      email: string;
+      role: string;
+    };
+  };
+  latestScreening: LatestScreeningSummary | null;
+}
+
+export default function Beranda() {
+  const { latestScreening, auth } = usePage<BerandaPageProps>().props;
+
+  // Map latestScreening to ScreeningResult format for existing UI components that may use it
+  const screeningResult: ScreeningResult | null = latestScreening ? {
+    kode_screening: latestScreening.kode_screening,
+    skor_poedji_rochjati: latestScreening.skor_kspr,
+    total_skor: latestScreening.skor_kspr,
+    tingkat_risiko: latestScreening.tingkat_risiko as ScreeningResult["tingkat_risiko"],
+    kategori_risiko: latestScreening.kategori_risiko as ScreeningResult["kategori_risiko"],
+    status_label: "",
+    map_value: latestScreening.map_value,
+    potensi_komplikasi: [],
+    rekomendasi_faskes: "",
+    rekomendasi_tempat: "",
+    penolong_persalinan: "",
+    saran_terapi_ids: [],
+    saran_terapi: [],
+    detail_skor: [],
+    input_summary: {
+      nama_pasien: "",
+      umur: 0,
+      paritas: 0,
+      sistolik: 0,
+      diastolik: 0,
+      edema_level: "none",
+      keluhan_spesifik: [],
+      sudah_dapat_treatment: false,
+      tipe_screening: "kehamilan",
+    },
+    created_at: latestScreening.created_at,
+  } : null;
 
   return (
     <BundaSehatLayout activeNav="beranda">

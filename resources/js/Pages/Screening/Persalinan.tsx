@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { router } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
@@ -51,34 +52,25 @@ export default function PersalinanScreening() {
     ada_riwayat_sc: boolean;
     kondisi_ketuban: string;
   }>({
-    nama_pasien: "Ibu Rahma Rahayu",
-    nik: "3201928301920002",
-    umur: 27,
-    paritas: 1,
-    sistolik: 120,
-    diastolik: 80,
+    nama_pasien: "",
+    nik: "",
+    umur: 0,
+    paritas: 0,
+    sistolik: 0,
+    diastolik: 0,
     edema_level: "none",
     keluhan_spesifik: [],
     sudah_dapat_treatment: false,
     detail_treatment: "",
     tipe_screening: "persalinan",
-    wilayah_puskesmas: "Puskesmas Wilayah 1",
+    wilayah_puskesmas: "",
     posisi_janin: "kepala_bawah",
     ada_riwayat_sc: false,
     kondisi_ketuban: "utuh",
   });
 
   useEffect(() => {
-    const saved = sessionStorage.getItem("latest_persalinan_result");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setPersalinanResult(parsed);
-        setHasScreened(true);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    // Screening result sekarang di-load dari server props via Inertia
   }, []);
 
   const validateStep = (step: number): boolean => {
@@ -145,35 +137,15 @@ export default function PersalinanScreening() {
 
     setIsLoading(true);
 
-    const keluhanList = [...formData.keluhan_spesifik];
-    if (formData.ada_riwayat_sc && !keluhanList.includes("riwayat_sc")) {
-      keluhanList.push("riwayat_sc");
-    }
-    if (formData.posisi_janin !== "kepala_bawah" && !keluhanList.includes("letak_sungsang_lintang")) {
-      keluhanList.push("letak_sungsang_lintang");
-    }
-    if (formData.kondisi_ketuban === "pecah" && !keluhanList.includes("ketuban_pecah_dini")) {
-      keluhanList.push("ketuban_pecah_dini");
-    }
-
-    try {
-      const resultData = evaluateScreening({
-        ...formData,
-        keluhan_spesifik: keluhanList,
-        tipe_screening: "persalinan",
-      });
-      sessionStorage.setItem("latest_persalinan_result", JSON.stringify(resultData));
-
-      setTimeout(() => {
+    router.post(route("screening.store"), formData as Record<string, unknown>, {
+      onSuccess: () => {
         setIsLoading(false);
-        setPersalinanResult(resultData);
-        setHasScreened(true);
-        setRightPanelView("summary");
-      }, 500);
-    } catch (err) {
-      setIsLoading(false);
-      setErrors({ general: "Terjadi kesalahan saat memproses screening persalinan." });
-    }
+      },
+      onError: (serverErrors) => {
+        setIsLoading(false);
+        setErrors(serverErrors as Record<string, string>);
+      },
+    });
   };
 
   const handleRescreen = () => {

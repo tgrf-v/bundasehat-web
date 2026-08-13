@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "@inertiajs/react";
+import React from "react";
+import { Link, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
@@ -23,65 +23,12 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-export default function HasilScreening() {
-  const [result, setResult] = useState<ScreeningResult | null>(null);
+interface HasilPageProps {
+  screening: ScreeningResult;
+}
 
-  useEffect(() => {
-    const saved = sessionStorage.getItem("latest_screening_result");
-    if (saved) {
-      try {
-        setResult(JSON.parse(saved));
-      } catch (e) {
-        setResult(null);
-      }
-    } else {
-      setResult({
-        kode_screening: "SCR-20260805-7782",
-        skor_poedji_rochjati: 10,
-        total_skor: 10,
-        tingkat_risiko: "Sedang",
-        kategori_risiko: "KRT",
-        status_label: "Risiko Tinggi / Sedang (KRT)",
-        map_value: 96.33,
-        potensi_komplikasi: [
-          "Pre-Hipertensi Gestasional",
-          "Edema Ekstremitas Ringan (Kaki)",
-          "Anemia Dalam Kehamilan",
-        ],
-        rekomendasi_faskes:
-          "Dapat Dilayani di Puskesmas / Rumah Sakit Type C dengan Pendampingan Bidan & Dokter Umum.",
-        rekomendasi_tempat: "Puskesmas Rawat Inap / PONED",
-        penolong_persalinan: "Bidan & Dokter Umum",
-        taksiran_hpl: "18 November 2026",
-        saran_terapi_ids: [1, 2],
-        saran_terapi: [
-          "Kompres Warm Compress pada leher & pundak",
-          "Teknik Pernapasan Deep Breathing Relaksasi",
-          "Pijat Oxytocin Tulang Belakang (Bantuan Suami)"
-        ],
-        detail_skor: [
-          { deskripsi: "Skor Awal Ibu Hamil", skor: 2 },
-          { deskripsi: "Pre-Hipertensi Gestasional", skor: 4 },
-          { deskripsi: "Edema Ekstremitas Ringan", skor: 4 }
-        ],
-        input_summary: {
-          nama_pasien: "Ibu Rahma Rahayu",
-          umur: 28,
-          paritas: 1,
-          sistolik: 130,
-          diastolik: 85,
-          edema_level: "ringan_kaki",
-          keluhan_spesifik: ["anemia_pucat"],
-          sudah_dapat_treatment: true,
-          detail_treatment: "Suplemen Fe dari Bidan",
-          tipe_screening: "kehamilan",
-          wilayah_puskesmas: "Puskesmas Wilayah 1",
-        },
-        nama_pasien: "Ibu Rahma Rahayu",
-        created_at: "5 Agustus 2026, 14:30 WIB",
-      });
-    }
-  }, []);
+export default function HasilScreening() {
+  const { screening: result } = usePage<HasilPageProps & { auth: { user: { id: number; name: string; email: string } } }>().props;
 
   const handlePrint = () => {
     window.print();

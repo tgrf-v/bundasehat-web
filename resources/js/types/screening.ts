@@ -37,6 +37,7 @@ export interface DetailSkorFactor {
 }
 
 export interface ScreeningResult {
+  id?: number;
   kode_screening: string;
   skor_poedji_rochjati: number;
   total_skor: number;

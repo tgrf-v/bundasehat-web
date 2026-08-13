@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { router } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
@@ -53,35 +54,26 @@ export default function KehamilanScreening() {
   const [rightPanelView, setRightPanelView] = useState<"summary" | "detail">("summary");
 
   const [formData, setFormData] = useState<ScreeningInput>({
-    nama_pasien: "Ibu Rahma Rahayu",
-    nik: "3201928301920002",
-    umur: 27,
-    paritas: 1,
-    hpht: "2025-10-12",
-    sistolik: 120,
-    diastolik: 80,
+    nama_pasien: "",
+    nik: "",
+    umur: 0,
+    paritas: 0,
+    hpht: "",
+    sistolik: 0,
+    diastolik: 0,
     edema_level: "none",
     keluhan_spesifik: [],
     sudah_dapat_treatment: false,
     detail_treatment: "",
     tipe_screening: "kehamilan",
-    wilayah_puskesmas: "Puskesmas Wilayah 1",
+    wilayah_puskesmas: "",
   });
 
   const [gestationalInfo, setGestationalInfo] = useState<{ weeks: number; dueDate?: string }>({ weeks: 0 });
   const [calculatedMap, setCalculatedMap] = useState<number>(86.67);
 
   useEffect(() => {
-    const savedResult = sessionStorage.getItem("latest_screening_result");
-    if (savedResult) {
-      try {
-        const parsed = JSON.parse(savedResult);
-        setScreeningResult(parsed);
-        setHasScreened(true);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    // Screening result sekarang di-load dari server props via Inertia
   }, []);
 
   useEffect(() => {
@@ -149,19 +141,15 @@ export default function KehamilanScreening() {
     }
     setIsLoading(true);
 
-    try {
-      const resultData = evaluateScreening(formData);
-      sessionStorage.setItem("latest_screening_result", JSON.stringify(resultData));
-
-      setTimeout(() => {
+    router.post(route("screening.store"), formData as Record<string, unknown>, {
+      onSuccess: () => {
         setIsLoading(false);
-        setScreeningResult(resultData);
-        setHasScreened(true);
-      }, 500);
-    } catch (err) {
-      setIsLoading(false);
-      setErrors({ general: "Terjadi kesalahan saat memproses screening. Silakan coba lagi." });
-    }
+      },
+      onError: (serverErrors) => {
+        setIsLoading(false);
+        setErrors(serverErrors as Record<string, string>);
+      },
+    });
   };
 
   const handleRescreen = () => {
