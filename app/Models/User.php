@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'no_telepon',
     ];
 
     /**
@@ -44,5 +48,43 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // ──────────────────────────────────────────────
+    // Role Helpers
+    // ──────────────────────────────────────────────
+
+    public function isSuperadmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+
+    public function isBidan(): bool
+    {
+        return $this->role === 'bidan';
+    }
+
+    public function isIbuHamil(): bool
+    {
+        return $this->role === 'ibu_hamil';
+    }
+
+    // ──────────────────────────────────────────────
+    // Relationships
+    // ──────────────────────────────────────────────
+
+    public function bidanProfile(): HasOne
+    {
+        return $this->hasOne(BidanProfile::class);
+    }
+
+    public function screenings(): HasMany
+    {
+        return $this->hasMany(Screening::class, 'ibu_hamil_id');
+    }
+
+    public function bidanScreenings(): HasMany
+    {
+        return $this->hasMany(Screening::class, 'bidan_id');
     }
 }
