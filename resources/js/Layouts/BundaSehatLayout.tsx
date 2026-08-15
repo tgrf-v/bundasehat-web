@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import {
   Activity,
   BookOpen,
@@ -23,18 +23,21 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   children,
   activeNav = "beranda",
 }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const { auth } = usePage<{
+    auth: {
+      user: {
+        id: number;
+        name: string;
+        email: string;
+        role: string;
+      } | null;
+    };
+  }>().props;
+
+  const user = auth?.user;
+  const isLoggedIn = Boolean(user);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [language, setLanguage] = useState<"ID" | "EN">("ID");
-
-  useEffect(() => {
-    const savedAuth = localStorage.getItem("bundasehat_auth");
-    const isAuth = savedAuth === "true";
-    setIsLoggedIn(isAuth);
-    if (!isAuth && window.location.pathname !== "/login") {
-      router.visit("/login");
-    }
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,16 +50,6 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleAuthMode = (mode: boolean) => {
-    setIsLoggedIn(mode);
-    localStorage.setItem("bundasehat_auth", mode ? "true" : "false");
-    if (mode) {
-      router.visit("/");
-    } else {
-      router.visit("/login");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-clip lg:overflow-y-hidden">
@@ -174,15 +167,11 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/profil"
-                className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-rose-100 transition-all shadow-soft-xs"
-                title="Profil Saya (Tegar Rifa'i)"
+                className="relative group p-1 rounded-full bg-slate-100 hover:bg-emerald-100 transition-all shadow-soft-xs flex items-center justify-center"
+                title={`Profil Saya (${user?.name || "User"})`}
               >
-                <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-slate-200 shrink-0">
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
-                    alt="Tegar Rifa'i"
-                    className="w-full h-full object-cover"
-                  />
+                <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-emerald-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
                 </div>
               </Link>
             </div>
@@ -279,32 +268,6 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           </div>
         </footer>
       )}
-
-      {/* Floating Demo Switcher Widget (Pojok Kanan Bawah - Ultra Compact) */}
-      <div className="fixed bottom-3 right-3 md:bottom-4 md:right-4 z-50 animate-fadeIn opacity-75 hover:opacity-100 transition-opacity">
-        <div className="flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-0.5 px-1 rounded-full border border-slate-700/80 shadow-soft-sm text-white">
-          <button
-            onClick={() => toggleAuthMode(false)}
-            className={`px-2 py-0.5 rounded-full text-[9px] font-bold transition-all ${
-              !isLoggedIn
-                ? "bg-amber-500 text-slate-950 shadow-sm"
-                : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Guest
-          </button>
-          <button
-            onClick={() => toggleAuthMode(true)}
-            className={`px-2 py-0.5 rounded-full text-[9px] font-bold transition-all ${
-              isLoggedIn
-                ? "bg-rose-500 text-white shadow-sm"
-                : "text-slate-400 hover:text-white"
-            }`}
-          >
-            User
-          </button>
-        </div>
-      </div>
 
     </div>
   );

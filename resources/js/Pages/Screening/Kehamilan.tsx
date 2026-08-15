@@ -557,7 +557,7 @@ export default function KehamilanScreening() {
                             <Label htmlFor="nama_pasien">Nama Lengkap Pasien <span className="text-rose-600">*</span></Label>
                             <Input
                               id="nama_pasien"
-                              placeholder="Contoh: Ibu Rahma Rahayu"
+                              placeholder="Masukkan nama lengkap pasien..."
                               value={formData.nama_pasien}
                               onChange={(e) => setFormData({ ...formData, nama_pasien: e.target.value })}
                               error={errors.nama_pasien}

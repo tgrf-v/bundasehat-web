@@ -192,7 +192,7 @@ export default function Login() {
                   <Input
                     id="nama_register"
                     type="text"
-                    placeholder="Contoh: Ibu Rahma Rahayu"
+                    placeholder="Masukkan nama lengkap..."
                     value={registerForm.data.name}
                     onChange={(e) => registerForm.setData("name", e.target.value)}
                     className="pl-10"
