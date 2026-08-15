@@ -29,7 +29,7 @@ class ScreeningRequest extends FormRequest
             'hpht' => ['nullable', 'string'],
             'sistolik' => ['required', 'integer', 'min:60', 'max:240'],
             'diastolik' => ['required', 'integer', 'min:40', 'max:160'],
-            'edema_level' => ['required', 'string', 'in:none,ringan_kaki,sedang_tungkai,berat_wajah_tangan'],
+            'edema_level' => ['required', 'string', 'in:none,ringan_kaki,sedang_tungkai,berat_wajah_tangan,bengkak_muka_tangan'],
             'keluhan_spesifik' => ['nullable', 'array'],
             'keluhan_spesifik.*' => ['string'],
             'sudah_dapat_treatment' => ['required', 'boolean'],

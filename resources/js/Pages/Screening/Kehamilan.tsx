@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
@@ -46,6 +46,13 @@ import {
 } from "lucide-react";
 
 export default function KehamilanScreening() {
+  const { flash, screeningResult: propResult } = usePage<{
+    flash?: { screeningResult?: ScreeningResult };
+    screeningResult?: ScreeningResult;
+  }>().props;
+
+  const serverResult = flash?.screeningResult || propResult;
+
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -73,8 +80,12 @@ export default function KehamilanScreening() {
   const [calculatedMap, setCalculatedMap] = useState<number>(86.67);
 
   useEffect(() => {
-    // Screening result sekarang di-load dari server props via Inertia
-  }, []);
+    if (serverResult) {
+      setScreeningResult(serverResult);
+      setHasScreened(true);
+      setRightPanelView("summary");
+    }
+  }, [serverResult]);
 
   useEffect(() => {
     if (formData.hpht) {
@@ -139,11 +150,22 @@ export default function KehamilanScreening() {
       handleNextStep(e);
       return;
     }
+    if (!validateStep1()) {
+      setCurrentStep(1);
+      return;
+    }
+    if (!validateStep2()) {
+      setCurrentStep(2);
+      return;
+    }
     setIsLoading(true);
 
     router.post(route("screening.store"), formData as Record<string, unknown>, {
+      preserveState: true,
+      preserveScroll: true,
       onSuccess: () => {
         setIsLoading(false);
+        setErrors({});
       },
       onError: (serverErrors) => {
         setIsLoading(false);
@@ -507,6 +529,18 @@ export default function KehamilanScreening() {
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    
+                    {/* Error Banner */}
+                    {Object.keys(errors).length > 0 && (
+                      <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium space-y-1 animate-fadeIn">
+                        {Object.values(errors).map((err, idx) => (
+                          <p key={idx} className="flex items-center gap-1.5">
+                            <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-500" />
+                            <span>{err}</span>
+                          </p>
+                        ))}
+                      </div>
+                    )}
                     
                     {/* STEP 1 */}
                     {currentStep === 1 && (

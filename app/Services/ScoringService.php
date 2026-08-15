@@ -125,14 +125,14 @@ class ScoringService
             $score += 4;
             $komplikasi[] = 'Edema Ekstremitas Sedang (Tungkai/Betis)';
             $detailSkorList[] = ['deskripsi' => 'Edema Ekstremitas Sedang (Tungkai/Betis)', 'skor' => 4];
-        } elseif ($edemaLevel === 'berat_wajah_tangan') {
-            $score += 8;
-            $komplikasi[] = 'Edema Anasarka / Wajah & Tangan (Gejala Preeklamsia Berat)';
-            $detailSkorList[] = ['deskripsi' => 'Edema Anasarka (Wajah & Kelopak Tangan)', 'skor' => 8];
+        } elseif ($edemaLevel === 'berat_wajah_tangan' || $edemaLevel === 'bengkak_muka_tangan') {
+            $score += 4;
+            $komplikasi[] = 'Edema Pembengkakan Muka / Tungkai / Tangan';
+            $detailSkorList[] = ['deskripsi' => 'Edema Muka / Tungkai / Tangan', 'skor' => 4];
         }
 
         // ── Evaluasi Keluhan Spesifik ──
-        if (in_array('pusing_berat_kabur', $keluhanSpesifik, true)) {
+        if (in_array('pusing_berat_kabur', $keluhanSpesifik, true) || in_array('pusing_hebat', $keluhanSpesifik, true) || in_array('pandangan_kabur', $keluhanSpesifik, true)) {
             $score += 8;
             $komplikasi[] = 'Nyeri Kepala Berat & Pandangan Kabur';
             $detailSkorList[] = ['deskripsi' => 'Nyeri Kepala Berat & Pandangan Kabur', 'skor' => 8];
@@ -141,6 +141,11 @@ class ScoringService
             $score += 8;
             $komplikasi[] = 'Nyeri Epigastrium / Ulu Hati (Tanda Impending Eklamsia)';
             $detailSkorList[] = ['deskripsi' => 'Nyeri Ulu Hati Epigastrium', 'skor' => 8];
+        }
+        if (in_array('kejang', $keluhanSpesifik, true)) {
+            $score += 8;
+            $komplikasi[] = 'Riwayat Kejang Dalam Kehamilan';
+            $detailSkorList[] = ['deskripsi' => 'Riwayat Kejang saat Hamil', 'skor' => 8];
         }
         if (in_array('anemia_pucat', $keluhanSpesifik, true)) {
             $score += 4;
@@ -152,7 +157,12 @@ class ScoringService
             $komplikasi[] = 'Perdarahan Antepartum / Postpartum';
             $detailSkorList[] = ['deskripsi' => 'Perdarahan Jalan Lahir / Flek', 'skor' => 8];
         }
-        if (in_array('gerakan_janin_berkurang', $keluhanSpesifik, true)) {
+        if (in_array('ketuban_pecah', $keluhanSpesifik, true) || in_array('ketuban_pecah_dini', $keluhanSpesifik, true)) {
+            $score += 4;
+            $komplikasi[] = 'Ketuban Pecah Dini (KPD)';
+            $detailSkorList[] = ['deskripsi' => 'Ketuban Pecah Dini', 'skor' => 4];
+        }
+        if (in_array('gerakan_janin_berkurang', $keluhanSpesifik, true) || in_array('gerak_janin_berkurang', $keluhanSpesifik, true)) {
             $score += 8;
             $komplikasi[] = 'Gawat Janin / Fetal Distress';
             $detailSkorList[] = ['deskripsi' => 'Gerakan Janin Berkurang', 'skor' => 8];

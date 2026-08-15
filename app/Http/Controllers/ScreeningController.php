@@ -94,7 +94,7 @@ class ScreeningController extends Controller
             'taksiran_hpl' => $scoringResult['taksiran_hpl'],
         ]);
 
-        return redirect()->route('screening.show', $screening->id);
+        return redirect()->back()->with('screeningResult', $this->formatScreeningResult($screening));
     }
 
     /**
