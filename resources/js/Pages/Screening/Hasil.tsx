@@ -23,12 +23,14 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-interface HasilPageProps {
+import { PageProps } from "@/types";
+
+type HasilPageProps = PageProps<{
   screening: ScreeningResult;
-}
+}>;
 
 export default function HasilScreening() {
-  const { screening: result } = usePage<HasilPageProps & { auth: { user: { id: number; name: string; email: string } } }>().props;
+  const { screening: result } = usePage<HasilPageProps>().props;
 
   const handlePrint = () => {
     window.print();

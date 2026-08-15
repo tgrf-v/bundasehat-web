@@ -39,11 +39,12 @@ import {
   Info,
 } from "lucide-react";
 
+import { PageProps } from "@/types";
+
 export default function PersalinanScreening() {
-  const { flash, screeningResult: propResult } = usePage<{
-    flash?: { screeningResult?: ScreeningResult };
+  const { flash, screeningResult: propResult } = usePage<PageProps<{
     screeningResult?: ScreeningResult;
-  }>().props;
+  }>>().props;
 
   const serverResult = flash?.screeningResult || propResult;
 
@@ -155,7 +156,7 @@ export default function PersalinanScreening() {
 
     setIsLoading(true);
 
-    router.post(route("screening.store"), formData as Record<string, unknown>, {
+    router.post(route("screening.store"), formData as any, {
       preserveState: true,
       preserveScroll: true,
       onSuccess: () => {

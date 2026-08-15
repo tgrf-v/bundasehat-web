@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, router, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
@@ -21,20 +21,31 @@ import {
   ArrowLeft,
   X,
   Inbox,
+  AlertTriangle,
+  MapPin,
+  Building,
+  Briefcase,
+  GraduationCap,
+  Phone,
+  CreditCard,
 } from "lucide-react";
 
-interface ProfilPageProps {
-  auth: {
-    user: {
-      id: number;
-      name: string;
-      email: string;
-      role: string;
-      no_telepon: string | null;
-    };
-  };
-  screenings: ScreeningResult[];
+import { PageProps } from "@/types";
+
+interface ProfileFormData {
+  name: string;
+  no_telepon: string;
+  nik: string;
+  tanggal_lahir: string;
+  pekerjaan: string;
+  pendidikan: string;
+  hpht: string;
+  puskesmas: string;
 }
+
+type ProfilPageProps = PageProps<{
+  screenings: ScreeningResult[];
+}>;
 
 export default function ProfilIndex() {
   const { auth, screenings } = usePage<ProfilPageProps>().props;
@@ -42,24 +53,30 @@ export default function ProfilIndex() {
 
   const [activeView, setActiveView] = useState<"menu" | "edit_profil" | "riwayat" | "syarat" | "privasi" | "bantuan">("menu");
   const [isSaved, setIsSaved] = useState<boolean>(false);
-  const [profileData, setProfileData] = useState({
-    nama: user.name,
-    tanggalLahir: "",
-    telepon: user.no_telepon ?? "",
-    pekerjaan: "",
-    pendidikan: "",
-    nik: "",
-    hpht: "",
-    puskesmas: "",
+
+  const form = useForm<ProfileFormData>({
+    name: user.name || "",
+    no_telepon: user.no_telepon || "",
+    nik: user.nik || "",
+    tanggal_lahir: user.tanggal_lahir || "",
+    pekerjaan: user.pekerjaan || "",
+    pendidikan: user.pendidikan || "",
+    hpht: user.hpht || "",
+    puskesmas: user.puskesmas || "",
   });
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => {
-      setIsSaved(false);
-      setActiveView("menu");
-    }, 1500);
+    form.patch(route("profile.update"), {
+      preserveScroll: true,
+      onSuccess: () => {
+        setIsSaved(true);
+        setTimeout(() => {
+          setIsSaved(false);
+          setActiveView("menu");
+        }, 1200);
+      },
+    });
   };
 
   const handleLogout = () => {
@@ -96,7 +113,7 @@ export default function ProfilIndex() {
                   onClick={() => setActiveView("edit_profil")}
                   className="group inline-flex items-center gap-1.5 text-lg sm:text-xl font-bold text-slate-900 hover:text-rose-600 transition-colors"
                 >
-                  <span>{profileData.nama}</span>
+                  <span>{user.name}</span>
                   <ChevronRight className="h-5 w-5 text-slate-800 group-hover:text-rose-600 group-hover:translate-x-0.5 transition-all" />
                 </button>
 
@@ -110,10 +127,10 @@ export default function ProfilIndex() {
               </div>
             </div>
 
-            {/* Menu 1: Standalone Card - Riwayat */}
+            {/* Menu 1: Single Riwayat Card */}
             <Card
               onClick={() => setActiveView("riwayat")}
-              className="rounded-3xl border-slate-100 bg-white p-4 sm:p-5 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer group space-y-0"
+              className="rounded-3xl border-slate-100 bg-white p-4 sm:p-5 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3.5">
@@ -121,7 +138,7 @@ export default function ProfilIndex() {
                     <Baby className="h-5 w-5 text-emerald-600" />
                   </div>
                   <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
-                    Riwayat
+                    Riwayat Skrining
                   </span>
                 </div>
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
@@ -200,7 +217,7 @@ export default function ProfilIndex() {
           </div>
         )}
 
-        {/* VIEW 2: HALAMAN DEDIKASI EDIT DATA DIRI (DESAIN SESUAI REFERENSI GAMBAR) */}
+        {/* VIEW 2: HALAMAN DEDIKASI EDIT DATA DIRI */}
         {activeView === "edit_profil" && (
           <div className="space-y-6 animate-fadeIn">
             {/* Header Bar Navigation */}
@@ -220,81 +237,143 @@ export default function ProfilIndex() {
 
             {/* Form Container Card */}
             <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-5 border-none sm:border">
-              <form onSubmit={handleSaveProfile} className="space-y-5">
+              <form onSubmit={handleSaveProfile} className="space-y-4">
                 {isSaved && (
                   <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2 animate-fadeIn">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span>Data diri berhasil disimpan!</span>
+                    <span>Data diri berhasil disimpan ke database!</span>
+                  </div>
+                )}
+
+                {Object.keys(form.errors).length > 0 && (
+                  <div className="p-3.5 rounded-2xl bg-rose-50 text-rose-800 border border-rose-200 text-xs font-medium space-y-1 animate-fadeIn">
+                    {Object.values(form.errors).map((err, idx) => (
+                      <p key={idx} className="flex items-center gap-1.5">
+                        <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-500" />
+                        <span>{err}</span>
+                      </p>
+                    ))}
                   </div>
                 )}
 
                 {/* Field 1: Nama */}
                 <div>
-                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
-                    Nama
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+                    Nama Lengkap <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
-                    value={profileData.nama}
-                    onChange={(e) => setProfileData({ ...profileData, nama: e.target.value })}
-                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    value={form.data.name}
+                    onChange={(e) => form.setData("name", e.target.value)}
+                    placeholder="Nama Lengkap"
+                    required
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   />
+                  {form.errors.name && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.name}</p>}
                 </div>
 
-                {/* Field 2: Tanggal Lahir */}
+                {/* Field 2: NIK */}
                 <div>
-                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+                    Nomor Induk Kependudukan (NIK)
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={16}
+                    value={form.data.nik}
+                    onChange={(e) => form.setData("nik", e.target.value)}
+                    placeholder="16 Digit NIK KTP"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                  {form.errors.nik && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.nik}</p>}
+                </div>
+
+                {/* Field 3: Nomor Handphone / WA */}
+                <div>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+                    Nomor WhatsApp / Handphone
+                  </label>
+                  <input
+                    type="tel"
+                    value={form.data.no_telepon}
+                    placeholder="Contoh: 081234567890"
+                    onChange={(e) => form.setData("no_telepon", e.target.value)}
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                  {form.errors.no_telepon && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.no_telepon}</p>}
+                </div>
+
+                {/* Field 4: Tanggal Lahir */}
+                <div>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
                     Tanggal Lahir
                   </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={profileData.tanggalLahir}
-                      onChange={(e) => setProfileData({ ...profileData, tanggalLahir: e.target.value })}
-                      className="w-full rounded-full h-12 pl-5 pr-12 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
-                    />
-                    <Calendar className="absolute right-4 top-3.5 h-5 w-5 text-slate-800" />
-                  </div>
-                </div>
-
-                {/* Field 3: Nomor Handphone */}
-                <div>
-                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
-                    Nomor Handphone
-                  </label>
                   <input
-                    type="text"
-                    value={profileData.telepon}
-                    placeholder="Nomor Handphone"
-                    onChange={(e) => setProfileData({ ...profileData, telepon: e.target.value })}
-                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    type="date"
+                    value={form.data.tanggal_lahir}
+                    onChange={(e) => form.setData("tanggal_lahir", e.target.value)}
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   />
+                  {form.errors.tanggal_lahir && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.tanggal_lahir}</p>}
                 </div>
 
-                {/* Field 4: Pekerjaan */}
+                {/* Field 5: Pekerjaan */}
                 <div>
-                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
                     Pekerjaan
                   </label>
                   <input
                     type="text"
-                    value={profileData.pekerjaan}
-                    onChange={(e) => setProfileData({ ...profileData, pekerjaan: e.target.value })}
-                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    value={form.data.pekerjaan}
+                    placeholder="Contoh: Ibu Rumah Tangga / Karyawan"
+                    onChange={(e) => form.setData("pekerjaan", e.target.value)}
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   />
+                  {form.errors.pekerjaan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.pekerjaan}</p>}
                 </div>
 
-                {/* Field 5: Pendidikan Terakhir */}
+                {/* Field 6: Pendidikan Terakhir */}
                 <div>
-                  <label className="text-xs sm:text-sm font-medium text-slate-600 mb-1.5 block">
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
                     Pendidikan Terakhir
                   </label>
                   <input
                     type="text"
-                    value={profileData.pendidikan}
-                    onChange={(e) => setProfileData({ ...profileData, pendidikan: e.target.value })}
-                    className="w-full rounded-full h-12 px-5 border border-slate-200 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    value={form.data.pendidikan}
+                    placeholder="Contoh: SMA / S-1"
+                    onChange={(e) => form.setData("pendidikan", e.target.value)}
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                   />
+                  {form.errors.pendidikan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.pendidikan}</p>}
+                </div>
+
+                {/* Field 7: HPHT (Khusus Ibu Hamil) */}
+                <div>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+                    Hari Pertama Haid Terakhir (HPHT)
+                  </label>
+                  <input
+                    type="date"
+                    value={form.data.hpht}
+                    onChange={(e) => form.setData("hpht", e.target.value)}
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                  {form.errors.hpht && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.hpht}</p>}
+                </div>
+
+                {/* Field 8: Wilayah Puskesmas Domisili */}
+                <div>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+                    Puskesmas Domisili / Rujukan
+                  </label>
+                  <input
+                    type="text"
+                    value={form.data.puskesmas}
+                    placeholder="Contoh: Puskesmas Kecamatan Cilandak"
+                    onChange={(e) => form.setData("puskesmas", e.target.value)}
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                  {form.errors.puskesmas && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.puskesmas}</p>}
                 </div>
 
                 {/* Action Buttons */}
@@ -302,16 +381,19 @@ export default function ProfilIndex() {
                   <button
                     type="button"
                     onClick={() => setActiveView("menu")}
-                    className="rounded-full px-7 h-12 border border-rose-400 text-rose-500 font-bold text-xs sm:text-sm hover:bg-rose-50 transition-colors uppercase shrink-0"
+                    className="rounded-full px-6 h-11 border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors uppercase shrink-0"
                   >
-                    BATAL
+                    Batal
                   </button>
-                  <button
+                  <Button
                     type="submit"
-                    className="rounded-full px-8 h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wide text-center shadow-soft-sm transition-colors shrink-0"
+                    variant="default"
+                    size="lg"
+                    disabled={form.processing}
+                    className="rounded-full px-7 h-11 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wide text-center shadow-soft-sm transition-colors shrink-0"
                   >
-                    SIMPAN PERUBAHAN
-                  </button>
+                    {form.processing ? "Menyimpan..." : "Simpan Perubahan"}
+                  </Button>
                 </div>
               </form>
             </Card>
@@ -357,7 +439,7 @@ export default function ProfilIndex() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {screenings.map((s) => (
+                      {screenings.map((s: ScreeningResult) => (
                         <TableRow
                           key={s.kode_screening}
                           className="cursor-pointer hover:bg-slate-50/70 transition-colors"

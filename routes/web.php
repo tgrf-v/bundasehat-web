@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BidanController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScreeningController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -73,6 +74,7 @@ Route::middleware('auth')->group(function () {
 
     // Profil & Riwayat Screening
     Route::get('/profil', [ScreeningController::class, 'history'])->name('profil.index');
+    Route::patch('/profil', [ProfileController::class, 'updateProfile'])->name('profile.update');
 
     // Design System Showcase (dev only)
     Route::get('/design-system', function () {

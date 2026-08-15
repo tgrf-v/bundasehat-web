@@ -41,6 +41,27 @@ class ProfileController extends Controller
     }
 
     /**
+     * Update user's extended profile data (Data Diri).
+     */
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'no_telepon' => ['nullable', 'string', 'max:20'],
+            'nik' => ['nullable', 'string', 'max:20'],
+            'tanggal_lahir' => ['nullable', 'date'],
+            'pekerjaan' => ['nullable', 'string', 'max:100'],
+            'pendidikan' => ['nullable', 'string', 'max:50'],
+            'hpht' => ['nullable', 'date'],
+            'puskesmas' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $request->user()->update($validated);
+
+        return Redirect::back()->with('success', 'Data profil berhasil diperbarui.');
+    }
+
+    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse

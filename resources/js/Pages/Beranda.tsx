@@ -26,17 +26,11 @@ interface LatestScreeningSummary {
   created_at: string;
 }
 
-interface BerandaPageProps {
-  auth: {
-    user: {
-      id: number;
-      name: string;
-      email: string;
-      role: string;
-    };
-  };
+import { PageProps } from "@/types";
+
+type BerandaPageProps = PageProps<{
   latestScreening: LatestScreeningSummary | null;
-}
+}>;
 
 export default function Beranda() {
   const { latestScreening, auth } = usePage<BerandaPageProps>().props;

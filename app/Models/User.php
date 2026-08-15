@@ -25,6 +25,12 @@ class User extends Authenticatable
         'password',
         'role',
         'no_telepon',
+        'nik',
+        'tanggal_lahir',
+        'pekerjaan',
+        'pendidikan',
+        'hpht',
+        'puskesmas',
     ];
 
     /**
