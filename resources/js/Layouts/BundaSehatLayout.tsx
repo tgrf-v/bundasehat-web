@@ -10,9 +10,16 @@ import {
   LogIn,
   Stethoscope,
   Globe,
+  ChevronDown,
 } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { GlobalSearch } from "@/Components/GlobalSearch";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/Components/ui/dropdown-menu";
 
 import { PageProps } from "@/types";
 
@@ -31,6 +38,8 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   const isLoggedIn = Boolean(user);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [language, setLanguage] = useState<"ID" | "EN">("ID");
+
+  const isScreeningActive = activeNav === "kehamilan" || activeNav === "persalinan";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,7 +85,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 !isLoggedIn && !isScrolled ? "text-white" : "text-slate-800"
               }`}
             >
-              Logo
+              BundaSehat
             </span>
           </Link>
 
@@ -94,37 +103,57 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "beranda"
-                    ? "text-emerald-700 font-bold"
+                    ? "text-rose-600 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
                 Beranda
               </Link>
-              <Link
-                href="/screening/kehamilan"
-                className={`px-3 py-1.5 text-sm transition-colors ${
-                  activeNav === "kehamilan"
-                    ? "text-emerald-700 font-bold"
-                    : "text-slate-500 font-medium hover:text-slate-900"
-                }`}
-              >
-                Screening Kehamilan
-              </Link>
-              <Link
-                href="/screening/persalinan"
-                className={`px-3 py-1.5 text-sm transition-colors ${
-                  activeNav === "persalinan"
-                    ? "text-emerald-700 font-bold"
-                    : "text-slate-500 font-medium hover:text-slate-900"
-                }`}
-              >
-                Screening Persalinan
-              </Link>
+
+              {/* Dropdown Menu: Screening */}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className={`px-3 py-1.5 text-sm transition-colors inline-flex items-center gap-1 cursor-pointer ${
+                    isScreeningActive
+                      ? "text-rose-600 font-bold"
+                      : "text-slate-500 font-medium hover:text-slate-900"
+                  }`}
+                >
+                  <span>Screening</span>
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56 p-1.5 rounded-2xl bg-white border border-slate-100/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+                  <DropdownMenuItem onClick={() => router.visit("/screening/kehamilan")} className="p-2.5 rounded-xl hover:bg-slate-50">
+                    <div className="flex items-center gap-2.5 w-full">
+                      <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                        <Activity className="h-4 w-4" />
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="font-bold text-xs text-slate-800">Screening Kehamilan</span>
+                        <span className="text-[10px] text-slate-500">Cek Risiko Trimester</span>
+                      </div>
+                    </div>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem onClick={() => router.visit("/screening/persalinan")} className="p-2.5 rounded-xl hover:bg-slate-50 mt-0.5">
+                    <div className="flex items-center gap-2.5 w-full">
+                      <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                        <Stethoscope className="h-4 w-4" />
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="font-bold text-xs text-slate-800">Screening Persalinan</span>
+                        <span className="text-[10px] text-slate-500">Kesiapan Bersalin</span>
+                      </div>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <Link
                 href="/kamus"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "kamus"
-                    ? "text-emerald-700 font-bold"
+                    ? "text-rose-600 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -134,7 +163,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 href="/tentang-kami"
                 className={`px-3 py-1.5 text-sm transition-colors ${
                   activeNav === "tentang-kami"
-                    ? "text-emerald-700 font-bold"
+                    ? "text-rose-600 font-bold"
                     : "text-slate-500 font-medium hover:text-slate-900"
                 }`}
               >
@@ -145,8 +174,8 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   href="/admin/bidan"
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
                     activeNav === "admin-bidan"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "text-emerald-700 hover:bg-emerald-50/60"
+                      ? "bg-rose-50 text-rose-600"
+                      : "text-slate-500 hover:text-slate-900 font-medium"
                   }`}
                 >
                   Kelola Bidan
@@ -175,15 +204,15 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       {/* Main Content */}
       <main className="flex-1 pt-16 pb-20 md:pb-0">{children}</main>
 
-      {/* Mobile Bottom Navigation Bar (Softglasses Style) */}
+      {/* Mobile Bottom Navigation Bar (Solid Clean Style) */}
       {isLoggedIn && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/75 backdrop-blur-xl border-t border-white/50 shadow-soft-lg px-4 py-2">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-100 shadow-soft-lg px-4 py-2">
           <div className="grid grid-cols-5 gap-1 text-center">
             <Link
               href="/"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "beranda"
-                  ? "text-emerald-700 font-bold"
+                  ? "text-rose-600 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -195,7 +224,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/screening/kehamilan"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "kehamilan"
-                  ? "text-emerald-700 font-bold"
+                  ? "text-rose-600 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -207,7 +236,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/screening/persalinan"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "persalinan"
-                  ? "text-emerald-700 font-bold"
+                  ? "text-rose-600 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -219,7 +248,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/kamus"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "kamus"
-                  ? "text-emerald-700 font-bold"
+                  ? "text-rose-600 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -231,7 +260,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/profil"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "profil"
-                  ? "text-emerald-700 font-bold"
+                  ? "text-rose-600 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
