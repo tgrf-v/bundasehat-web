@@ -7,6 +7,7 @@ import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
+import { Dialog } from "@/Components/ui/dialog";
 import {
   Stethoscope,
   Plus,
@@ -339,220 +340,197 @@ export default function AdminBidanIndex() {
       </div>
 
       {/* MODAL / DIALOG: TAMBAH BIDAN BARU */}
-      {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-soft-lg space-y-6 max-h-[90vh] overflow-y-auto">
-            
-            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
-                  <UserPlus className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                    Tambah Akun Bidan Baru
-                  </h3>
-                  <p className="text-xs text-slate-500 font-medium">
-                    Registrasikan Nakes Bidan untuk wilayah binaan
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsCreateModalOpen(false)}
-                className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateSubmit} className="space-y-4">
-              
-              {/* Field 1: Nama Lengkap */}
-              <div>
-                <Label htmlFor="bidan_name" className="text-xs font-bold text-slate-700">
-                  Nama Lengkap &amp; Gelar <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  id="bidan_name"
-                  type="text"
-                  placeholder="Contoh: Bidan Siti Rahayu, S.Tr.Keb"
-                  value={createForm.data.name}
-                  onChange={(e) => createForm.setData("name", e.target.value)}
-                  className="mt-1"
-                  required
-                />
-                {createForm.errors.name && (
-                  <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.name}</p>
-                )}
-              </div>
-
-              {/* Field 2: Email Login */}
-              <div>
-                <Label htmlFor="bidan_email" className="text-xs font-bold text-slate-700">
-                  Alamat Email Akun <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  id="bidan_email"
-                  type="email"
-                  placeholder="bidan.siti@puskesmas.go.id"
-                  value={createForm.data.email}
-                  onChange={(e) => createForm.setData("email", e.target.value)}
-                  className="mt-1"
-                  required
-                />
-                {createForm.errors.email && (
-                  <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.email}</p>
-                )}
-              </div>
-
-              {/* Field 3: Password Akun */}
-              <div>
-                <Label htmlFor="bidan_password" className="text-xs font-bold text-slate-700">
-                  Password Login <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  id="bidan_password"
-                  type="password"
-                  placeholder="Minimal 8 karakter"
-                  value={createForm.data.password}
-                  onChange={(e) => createForm.setData("password", e.target.value)}
-                  className="mt-1"
-                  required
-                />
-                {createForm.errors.password && (
-                  <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.password}</p>
-                )}
-              </div>
-
-              {/* Field 4: No. STR Bidan */}
-              <div>
-                <Label htmlFor="bidan_str" className="text-xs font-bold text-slate-700">
-                  Nomor STR Bidan <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  id="bidan_str"
-                  type="text"
-                  placeholder="Contoh: STR-BDN-2026-0912"
-                  value={createForm.data.no_str}
-                  onChange={(e) => createForm.setData("no_str", e.target.value)}
-                  className="mt-1"
-                  required
-                />
-                {createForm.errors.no_str && (
-                  <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.no_str}</p>
-                )}
-              </div>
-
-              {/* Field 5: Wilayah Puskesmas */}
-              <div>
-                <Label htmlFor="bidan_puskesmas" className="text-xs font-bold text-slate-700">
-                  Wilayah Penugasan Puskesmas <span className="text-rose-500">*</span>
-                </Label>
-                <Input
-                  id="bidan_puskesmas"
-                  type="text"
-                  placeholder="Contoh: Puskesmas Kecamatan Cilandak"
-                  value={createForm.data.puskesmas_wilayah}
-                  onChange={(e) => createForm.setData("puskesmas_wilayah", e.target.value)}
-                  className="mt-1"
-                  required
-                />
-                {createForm.errors.puskesmas_wilayah && (
-                  <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.puskesmas_wilayah}</p>
-                )}
-              </div>
-
-              {/* Field 6: No. WhatsApp / Telepon */}
-              <div>
-                <Label htmlFor="bidan_phone" className="text-xs font-bold text-slate-700">
-                  Nomor WhatsApp / Kontak
-                </Label>
-                <Input
-                  id="bidan_phone"
-                  type="tel"
-                  placeholder="Contoh: 081234567890"
-                  value={createForm.data.no_telepon}
-                  onChange={(e) => createForm.setData("no_telepon", e.target.value)}
-                  className="mt-1"
-                />
-                {createForm.errors.no_telepon && (
-                  <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.no_telepon}</p>
-                )}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="default"
-                  onClick={() => setIsCreateModalOpen(false)}
-                  className="rounded-full font-bold text-xs"
-                >
-                  Batal
-                </Button>
-                <Button
-                  type="submit"
-                  variant="default"
-                  size="default"
-                  isLoading={createForm.processing}
-                  disabled={createForm.processing}
-                  className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-1.5 shadow-soft-sm"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>Simpan Akun Bidan</span>
-                </Button>
-              </div>
-
-            </form>
-
+      <Dialog
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Tambah Akun Bidan Baru"
+        description="Registrasikan Nakes Bidan untuk wilayah binaan"
+      >
+        <form onSubmit={handleCreateSubmit} className="space-y-4 pt-1">
+          
+          {/* Field 1: Nama Lengkap */}
+          <div>
+            <Label htmlFor="bidan_name" className="text-xs font-bold text-slate-700">
+              Nama Lengkap &amp; Gelar <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="bidan_name"
+              type="text"
+              placeholder="Contoh: Bidan Siti Rahayu, S.Tr.Keb"
+              value={createForm.data.name}
+              onChange={(e) => createForm.setData("name", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {createForm.errors.name && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.name}</p>
+            )}
           </div>
-        </div>
-      )}
+
+          {/* Field 2: Email Login */}
+          <div>
+            <Label htmlFor="bidan_email" className="text-xs font-bold text-slate-700">
+              Alamat Email Akun <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="bidan_email"
+              type="email"
+              placeholder="bidan.siti@puskesmas.go.id"
+              value={createForm.data.email}
+              onChange={(e) => createForm.setData("email", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {createForm.errors.email && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.email}</p>
+            )}
+          </div>
+
+          {/* Field 3: Password Akun */}
+          <div>
+            <Label htmlFor="bidan_password" className="text-xs font-bold text-slate-700">
+              Password Login <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="bidan_password"
+              type="password"
+              placeholder="Minimal 8 karakter"
+              value={createForm.data.password}
+              onChange={(e) => createForm.setData("password", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {createForm.errors.password && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.password}</p>
+            )}
+          </div>
+
+          {/* Field 4: No. STR Bidan */}
+          <div>
+            <Label htmlFor="bidan_str" className="text-xs font-bold text-slate-700">
+              Nomor STR Bidan <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="bidan_str"
+              type="text"
+              placeholder="Contoh: STR-BDN-2026-0912"
+              value={createForm.data.no_str}
+              onChange={(e) => createForm.setData("no_str", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {createForm.errors.no_str && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.no_str}</p>
+            )}
+          </div>
+
+          {/* Field 5: Wilayah Puskesmas */}
+          <div>
+            <Label htmlFor="bidan_puskesmas" className="text-xs font-bold text-slate-700">
+              Wilayah Penugasan Puskesmas <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="bidan_puskesmas"
+              type="text"
+              placeholder="Contoh: Puskesmas Kecamatan Cilandak"
+              value={createForm.data.puskesmas_wilayah}
+              onChange={(e) => createForm.setData("puskesmas_wilayah", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {createForm.errors.puskesmas_wilayah && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.puskesmas_wilayah}</p>
+            )}
+          </div>
+
+          {/* Field 6: No. WhatsApp / Telepon */}
+          <div>
+            <Label htmlFor="bidan_phone" className="text-xs font-bold text-slate-700">
+              Nomor WhatsApp / Kontak
+            </Label>
+            <Input
+              id="bidan_phone"
+              type="tel"
+              placeholder="Contoh: 081234567890"
+              value={createForm.data.no_telepon}
+              onChange={(e) => createForm.setData("no_telepon", e.target.value)}
+              className="mt-1"
+            />
+            {createForm.errors.no_telepon && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{createForm.errors.no_telepon}</p>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={() => setIsCreateModalOpen(false)}
+              className="rounded-full font-bold text-xs"
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="default"
+              size="default"
+              isLoading={createForm.processing}
+              disabled={createForm.processing}
+              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-1.5 shadow-soft-sm"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Simpan Akun Bidan</span>
+            </Button>
+          </div>
+
+        </form>
+      </Dialog>
 
       {/* MODAL DIALOG: KONFIRMASI HAPUS BIDAN */}
-      {deletingBidan && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-soft-lg space-y-5 text-center">
-            
-            <div className="h-14 w-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
-              <AlertTriangle className="h-7 w-7" />
-            </div>
+      <Dialog
+        isOpen={Boolean(deletingBidan)}
+        onClose={() => setDeletingBidan(null)}
+        showCloseButton={false}
+        className="max-w-md text-center p-6 sm:p-7"
+      >
+        <div className="space-y-5">
+          <div className="h-14 w-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+            <AlertTriangle className="h-7 w-7" />
+          </div>
 
-            <div className="space-y-2">
-              <h3 className="text-base font-bold text-slate-900">
-                Hapus Akun Bidan?
-              </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Apakah Anda yakin ingin menghapus akun Bidan <strong className="text-slate-800 font-bold">{deletingBidan.name}</strong> ({deletingBidan.email})? Akun ini tidak akan dapat login lagi.
-              </p>
-            </div>
+          <div className="space-y-2">
+            <h3 className="text-base font-bold text-slate-900">
+              Hapus Akun Bidan?
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Apakah Anda yakin ingin menghapus akun Bidan <strong className="text-slate-800 font-bold">{deletingBidan?.name}</strong> ({deletingBidan?.email})? Akun ini tidak akan dapat login lagi.
+            </p>
+          </div>
 
-            <div className="flex items-center justify-center gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="default"
-                onClick={() => setDeletingBidan(null)}
-                className="rounded-full font-bold text-xs px-5"
-              >
-                Batal
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                size="default"
-                onClick={handleDeleteConfirm}
-                className="rounded-full font-bold text-xs px-5"
-              >
-                Ya, Hapus Akun
-              </Button>
-            </div>
-
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={() => setDeletingBidan(null)}
+              className="rounded-full font-bold text-xs px-5"
+            >
+              Batal
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="default"
+              onClick={handleDeleteConfirm}
+              className="rounded-full font-bold text-xs px-5"
+            >
+              Ya, Hapus Akun
+            </Button>
           </div>
         </div>
-      )}
+      </Dialog>
 
     </BundaSehatLayout>
   );

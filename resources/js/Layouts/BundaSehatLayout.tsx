@@ -185,7 +185,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 pt-16 pb-20 md:pb-0">{children}</main>
+      <main className="flex-1 pt-16 pb-20 md:pb-0">{children}</main>
 
       {/* Mobile Bottom Navigation Bar (Softglasses Style) */}
       {isLoggedIn && (
