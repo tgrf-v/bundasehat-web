@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Baby,
   FileText,
+  HelpCircle,
   Headphones,
   ArrowLeft,
   X,
@@ -130,7 +131,7 @@ export default function ProfilIndex() {
             {/* Menu 1: Single Riwayat Card */}
             <Card
               onClick={() => setActiveView("riwayat")}
-              className="rounded-3xl border-slate-100 bg-white p-4 sm:p-5 shadow-soft-sm hover:shadow-soft-md transition-all cursor-pointer group"
+              className="rounded-3xl border border-slate-100 bg-white p-4 sm:p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all cursor-pointer group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3.5">
@@ -146,7 +147,7 @@ export default function ProfilIndex() {
             </Card>
 
             {/* Menu 2: Grouped Menu Box Card */}
-            <Card className="rounded-3xl border-slate-100 bg-white shadow-soft-sm divide-y divide-slate-100 overflow-hidden space-y-0">
+            <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] divide-y divide-slate-100 overflow-hidden space-y-0">
               
               {/* Row 1: Syarat dan Ketentuan */}
               <div
@@ -187,7 +188,7 @@ export default function ProfilIndex() {
               >
                 <div className="flex items-center gap-3.5">
                   <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                    <Headphones className="h-5 w-5 text-emerald-600" />
+                    <HelpCircle className="h-5 w-5 text-emerald-600" />
                   </div>
                   <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
                     Bantuan
@@ -236,7 +237,7 @@ export default function ProfilIndex() {
             </div>
 
             {/* Form Container Card */}
-            <Card className="rounded-3xl border-slate-100 bg-white p-6 sm:p-8 shadow-soft-sm space-y-5 border-none sm:border">
+            <Card className="rounded-3xl border border-slate-100 bg-white p-6 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-5">
               <form onSubmit={handleSaveProfile} className="space-y-4">
                 {isSaved && (
                   <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2 animate-fadeIn">
@@ -267,7 +268,7 @@ export default function ProfilIndex() {
                     onChange={(e) => form.setData("name", e.target.value)}
                     placeholder="Nama Lengkap"
                     required
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.name && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.name}</p>}
                 </div>
@@ -283,7 +284,7 @@ export default function ProfilIndex() {
                     value={form.data.nik}
                     onChange={(e) => form.setData("nik", e.target.value)}
                     placeholder="16 Digit NIK KTP"
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.nik && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.nik}</p>}
                 </div>
@@ -298,7 +299,7 @@ export default function ProfilIndex() {
                     value={form.data.no_telepon}
                     placeholder="Contoh: 081234567890"
                     onChange={(e) => form.setData("no_telepon", e.target.value)}
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.no_telepon && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.no_telepon}</p>}
                 </div>
@@ -312,7 +313,7 @@ export default function ProfilIndex() {
                     type="date"
                     value={form.data.tanggal_lahir}
                     onChange={(e) => form.setData("tanggal_lahir", e.target.value)}
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.tanggal_lahir && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.tanggal_lahir}</p>}
                 </div>
@@ -327,7 +328,7 @@ export default function ProfilIndex() {
                     value={form.data.pekerjaan}
                     placeholder="Contoh: Ibu Rumah Tangga / Karyawan"
                     onChange={(e) => form.setData("pekerjaan", e.target.value)}
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.pekerjaan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.pekerjaan}</p>}
                 </div>
@@ -342,7 +343,7 @@ export default function ProfilIndex() {
                     value={form.data.pendidikan}
                     placeholder="Contoh: SMA / S-1"
                     onChange={(e) => form.setData("pendidikan", e.target.value)}
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.pendidikan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.pendidikan}</p>}
                 </div>
@@ -356,7 +357,7 @@ export default function ProfilIndex() {
                     type="date"
                     value={form.data.hpht}
                     onChange={(e) => form.setData("hpht", e.target.value)}
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.hpht && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.hpht}</p>}
                 </div>
@@ -371,7 +372,7 @@ export default function ProfilIndex() {
                     value={form.data.puskesmas}
                     placeholder="Contoh: Puskesmas Kecamatan Cilandak"
                     onChange={(e) => form.setData("puskesmas", e.target.value)}
-                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                    className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
                   />
                   {form.errors.puskesmas && <p className="text-[11px] text-rose-500 mt-1 pl-3">{form.errors.puskesmas}</p>}
                 </div>
@@ -381,7 +382,7 @@ export default function ProfilIndex() {
                   <button
                     type="button"
                     onClick={() => setActiveView("menu")}
-                    className="rounded-full px-6 h-11 border border-slate-300 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors uppercase shrink-0"
+                    className="rounded-full px-6 h-11 border border-rose-200 text-rose-600 font-bold text-xs hover:bg-rose-50 transition-colors uppercase shrink-0"
                   >
                     Batal
                   </button>
@@ -416,7 +417,7 @@ export default function ProfilIndex() {
               </h2>
             </div>
 
-            <Card className="rounded-3xl border-slate-100 bg-white overflow-hidden shadow-soft-sm space-y-0">
+            <Card className="rounded-3xl border border-slate-100 bg-white overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-0">
               <CardHeader className="border-b border-slate-100 p-6">
                 <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <History className="h-5 w-5 text-rose-600" />

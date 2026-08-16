@@ -47,32 +47,20 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-clip lg:overflow-y-hidden">
 
-      {/* Background Ambient Ornaments & Visible Gradient Glows */}
+      {/* Background Soft Natural Tint matching Design Preview */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Visible Soft Radial Gradient Blobs */}
-        <div className="absolute -right-28 -top-10 w-[650px] h-[650px] bg-gradient-to-br from-emerald-200/45 via-sage-100/35 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -left-28 top-1/3 w-[550px] h-[550px] bg-gradient-to-tr from-sage-200/40 via-emerald-100/25 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] bg-gradient-to-t from-emerald-200/35 via-sage-100/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+        {/* Soft Warm Rose Ambient on Top Right */}
+        <div className="absolute -right-20 -top-20 w-[600px] h-[600px] bg-gradient-to-br from-rose-100/40 via-pink-50/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+        {/* Subtle Soft Tint on Left Bottom */}
+        <div className="absolute -left-20 bottom-10 w-[500px] h-[500px] bg-gradient-to-tr from-rose-50/30 via-slate-50/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+      </div>
 
-        {/* Floating Plus Signs (+ Ornaments) & Sparkles (Soft Opacity) */}
-        <div className="absolute top-36 left-12 text-emerald-600/20 text-2xl font-normal select-none">
-          +
-        </div>
-        <div className="absolute top-1/2 right-16 text-emerald-600/15 text-3xl font-normal select-none">
-          +
-        </div>
-        <div className="absolute bottom-1/4 left-1/4 text-sage-600/20 text-2xl font-normal select-none">
-          +
-        </div>
-        <div className="absolute top-1/4 right-1/3 text-emerald-600/20 text-xl select-none">
-          ✦
-        </div>
-      </div>      {/* Main Header Desktop (Fixed Top Navbar) */}
+      {/* Main Header Desktop (Fixed Top Navbar) */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           !isLoggedIn && !isScrolled
             ? "bg-transparent border-transparent shadow-none text-white"
-            : "bg-white/80 backdrop-blur-xl border-b border-white/50 shadow-soft-sm text-slate-900"
+            : "bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-soft-xs text-slate-900"
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between gap-4">

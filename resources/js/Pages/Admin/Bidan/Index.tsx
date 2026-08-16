@@ -141,7 +141,7 @@ export default function AdminBidanIndex() {
         {/* STATS BENTO GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           
-          <Card className="rounded-3xl border-slate-100 bg-white p-5 shadow-soft-sm space-y-2">
+          <Card className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Total Bidan Aktif
@@ -158,7 +158,7 @@ export default function AdminBidanIndex() {
             </div>
           </Card>
 
-          <Card className="rounded-3xl border-slate-100 bg-white p-5 shadow-soft-sm space-y-2">
+          <Card className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Puskesmas Terdaftar
@@ -175,12 +175,12 @@ export default function AdminBidanIndex() {
             </div>
           </Card>
 
-          <Card className="rounded-3xl border-slate-100 bg-white p-5 shadow-soft-sm space-y-2">
+          <Card className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Status Verifikasi STR
               </span>
-              <div className="h-9 w-9 rounded-2xl bg-sage-100 text-emerald-800 flex items-center justify-center">
+              <div className="h-9 w-9 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
                 <FileCheck className="h-5 w-5" />
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function AdminBidanIndex() {
         </div>
 
         {/* SEARCH & TABLE SECTION */}
-        <Card className="rounded-3xl border-slate-100 bg-white shadow-soft-sm overflow-hidden space-y-0">
+        <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-hidden space-y-0">
           
           <div className="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -214,7 +214,7 @@ export default function AdminBidanIndex() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Cari nama, STR, puskesmas..."
-                className="pl-9 text-xs h-10 rounded-full"
+                className="pl-9 text-xs h-10 rounded-full border border-slate-200 bg-white"
               />
               <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
             </div>

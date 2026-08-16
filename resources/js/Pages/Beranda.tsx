@@ -90,14 +90,14 @@ export default function Beranda() {
             {/* Shortcut 1: Screening Kehamilan */}
             <Link
               href="/screening/kehamilan"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
-                  <Activity className="h-6 w-6" />
+                <div className="h-12 w-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/80 group-hover:scale-105 transition-transform shrink-0">
+                  <Activity className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
                     Screening Kehamilan
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
@@ -105,20 +105,20 @@ export default function Beranda() {
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
             {/* Shortcut 2: Screening Persalinan */}
             <Link
               href="/screening/persalinan"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
-                  <Stethoscope className="h-6 w-6" />
+                <div className="h-12 w-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/80 group-hover:scale-105 transition-transform shrink-0">
+                  <Stethoscope className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
                     Screening Persalinan
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
@@ -126,20 +126,20 @@ export default function Beranda() {
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
             {/* Shortcut 3: Kamus Kesehatan */}
             <Link
               href="/kamus"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
-                  <BookOpen className="h-6 w-6" />
+                <div className="h-12 w-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/80 group-hover:scale-105 transition-transform shrink-0">
+                  <BookOpen className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
                     Kamus Kesehatan
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
@@ -147,49 +147,28 @@ export default function Beranda() {
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
-            {/* Shortcut 4: Tentang Kami */}
-            <Link
-              href="/tentang-kami"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-coral-200 transition-all flex items-center justify-between group"
-            >
-              <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-coral-50 text-coral-600 flex items-center justify-center border border-coral-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
-                  <Info className="h-6 w-6" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-coral-600 transition-colors truncate">
-                    Tentang Kami
-                  </h3>
-                  <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
-                    Informasi &amp; Profil Platform
-                  </p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-coral-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
-            </Link>
-
-            {/* Shortcut 5: Profil Saya */}
+            {/* Shortcut 4: Profil Saya */}
             <Link
               href="/profil"
-              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100 shadow-soft-sm hover:shadow-soft-md hover:border-emerald-200 transition-all flex items-center justify-between group"
+              className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="h-12 w-12 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100/80 group-hover:scale-105 transition-transform shrink-0 shadow-soft-xs">
-                  <User className="h-6 w-6" />
+                <div className="h-12 w-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/80 group-hover:scale-105 transition-transform shrink-0">
+                  <User className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition-colors truncate">
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-rose-600 transition-colors truncate">
                     Profil Saya
                   </h3>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
-                    Riwayat &amp; Data Akun
+                    Riwayat Screening
                   </p>
                 </div>
               </div>
-              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ChevronRight className="h-5 w-5 text-slate-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
             </Link>
 
           </div>
@@ -205,7 +184,7 @@ export default function Beranda() {
             {screeningResult && (
               <Link
                 href="/screening/kehamilan"
-                className="text-xs font-bold text-emerald-700 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-rose-600 hover:underline flex items-center gap-1"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 <span>Screening Ulang</span>
@@ -215,8 +194,8 @@ export default function Beranda() {
 
           {!screeningResult ? (
             /* EMPTY STATE: BELUM ADA DATA SCREENING */
-            <Card className="p-8 border-dashed border-slate-200 bg-white text-center rounded-3xl space-y-4">
-              <div className="h-16 w-16 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto">
+            <Card className="p-8 border border-slate-100 bg-white text-center rounded-3xl space-y-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+              <div className="h-16 w-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
                 <Activity className="h-8 w-8" />
               </div>
               
@@ -229,15 +208,15 @@ export default function Beranda() {
 
               <Link
                 href="/screening/kehamilan"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-700 text-white font-bold text-xs shadow-soft-sm hover:bg-emerald-800 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-rose-600 text-white font-bold text-xs shadow-soft-sm hover:bg-rose-700 transition-all"
               >
                 <Plus className="h-4 w-4" />
                 <span>Mulai Screening Sekarang</span>
               </Link>
             </Card>
           ) : (
-            /* FILLED STATE: HASIL SCREENING TERAKHIR (FULL WIDTH SPLIT CARD: LEFT IMAGE WITH FADING GRADIENT + RIGHT RESULTS) */
-            <Card className="w-full rounded-3xl border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all bg-white overflow-hidden space-y-0">
+            /* FILLED STATE: HASIL SCREENING TERAKHIR (SOLID WHITE CARD) */
+            <Card className="w-full rounded-3xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_30px_rgba(0,0,0,0.09)] transition-all bg-white overflow-hidden space-y-0">
               <div className="grid grid-cols-1 md:grid-cols-12 min-h-[280px]">
                 
                 {/* Left Side: Image with Ultra Smooth Fade Gradient Overlay into White Content */}
@@ -245,32 +224,24 @@ export default function Beranda() {
                   className="md:col-span-5 relative h-56 md:h-auto w-full bg-cover bg-center overflow-hidden min-h-[240px]"
                   style={{ backgroundImage: "url('/images/screening-banner.jpg?v=2')" }}
                 >
-                  {/* Soft Dark Accent Overlay on Left */}
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: "linear-gradient(135deg, rgba(37, 55, 47, 0.45) 0%, rgba(62, 91, 77, 0.15) 50%, transparent 100%)",
-                    }}
-                  />
-                  
-                  {/* Ultra Smooth Fade Transition into White Content (Desktop: Wide Right Fade, Mobile: Wide Bottom Fade) */}
-                  <div
-                    className="hidden md:block absolute inset-y-0 right-0 w-1/2 pointer-events-none z-10"
-                    style={{
-                      background: "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.35) 45%, rgba(255,255,255,0.75) 75%, #ffffff 100%)",
-                    }}
-                  />
-                  <div
-                    className="md:hidden absolute inset-x-0 bottom-0 h-28 pointer-events-none z-10"
-                    style={{
-                      background: "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.2) 30%, rgba(255,255,255,0.75) 70%, #ffffff 100%)",
-                    }}
-                  />
-
                   {/* Floating Tag Overlay */}
-                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-slate-900/70 backdrop-blur-md text-white text-[11px] font-bold tracking-wide shadow-soft-xs">
+                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-bold tracking-wide shadow-md">
                     Hasil Skrining Terakhir
                   </div>
+
+                  {/* Smooth Fade Transition into White Content */}
+                  <div
+                    className="hidden md:block absolute inset-y-0 right-0 w-1/3 pointer-events-none z-10"
+                    style={{
+                      background: "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.7) 60%, #ffffff 100%)",
+                    }}
+                  />
+                  <div
+                    className="md:hidden absolute inset-x-0 bottom-0 h-24 pointer-events-none z-10"
+                    style={{
+                      background: "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.7) 60%, #ffffff 100%)",
+                    }}
+                  />
                 </div>
 
                 {/* Right Side: Screening Results Details (Centered Layout) */}
@@ -282,14 +253,8 @@ export default function Beranda() {
                         Tingkat Risiko Ibu Hamil • HPL: <span className="font-bold text-slate-700">{screeningResult.taksiran_hpl || "19 Juli 2026"}</span>
                       </p>
                       {/* Judul Risiko */}
-                      <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
-                        screeningResult.kategori_risiko === "KRR"
-                          ? "text-emerald-700"
-                          : screeningResult.kategori_risiko === "KRT"
-                          ? "text-amber-700"
-                          : "text-rose-600"
-                      }`}>
-                        {screeningResult.status_label}
+                      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mt-1 text-amber-600">
+                        {screeningResult.status_label || "Risiko Tinggi / Sedang"}
                       </h2>
                     </div>
 
@@ -303,7 +268,7 @@ export default function Beranda() {
 
                       {/* Floating Black Score Pin Pointer */}
                       {(() => {
-                        const score = screeningResult.total_skor || 2;
+                        const score = screeningResult.total_skor || 10;
                         const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
                         return (
                           <div
@@ -321,7 +286,7 @@ export default function Beranda() {
 
                     {/* Deskripsi Rekomendasi */}
                     <p className="text-xs sm:text-sm font-medium text-slate-600 max-w-md mx-auto">
-                      Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat} ({screeningResult.penolong_persalinan})</strong>
+                      Rekomendasi Penolong: <strong className="font-bold text-slate-800">{screeningResult.rekomendasi_tempat || "Puskesmas Rawat Inap / PONED"} {screeningResult.penolong_persalinan ? `(${screeningResult.penolong_persalinan})` : "(Bidan & Dokter Umum)"}</strong>
                     </p>
                   </div>
 
