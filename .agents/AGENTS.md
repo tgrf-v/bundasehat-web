@@ -49,6 +49,10 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 - **DILARANG KERAS** menggunakan font weight extra bold (`font-extrabold`, `font-black`, `font-800`, `font-900`) di seluruh antarmuka (UI).
 - **WAJIB** membatasi ketebalan font maksimal sampai tingkat `font-bold` (`font-700`) agar tampilan UI tetap clean, elegan, professional, dan nyaman dibaca.
 
+### 13. DILARANG MENGGUNAKAN AMBIENT GLOW TANPA IZIN EKSPLISIT
+- **DILARANG KERAS** menambahkan efek ambient glow, colored gradient blobs, atau background blur warna-warni tanpa izin dan persetujuan eksplisit dari user!
+- Setiap rancangan atau modifikasi desain visual **WAJIB** meminta izin dan menunggu persetujuan eksplisit dari user sebelum diterapkan.
+
 ---
 
 ## 📌 Ringkasan Spesifikasi Proyek BundaSehat
