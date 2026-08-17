@@ -117,9 +117,6 @@ export default function AdminBidanIndex() {
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Manajemen Akun Bidan Wilayah
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium max-w-2xl leading-relaxed">
-              Kelola data akun tenaga kesehatan kebidanan, nomor STR resmi, dan penugasan fasilitas Puskesmas wilayah binaan.
-            </p>
           </div>
 
           <Button
@@ -195,12 +192,10 @@ export default function AdminBidanIndex() {
           
           <div className="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-base font-bold text-slate-900">
-                Daftar Tenaga Bidan Wilayah
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Users className="h-4 w-4 text-emerald-700" />
+                <span>Daftar Bidan Wilayah</span>
               </CardTitle>
-              <CardDescription className="text-xs text-slate-500 mt-0.5">
-                Total {filteredBidan.length} data bidan terdaftar dalam sistem
-              </CardDescription>
             </div>
 
             {/* Search Input */}
