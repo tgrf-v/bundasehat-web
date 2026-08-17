@@ -114,10 +114,6 @@ export default function AdminBidanIndex() {
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[11px] font-bold tracking-wide uppercase mb-2">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Portal Superadmin Kebidanan</span>
-            </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               Manajemen Akun Bidan Wilayah
             </h1>
