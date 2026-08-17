@@ -57,6 +57,11 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 - **DILARANG KERAS** menambahkan section badge, eyebrow tag, pill chip, atau label kategori kecil di atas judul halaman tanpa instruksi atau izin eksplisit dari user!
 - Jika user tidak meminta secara spesifik, **JANGAN PERNAH** menambahkan elemen section badge di antarmuka mana pun.
 
+### 15. DILARANG KERAS MENGAMBIL INISIATIF SENDIRI / MENAMBAHKAN ELEMEN DI LUAR INSTRUKSI (SANGAT KETAT)
+- **AI ADALAH ALAT**, USER ADALAH PEMEGANG KEPUTUSAN TERTINGGI.
+- **DILARANG KERAS** menambah komponen, kartu (cards), bento grid, seksi baru, fitur, atau merombak layout yang **TIDAK PERNAH DIMINTA SECARA EKSPLISIT** oleh user!
+- **WAJIB** hanya mengeksekusi instruksi persis yang diminta oleh user (*Zero Assumptions & Strict Scope Lock*). Segala ide atau penambahan elemen baru **HARUS MENDAPAT IZIN / PERSETUJUAN EKSPLISIT DARI USER** terlebih dahulu sebelum boleh dibuat.
+
 ---
 
 ## 📌 Ringkasan Spesifikasi Proyek BundaSehat
