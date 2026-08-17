@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Components/ui/card";
+import { Card, CardContent, CardTitle } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
@@ -9,15 +9,12 @@ import { Label } from "@/Components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { Dialog } from "@/Components/ui/dialog";
 import {
-  Stethoscope,
   Plus,
   Trash2,
   Search,
-  Building2,
   ShieldCheck,
   Phone,
   Mail,
-  FileCheck,
   Calendar,
   AlertTriangle,
   CheckCircle2,
@@ -93,12 +90,6 @@ export default function AdminBidanIndex() {
     );
   });
 
-  // Statistik Cepat
-  const totalBidan = bidanList.length;
-  const uniquePuskesmas = new Set(
-    bidanList.map((b) => b.puskesmas_wilayah).filter(Boolean)
-  ).size;
-
   return (
     <BundaSehatLayout activeNav="admin-bidan">
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8 animate-fadeIn">
@@ -129,62 +120,6 @@ export default function AdminBidanIndex() {
             <UserPlus className="h-4 w-4" />
             <span>Tambah Bidan Baru</span>
           </Button>
-        </div>
-
-        {/* STATS BENTO GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          
-          <Card className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Total Bidan Aktif
-              </span>
-              <div className="h-9 w-9 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                <Stethoscope className="h-5 w-5" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900">
-                {totalBidan}
-              </span>
-              <span className="text-xs text-slate-500 font-medium">Tenaga Nakes</span>
-            </div>
-          </Card>
-
-          <Card className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Puskesmas Terdaftar
-              </span>
-              <div className="h-9 w-9 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center">
-                <Building2 className="h-5 w-5" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900">
-                {uniquePuskesmas}
-              </span>
-              <span className="text-xs text-slate-500 font-medium">Wilayah Faskes</span>
-            </div>
-          </Card>
-
-          <Card className="rounded-3xl border border-slate-100 bg-white p-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Status Verifikasi STR
-              </span>
-              <div className="h-9 w-9 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                <FileCheck className="h-5 w-5" />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl sm:text-3xl font-bold text-emerald-700">
-                100%
-              </span>
-              <span className="text-xs text-emerald-600 font-medium">Tervalidasi Resmi</span>
-            </div>
-          </Card>
-
         </div>
 
         {/* SEARCH & TABLE SECTION */}
