@@ -53,6 +53,10 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 - **DILARANG KERAS** menambahkan efek ambient glow, colored gradient blobs, atau background blur warna-warni tanpa izin dan persetujuan eksplisit dari user!
 - Setiap rancangan atau modifikasi desain visual **WAJIB** meminta izin dan menunggu persetujuan eksplisit dari user sebelum diterapkan.
 
+### 14. DILARANG MENGGUNAKAN SECTION BADGE / EYEBROW BADGE TANPA IZIN EKSPLISIT
+- **DILARANG KERAS** menambahkan section badge, eyebrow tag, pill chip, atau label kategori kecil di atas judul halaman tanpa instruksi atau izin eksplisit dari user!
+- Jika user tidak meminta secara spesifik, **JANGAN PERNAH** menambahkan elemen section badge di antarmuka mana pun.
+
 ---
 
 ## 📌 Ringkasan Spesifikasi Proyek BundaSehat
