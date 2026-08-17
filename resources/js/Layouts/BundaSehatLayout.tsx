@@ -173,34 +173,10 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
               {/* Dropdown Menu: Admin (Superadmin) */}
               {user?.role === "superadmin" && (
-<<<<<<< HEAD
-                <>
-                  <Link
-                    href="/admin/bidan"
-                    className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
-                      activeNav === "admin-bidan"
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "text-emerald-700 hover:bg-emerald-50/60"
-                    }`}
-                  >
-                    Kelola Bidan
-                  </Link>
-                  <Link
-                    href="/admin/kamus"
-                    className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
-                      activeNav === "admin-kamus"
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "text-emerald-700 hover:bg-emerald-50/60"
-                    }`}
-                  >
-                    Kelola Kamus
-                  </Link>
-                </>
-=======
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     className={`px-3 py-1.5 text-sm transition-colors inline-flex items-center gap-1 cursor-pointer ${
-                      activeNav === "admin-bidan"
+                      activeNav === "admin-bidan" || activeNav === "admin-kamus"
                         ? "text-rose-600 font-bold"
                         : "text-slate-500 font-medium hover:text-slate-900"
                     }`}
@@ -220,9 +196,20 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                         </div>
                       </div>
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem onClick={() => router.visit("/admin/kamus")} className="p-2.5 rounded-xl hover:bg-slate-50 mt-0.5">
+                      <div className="flex items-center gap-2.5 w-full">
+                        <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                          <BookOpen className="h-4 w-4" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <span className="font-bold text-xs text-slate-800">Kelola Kamus</span>
+                          <span className="text-[10px] text-slate-500">Istilah &amp; Video Terapi</span>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
->>>>>>> 03e58f7210ba1f1d45e8300b6bbb9432434ee47e
               )}
             </nav>
           )}
