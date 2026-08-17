@@ -10,59 +10,61 @@ export default function TentangKami() {
     <BundaSehatLayout activeNav="tentang-kami">
       <div className="w-full">
 
-        {/* HERO HEADER SEDERHANA (TINGGI ~200-300px) */}
-        <section className="w-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 text-white pt-20 pb-12 sm:pt-24 sm:pb-14 relative overflow-hidden shadow-soft-sm">
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+        {/* HERO HEADER SEDERHANA (TINGGI KOMPAK) */}
+        <section className="w-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 text-white pt-16 pb-10 sm:pt-20 sm:pb-12 relative overflow-hidden shadow-soft-sm">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-2.5">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
               Tentang Kami
             </h1>
-            <p className="text-sm sm:text-base text-emerald-100 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-emerald-100 font-medium max-w-2xl mx-auto leading-relaxed">
               Mengenal tujuan, latar belakang, dan peran BundaSehat dalam mendukung kesehatan ibu dan janin.
             </p>
           </div>
         </section>
 
-        {/* SECTION TENTANG KAMI */}
-        <section id="tentang" className="w-full bg-white pt-12 sm:pt-16 pb-16 sm:pb-24">
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
-
-            {/* Row 1: Left Image Box, Right Text Content */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* SECTION 1: PROFIL & TUJUAN PLATFORM (BACKGROUND PUTIH) */}
+        <section id="tentang" className="w-full bg-white py-8 sm:py-10 md:py-12 border-b border-slate-100/80">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-10 items-center">
 
               {/* Left Image Box */}
               <div className="md:col-span-5 flex justify-center">
-                <div className="w-full h-64 sm:h-80 rounded-3xl bg-slate-100/80 p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
-                  <ApplicationLogo className="h-20 sm:h-24 w-20 sm:w-24 mb-3" />
-                  <span className="font-bold text-xl text-slate-800 tracking-wide">
+                <div className="w-full h-56 sm:h-72 rounded-3xl bg-slate-100/80 p-6 sm:p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
+                  <ApplicationLogo className="h-16 sm:h-20 w-16 sm:w-20 mb-2" />
+                  <span className="font-bold text-lg sm:text-xl text-slate-800 tracking-wide">
                     Logo
                   </span>
                 </div>
               </div>
 
               {/* Right Text Content */}
-              <div className="md:col-span-7 space-y-4 text-slate-700">
-                <p className="text-sm sm:text-base leading-relaxed font-medium">
+              <div className="md:col-span-7 space-y-3.5 text-slate-700">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                   Aplikasi berbasis website ini dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-coral-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
                 </p>
 
-                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                   Platform ini dirancang dengan mengintegrasikan standar medis nasional Kartu Skor Poedji Rochjati (KSPR), pemantauan usia kehamilan &amp; taksiran persalinan (HPL), serta rekomendasi penolong dan tempat persalinan yang aman.
                 </p>
 
-                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                   Kami berkomitmen menjadikan platform pilihan utama ibu hamil dan bidan wilayah dalam mempercepat rujukan medis serta menekan angka komplikasi kehamilan secara digital dan transparan.
                 </p>
               </div>
 
             </div>
+          </div>
+        </section>
 
-            {/* Row 2: Mengapa BundaSehat Dibuat? */}
-            <div className="pt-8 border-t border-slate-100 space-y-6 max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+        {/* SECTION 2: MENGAPA BUNDASEHAT DIBUAT? (BACKGROUND ABU-ABU SANGAT LEMBUT) */}
+        <section className="w-full bg-slate-50/90 py-8 sm:py-10 md:py-12 border-b border-slate-200/60">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto space-y-4 text-center">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                 Mengapa BundaSehat Dibuat?
               </h2>
 
-              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-medium text-left">
+              <div className="space-y-3.5 text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed font-medium text-center">
                 <p>
                   Kehamilan membutuhkan pemantauan yang berkelanjutan dan penuh kehati-hatian. Setiap tahapan dan perubahan kondisi fisik ibu maupun perkembangan janin memerlukan perhatian dini untuk memastikan proses persalinan dapat berjalan lancar dan aman.
                 </p>
@@ -76,50 +78,58 @@ export default function TentangKami() {
                 </p>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Row 3: Landasan & Keahlian */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 border-t border-slate-100">
+        {/* SECTION 3: LANDASAN & KEAHLIAN (BACKGROUND PUTIH) */}
+        <section className="w-full bg-white py-8 sm:py-10 md:py-12">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-10 items-center">
 
               {/* Left Text Content */}
-              <div className="md:col-span-7 space-y-4 text-slate-700 order-2 md:order-1">
-                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              <div className="md:col-span-7 space-y-3.5 text-slate-700 order-2 md:order-1">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                   Landasan &amp; Keahlian
                 </h2>
 
-                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                   <strong className="font-bold text-slate-900">Kepakaran Kebidanan Bu Asih &amp; Nakes Wilayah</strong> menjadi fondasi utama dalam penyusunan rekomendasi medis, edukasi kamus kesehatan A-Z, dan panduan terapi komplementer non-obat yang dihadirkan di dalam platform.
                 </p>
 
-                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                   Visi kami adalah berkontribusi aktif dalam percepatan transformasi digital di bidang kesehatan ibu dan anak, dengan menghadirkan solusi teknologi yang menjawab permasalahan krusial kebidanan secara tepat dan berbasis bukti medis.
                 </p>
 
-                <p className="text-sm sm:text-base leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                   Moto kami yakni <em className="font-bold text-emerald-700">Inovasi Medis &amp; Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
                 </p>
               </div>
 
               {/* Right Image Box */}
               <div className="md:col-span-5 flex justify-center order-1 md:order-2">
-                <div className="w-full h-64 sm:h-80 rounded-3xl bg-slate-100/80 p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
-                  <ApplicationLogo className="h-20 sm:h-24 w-20 sm:w-24 mb-3" />
-                  <span className="font-bold text-xl text-slate-800 tracking-wide">
+                <div className="w-full h-56 sm:h-72 rounded-3xl bg-slate-100/80 p-6 sm:p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
+                  <ApplicationLogo className="h-16 sm:h-20 w-16 sm:w-20 mb-2" />
+                  <span className="font-bold text-lg sm:text-xl text-slate-800 tracking-wide">
                     Logo
                   </span>
                 </div>
               </div>
 
             </div>
+          </div>
+        </section>
 
-            {/* Row 4: CTA Terakhir */}
-            <div className="pt-6 border-t border-slate-100 text-center space-y-4 max-w-xl mx-auto">
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+        {/* SECTION 4: CALL TO ACTION (BACKGROUND HIJAU LEMBUT) */}
+        <section className="w-full bg-emerald-50/70 py-8 sm:py-10 md:py-12 border-t border-emerald-100/80">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center space-y-3.5 max-w-xl mx-auto">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
                 Mulai Kenali Risiko Kehamilan Anda
               </h3>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
                 Lakukan deteksi dini kondisi kesehatan dan kesiapan persalinan Anda secara mandiri dan akurat.
               </p>
-              <div className="pt-2">
+              <div className="pt-1.5">
                 <Link href="/screening/kehamilan">
                   <Button
                     size="lg"
@@ -131,7 +141,6 @@ export default function TentangKami() {
                 </Link>
               </div>
             </div>
-
           </div>
         </section>
 
