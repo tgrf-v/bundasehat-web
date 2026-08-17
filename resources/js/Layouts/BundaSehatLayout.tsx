@@ -73,10 +73,10 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             : "bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-soft-xs text-slate-900"
         }`}
       >
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex md:grid md:grid-cols-[auto_1fr_auto] items-center justify-between md:justify-normal gap-4">
           
-          {/* Sisi Kiri: Logo Brand & Search Bar Kompak */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          {/* Ujung Kiri (Anchor): Logo Brand */}
+          <div className="flex items-center shrink-0">
             <Link href={isLoggedIn ? "/" : "/login"} className="flex items-center gap-2.5 group shrink-0">
               <ApplicationLogo
                 variant={!isLoggedIn && !isScrolled ? "white" : "color"}
@@ -90,19 +90,18 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 BundaSehat
               </span>
             </Link>
-
-            {/* Global Search Bar Component (Lebar Kompak 240-280px) */}
-            {isLoggedIn && (
-              <div className="w-56 sm:w-60 md:w-64 shrink-0">
-                <GlobalSearch />
-              </div>
-            )}
           </div>
 
-          {/* Sisi Kanan: Navigasi Desktop & Profile User */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {isLoggedIn && (
-              <nav className="hidden md:flex items-center gap-1">
+          {/* Tengah (Center Group): Search Bar + Menu Navigasi */}
+          {isLoggedIn && (
+            <div className="hidden md:flex items-center justify-center gap-3 lg:gap-5 w-full">
+              {/* Global Search Bar Component (Lebar Kompak 230-260px) */}
+              <div className="w-52 sm:w-56 md:w-60 lg:w-64 shrink-0">
+                <GlobalSearch />
+              </div>
+
+              {/* Navigasi Desktop */}
+              <nav className="flex items-center gap-1">
                 <Link
                   href="/"
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
@@ -215,23 +214,23 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   </DropdownMenu>
                 )}
               </nav>
-            )}
+            </div>
+          )}
 
-            {/* User Profile & Auth Action Buttons */}
-            {isLoggedIn && (
-              <div className="hidden md:flex items-center pl-1 sm:pl-2">
-                <Link
-                  href="/profil"
-                  className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-emerald-100 transition-all shadow-soft-xs flex items-center justify-center"
-                  title={`Profil Saya (${user?.name || "User"})`}
-                >
-                  <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-emerald-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">
-                    {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
-                  </div>
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* Ujung Kanan (Anchor): User Profile Avatar */}
+          {isLoggedIn && (
+            <div className="hidden md:flex items-center justify-end shrink-0">
+              <Link
+                href="/profil"
+                className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-emerald-100 transition-all shadow-soft-xs flex items-center justify-center"
+                title={`Profil Saya (${user?.name || "User"})`}
+              >
+                <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-emerald-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       </header>
 
