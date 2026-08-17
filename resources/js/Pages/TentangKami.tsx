@@ -12,7 +12,7 @@ export default function TentangKami() {
 
         {/* HERO HEADER SEDERHANA (TINGGI ~200-300px) */}
         <section className="w-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 text-white pt-20 pb-12 sm:pt-24 sm:pb-14 relative overflow-hidden shadow-soft-sm">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-3">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-3">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
               Tentang Kami
             </h1>
@@ -24,7 +24,7 @@ export default function TentangKami() {
 
         {/* SECTION TENTANG KAMI */}
         <section id="tentang" className="w-full bg-white pt-12 sm:pt-16 pb-16 sm:pb-24">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
 
             {/* Row 1: Left Image Box, Right Text Content */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
