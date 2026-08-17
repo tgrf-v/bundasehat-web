@@ -73,10 +73,10 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             : "bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-soft-xs text-slate-900"
         }`}
       >
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 sm:gap-6">
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           
           {/* Sisi Kiri: Logo Brand & Search Bar Kompak */}
-          <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
             <Link href={isLoggedIn ? "/" : "/login"} className="flex items-center gap-2.5 group shrink-0">
               <ApplicationLogo
                 variant={!isLoggedIn && !isScrolled ? "white" : "color"}
@@ -91,24 +91,24 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               </span>
             </Link>
 
-            {/* Global Search Bar Component (Lebar Kompak 260-300px) */}
+            {/* Global Search Bar Component (Lebar Kompak 240-280px) */}
             {isLoggedIn && (
-              <div className="w-56 sm:w-64 md:w-72 shrink-0">
+              <div className="w-56 sm:w-60 md:w-64 shrink-0">
                 <GlobalSearch />
               </div>
             )}
           </div>
 
           {/* Sisi Kanan: Navigasi Desktop & Profile User */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             {isLoggedIn && (
-              <nav className="hidden md:flex items-center gap-1.5">
+              <nav className="hidden md:flex items-center gap-1">
                 <Link
                   href="/"
-                  className={`px-3 py-1.5 text-sm transition-colors ${
+                  className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
                     activeNav === "beranda"
                       ? "text-rose-600 font-bold"
-                      : "text-slate-500 font-medium hover:text-slate-900"
+                      : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
                 >
                   Beranda
@@ -117,14 +117,14 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 {/* Dropdown Menu: Screening */}
                 <DropdownMenu>
                   <DropdownMenuTrigger
-                    className={`px-3 py-1.5 text-sm transition-colors inline-flex items-center gap-1 cursor-pointer ${
+                    className={`px-3 py-1.5 text-sm transition-colors rounded-full inline-flex items-center gap-1 cursor-pointer ${
                       isScreeningActive
                         ? "text-rose-600 font-bold"
-                        : "text-slate-500 font-medium hover:text-slate-900"
+                        : "text-slate-600 font-medium hover:text-slate-900"
                     }`}
                   >
                     <span>Screening</span>
-                    <ChevronDown className="h-3.5 w-3.5" />
+                    <ChevronDown className="h-3.5 w-3.5 opacity-70" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-56 p-1.5 rounded-2xl bg-white border border-slate-100/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
                     <DropdownMenuItem onClick={() => router.visit("/screening/kehamilan")} className="p-2.5 rounded-xl hover:bg-slate-50">
@@ -155,20 +155,20 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
                 <Link
                   href="/kamus"
-                  className={`px-3 py-1.5 text-sm transition-colors ${
+                  className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
                     activeNav === "kamus"
                       ? "text-rose-600 font-bold"
-                      : "text-slate-500 font-medium hover:text-slate-900"
+                      : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
                 >
                   Kamus Kesehatan
                 </Link>
                 <Link
                   href="/tentang-kami"
-                  className={`px-3 py-1.5 text-sm transition-colors ${
+                  className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
                     activeNav === "tentang-kami"
                       ? "text-rose-600 font-bold"
-                      : "text-slate-500 font-medium hover:text-slate-900"
+                      : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
                 >
                   Tentang Kami
@@ -178,14 +178,14 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 {user?.role === "superadmin" && (
                   <DropdownMenu>
                     <DropdownMenuTrigger
-                      className={`px-3 py-1.5 text-sm transition-colors inline-flex items-center gap-1 cursor-pointer ${
+                      className={`px-3 py-1.5 text-sm transition-colors rounded-full inline-flex items-center gap-1 cursor-pointer ${
                         activeNav === "admin-bidan" || activeNav === "admin-kamus"
                           ? "text-rose-600 font-bold"
-                          : "text-slate-500 font-medium hover:text-slate-900"
+                          : "text-slate-600 font-medium hover:text-slate-900"
                       }`}
                     >
                       <span>Admin</span>
-                      <ChevronDown className="h-3.5 w-3.5" />
+                      <ChevronDown className="h-3.5 w-3.5 opacity-70" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white border border-slate-100/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
                       <DropdownMenuItem onClick={() => router.visit("/admin/bidan")} className="p-2.5 rounded-xl hover:bg-slate-50">
@@ -219,10 +219,10 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
             {/* User Profile & Auth Action Buttons */}
             {isLoggedIn && (
-              <div className="hidden md:flex items-center">
+              <div className="hidden md:flex items-center pl-1 sm:pl-2">
                 <Link
                   href="/profil"
-                  className="relative group p-1 rounded-full bg-slate-100 hover:bg-emerald-100 transition-all shadow-soft-xs flex items-center justify-center"
+                  className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-emerald-100 transition-all shadow-soft-xs flex items-center justify-center"
                   title={`Profil Saya (${user?.name || "User"})`}
                 >
                   <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-emerald-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">

@@ -62,6 +62,12 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 - **DILARANG KERAS** menambah komponen, kartu (cards), bento grid, seksi baru, fitur, atau merombak layout yang **TIDAK PERNAH DIMINTA SECARA EKSPLISIT** oleh user!
 - **WAJIB** hanya mengeksekusi instruksi persis yang diminta oleh user (*Zero Assumptions & Strict Scope Lock*). Segala ide atau penambahan elemen baru **HARUS MENDAPAT IZIN / PERSETUJUAN EKSPLISIT DARI USER** terlebih dahulu sebelum boleh dibuat.
 
+### 16. SPESIFIKASI STRUKTUR NAVBAR BERDASARKAN ROLE (STRICT SCOPE LOCK)
+- **Superadmin**: `[Logo] [Search] Beranda | Screening ▾ | Kamus Kesehatan | Tentang Kami | Admin ▾ [Avatar]`
+- **Admin / Bidan**: `[Logo] [Search] Beranda | Screening ▾ | Kamus Kesehatan | Tentang Kami [Avatar]`
+- **Pasien / Guest**: Landing page header / Login trigger.
+- **DILARANG KERAS** menambah menu baru, mengubah struktur hierarki navigasi, atau mengotak-atik permission/role logic navbar tanpa instruksi eksplisit dari user.
+
 ---
 
 ## 📌 Ringkasan Spesifikasi Proyek BundaSehat
