@@ -244,7 +244,7 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
 
   return (
     <BundaSehatLayout activeNav="kamus">
-      <div className="max-w-6xl mx-auto px-4 py-6 md:py-8 space-y-6">
+      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6">
         
         {/* Flash Message Notification */}
         {flash?.success && (
