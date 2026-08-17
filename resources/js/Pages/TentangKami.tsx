@@ -83,6 +83,27 @@ export default function TentangKami() {
 
             </div>
 
+            {/* Row 3: Mengapa BundaSehat Dibuat? */}
+            <div className="pt-8 border-t border-slate-100 space-y-6 max-w-3xl mx-auto text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Mengapa BundaSehat Dibuat?
+              </h2>
+
+              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-medium text-left">
+                <p>
+                  Kehamilan membutuhkan pemantauan yang berkelanjutan dan penuh kehati-hatian. Setiap tahapan dan perubahan kondisi fisik ibu maupun perkembangan janin memerlukan perhatian dini untuk memastikan proses persalinan dapat berjalan lancar dan aman.
+                </p>
+
+                <p>
+                  Namun pada kenyataannya, tidak semua ibu memiliki akses informasi kesehatan kebidanan yang mudah dipahami, akurat, dan bebas dari kebingungan mitos yang beredar luas di masyarakat.
+                </p>
+
+                <p>
+                  BundaSehat dikembangkan sebagai pendamping digital yang menjembatani ibu hamil dengan standar klinis kebidanan terpercaya. Kami hadir untuk membantu mengenali tanda bahaya sedini mungkin, memberikan edukasi perawatan mandiri yang aman, dan mendukung pengambilan keputusan rujukan persalinan yang tepat waktu.
+                </p>
+              </div>
+            </div>
+
           </div>
         </section>
 
