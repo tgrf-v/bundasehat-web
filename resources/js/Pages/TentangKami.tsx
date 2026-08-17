@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { Button } from "@/Components/ui/button";
+import { ArrowRight } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function TentangKami() {
@@ -19,7 +22,7 @@ export default function TentangKami() {
           </div>
         </section>
 
-        {/* SECTION TENTANG KAMI (STRUKTUR KONTEN ASLI) */}
+        {/* SECTION TENTANG KAMI */}
         <section id="tentang" className="w-full bg-white pt-12 sm:pt-16 pb-16 sm:pb-24">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
 
@@ -53,11 +56,36 @@ export default function TentangKami() {
 
             </div>
 
-            {/* Row 2: Left Text Content, Right Image Box */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Row 2: Mengapa BundaSehat Dibuat? */}
+            <div className="pt-8 border-t border-slate-100 space-y-6 max-w-3xl mx-auto text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Mengapa BundaSehat Dibuat?
+              </h2>
+
+              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-medium text-left">
+                <p>
+                  Kehamilan membutuhkan pemantauan yang berkelanjutan dan penuh kehati-hatian. Setiap tahapan dan perubahan kondisi fisik ibu maupun perkembangan janin memerlukan perhatian dini untuk memastikan proses persalinan dapat berjalan lancar dan aman.
+                </p>
+
+                <p>
+                  Namun pada kenyataannya, tidak semua ibu memiliki akses informasi kesehatan kebidanan yang mudah dipahami, akurat, dan bebas dari kebingungan mitos yang beredar luas di masyarakat.
+                </p>
+
+                <p>
+                  BundaSehat dikembangkan sebagai pendamping digital yang menjembatani ibu hamil dengan standar klinis kebidanan terpercaya. Kami hadir untuk membantu mengenali tanda bahaya sedini mungkin, memberikan edukasi perawatan mandiri yang aman, dan mendukung pengambilan keputusan rujukan persalinan yang tepat waktu.
+                </p>
+              </div>
+            </div>
+
+            {/* Row 3: Landasan & Keahlian */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 border-t border-slate-100">
 
               {/* Left Text Content */}
               <div className="md:col-span-7 space-y-4 text-slate-700 order-2 md:order-1">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                  Landasan &amp; Keahlian
+                </h2>
+
                 <p className="text-sm sm:text-base leading-relaxed font-medium">
                   <strong className="font-bold text-slate-900">Kepakaran Kebidanan Bu Asih &amp; Nakes Wilayah</strong> menjadi fondasi utama dalam penyusunan rekomendasi medis, edukasi kamus kesehatan A-Z, dan panduan terapi komplementer non-obat yang dihadirkan di dalam platform.
                 </p>
@@ -83,24 +111,24 @@ export default function TentangKami() {
 
             </div>
 
-            {/* Row 3: Mengapa BundaSehat Dibuat? */}
-            <div className="pt-8 border-t border-slate-100 space-y-6 max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Mengapa BundaSehat Dibuat?
-              </h2>
-
-              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-medium text-left">
-                <p>
-                  Kehamilan membutuhkan pemantauan yang berkelanjutan dan penuh kehati-hatian. Setiap tahapan dan perubahan kondisi fisik ibu maupun perkembangan janin memerlukan perhatian dini untuk memastikan proses persalinan dapat berjalan lancar dan aman.
-                </p>
-
-                <p>
-                  Namun pada kenyataannya, tidak semua ibu memiliki akses informasi kesehatan kebidanan yang mudah dipahami, akurat, dan bebas dari kebingungan mitos yang beredar luas di masyarakat.
-                </p>
-
-                <p>
-                  BundaSehat dikembangkan sebagai pendamping digital yang menjembatani ibu hamil dengan standar klinis kebidanan terpercaya. Kami hadir untuk membantu mengenali tanda bahaya sedini mungkin, memberikan edukasi perawatan mandiri yang aman, dan mendukung pengambilan keputusan rujukan persalinan yang tepat waktu.
-                </p>
+            {/* Row 4: CTA Terakhir */}
+            <div className="pt-6 border-t border-slate-100 text-center space-y-4 max-w-xl mx-auto">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                Mulai Kenali Risiko Kehamilan Anda
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+                Lakukan deteksi dini kondisi kesehatan dan kesiapan persalinan Anda secara mandiri dan akurat.
+              </p>
+              <div className="pt-2">
+                <Link href="/screening/kehamilan">
+                  <Button
+                    size="lg"
+                    className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm gap-2 shadow-soft-sm"
+                  >
+                    <span>Tes Screening Kehamilan</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
             </div>
 
