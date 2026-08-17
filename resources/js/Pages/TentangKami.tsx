@@ -1,8 +1,5 @@
 import React from "react";
-import { Link } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
-import { Button } from "@/Components/ui/button";
-import { ArrowRight } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function TentangKami() {
@@ -10,13 +7,22 @@ export default function TentangKami() {
     <BundaSehatLayout activeNav="tentang-kami">
       <div className="w-full">
 
-        {/* HERO HEADER SEDERHANA (TINGGI KOMPAK) */}
-        <section className="w-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 text-white pt-16 pb-10 sm:pt-20 sm:pb-12 relative overflow-hidden shadow-soft-sm">
+        {/* HERO HEADER DENGAN BACKGROUND GAMBAR (KOTAK RATA) */}
+        <section className="w-full relative overflow-hidden text-white pt-16 pb-12 sm:pt-20 sm:pb-16 bg-emerald-950 shadow-soft-sm">
+          {/* Background Image */}
+          <img
+            src="/images/about-hero-bg.jpg"
+            alt="Tentang BundaSehat"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          {/* Overlay Gradient Emerald untuk Kontras Teks yang Jelas */}
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/85 via-emerald-900/80 to-emerald-950/85 backdrop-blur-[0.5px]" />
+
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-2.5">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-sm">
               Tentang Kami
             </h1>
-            <p className="text-xs sm:text-sm md:text-base text-emerald-100 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-emerald-100 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
               Mengenal tujuan, latar belakang, dan peran BundaSehat dalam mendukung kesehatan ibu dan janin.
             </p>
           </div>
@@ -115,31 +121,6 @@ export default function TentangKami() {
                 </div>
               </div>
 
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION 4: CALL TO ACTION (BACKGROUND HIJAU LEMBUT) */}
-        <section className="w-full bg-emerald-50/70 py-8 sm:py-10 md:py-12 border-t border-emerald-100/80">
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-3.5 max-w-xl mx-auto">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
-                Mulai Kenali Risiko Kehamilan Anda
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-                Lakukan deteksi dini kondisi kesehatan dan kesiapan persalinan Anda secara mandiri dan akurat.
-              </p>
-              <div className="pt-1.5">
-                <Link href="/screening/kehamilan">
-                  <Button
-                    size="lg"
-                    className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm gap-2 shadow-soft-sm"
-                  >
-                    <span>Tes Screening Kehamilan</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
             </div>
           </div>
         </section>
