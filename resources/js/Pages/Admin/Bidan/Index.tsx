@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardTitle } from "@/Components/ui/card";
@@ -12,17 +12,23 @@ import {
   Plus,
   Trash2,
   Search,
-  ShieldCheck,
   Phone,
   Mail,
-  Calendar,
   AlertTriangle,
   CheckCircle2,
-  X,
   UserPlus,
   MapPin,
-  Users,
 } from "lucide-react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
 
 import { PageProps } from "@/types";
 
@@ -43,7 +49,8 @@ type AdminBidanPageProps = PageProps<{
 export default function AdminBidanIndex() {
   const { bidanList = [], flash } = usePage<AdminBidanPageProps>().props;
 
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [deletingBidan, setDeletingBidan] = useState<BidanItem | null>(null);
 
@@ -79,15 +86,113 @@ export default function AdminBidanIndex() {
     });
   };
 
-  // Filter list berdasarkan pencarian
-  const filteredBidan = bidanList.filter((b) => {
-    const query = searchTerm.toLowerCase();
-    return (
-      b.name.toLowerCase().includes(query) ||
-      b.email.toLowerCase().includes(query) ||
-      (b.no_str && b.no_str.toLowerCase().includes(query)) ||
-      (b.puskesmas_wilayah && b.puskesmas_wilayah.toLowerCase().includes(query))
-    );
+  // Definisi Kolom TanStack Table
+  const columns = useMemo<ColumnDef<BidanItem>[]>(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Nama Bidan",
+        cell: ({ row }) => {
+          const bidan = row.original;
+          return (
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0">
+                {bidan.name.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                  {bidan.name}
+                </p>
+                <p className="text-[11px] text-slate-500 font-medium truncate flex items-center gap-1 mt-0.5">
+                  <Mail className="h-3 w-3 text-slate-400" />
+                  <span>{bidan.email}</span>
+                </p>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "no_str",
+        header: "No. STR",
+        cell: ({ row }) => (
+          <Badge variant="outline" className="text-[11px] font-mono font-bold bg-slate-50 border-slate-200">
+            {row.original.no_str || "-"}
+          </Badge>
+        ),
+      },
+      {
+        accessorKey: "puskesmas_wilayah",
+        header: "Wilayah Puskesmas",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+            <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+            <span>{row.original.puskesmas_wilayah || "Puskesmas Belum Diatur"}</span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "no_telepon",
+        header: "No. WhatsApp",
+        cell: ({ row }) => {
+          const phone = row.original.no_telepon;
+          return phone ? (
+            <span className="flex items-center gap-1 text-xs text-slate-600 font-medium">
+              <Phone className="h-3 w-3 text-slate-400" />
+              <span>{phone}</span>
+            </span>
+          ) : (
+            <span className="text-xs text-slate-400 font-medium">-</span>
+          );
+        },
+      },
+      {
+        accessorKey: "created_at",
+        header: "Terdaftar",
+        cell: ({ row }) => (
+          <span className="text-xs text-slate-500">{row.original.created_at}</span>
+        ),
+      },
+      {
+        id: "actions",
+        header: () => <div className="text-right pr-2">Aksi</div>,
+        cell: ({ row }) => (
+          <div className="text-right pr-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setDeletingBidan(row.original)}
+              className="h-8 w-8 p-0 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+              title="Hapus Akun Bidan"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
+  const table = useReactTable({
+    data: bidanList,
+    columns,
+    state: {
+      globalFilter,
+      sorting,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
 
   return (
@@ -127,9 +232,8 @@ export default function AdminBidanIndex() {
           
           <div className="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Users className="h-4 w-4 text-emerald-700" />
-                <span>Daftar Bidan Wilayah</span>
+              <CardTitle className="text-base font-bold text-slate-900">
+                Daftar Bidan
               </CardTitle>
             </div>
 
@@ -137,8 +241,8 @@ export default function AdminBidanIndex() {
             <div className="relative w-full sm:w-72">
               <Input
                 type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={globalFilter ?? ""}
+                onChange={(e) => setGlobalFilter(e.target.value)}
                 placeholder="Cari nama, STR, puskesmas..."
                 className="pl-9 text-xs h-10 rounded-full border border-slate-200 bg-white"
               />
@@ -147,111 +251,96 @@ export default function AdminBidanIndex() {
           </div>
 
           <CardContent className="p-0">
-            {filteredBidan.length > 0 ? (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-slate-50/70">
-                      <TableHead className="text-xs font-bold pl-6">Nama Bidan</TableHead>
-                      <TableHead className="text-xs font-bold">No. STR</TableHead>
-                      <TableHead className="text-xs font-bold">Wilayah Puskesmas</TableHead>
-                      <TableHead className="text-xs font-bold">No. WhatsApp</TableHead>
-                      <TableHead className="text-xs font-bold">Terdaftar</TableHead>
-                      <TableHead className="text-xs font-bold text-right pr-6">Aksi</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredBidan.map((bidan) => (
-                      <TableRow key={bidan.id} className="hover:bg-slate-50/60 transition-colors">
-                        
-                        {/* Name & Email */}
-                        <TableCell className="pl-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0">
-                              {bidan.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">
-                                {bidan.name}
-                              </p>
-                              <p className="text-[11px] text-slate-500 font-medium truncate flex items-center gap-1 mt-0.5">
-                                <Mail className="h-3 w-3 text-slate-400" />
-                                <span>{bidan.email}</span>
-                              </p>
-                            </div>
-                          </div>
-                        </TableCell>
+            {table.getRowModel().rows?.length ? (
+              <>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id} className="bg-slate-50/70">
+                          {headerGroup.headers.map((header) => (
+                            <TableHead key={header.id} className="text-xs font-bold px-6 py-3.5">
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                  )}
+                            </TableHead>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableHeader>
+                    <TableBody>
+                      {table.getRowModel().rows.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          className="hover:bg-slate-50/60 transition-colors"
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id} className="px-6 py-4">
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
 
-                        {/* STR Badge */}
-                        <TableCell className="py-4">
-                          <Badge variant="outline" className="text-[11px] font-mono font-bold bg-slate-50 border-slate-200">
-                            {bidan.no_str || "-"}
-                          </Badge>
-                        </TableCell>
-
-                        {/* Wilayah Puskesmas */}
-                        <TableCell className="py-4">
-                          <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
-                            <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                            <span>{bidan.puskesmas_wilayah || "Puskesmas Belum Diatur"}</span>
-                          </div>
-                        </TableCell>
-
-                        {/* No. Telepon */}
-                        <TableCell className="py-4 text-xs text-slate-600 font-medium">
-                          {bidan.no_telepon ? (
-                            <span className="flex items-center gap-1">
-                              <Phone className="h-3 w-3 text-slate-400" />
-                              <span>{bidan.no_telepon}</span>
-                            </span>
-                          ) : (
-                            <span className="text-slate-400">-</span>
-                          )}
-                        </TableCell>
-
-                        {/* Tanggal */}
-                        <TableCell className="py-4 text-xs text-slate-500">
-                          {bidan.created_at}
-                        </TableCell>
-
-                        {/* Action */}
-                        <TableCell className="py-4 text-right pr-6">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setDeletingBidan(bidan)}
-                            className="h-8 w-8 p-0 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                            title="Hapus Akun Bidan"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                {/* Pagination Controls (jika data melebihi 10 baris) */}
+                {table.getPageCount() > 1 && (
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 text-xs text-slate-500">
+                    <div>
+                      Halaman {table.getState().pagination.pageIndex + 1} dari {table.getPageCount()}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                        className="rounded-full text-xs font-bold h-8 px-3"
+                      >
+                        Sebelumnya
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                        className="rounded-full text-xs font-bold h-8 px-3"
+                      >
+                        Berikutnya
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="p-12 text-center space-y-3">
                 <div className="h-14 w-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
-                  <Users className="h-7 w-7" />
+                  <Search className="h-6 w-6" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-800">Tidak Ada Data Bidan</h4>
                   <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                    {searchTerm
-                      ? `Tidak ditemukan akun bidan yang cocok dengan pencarian "${searchTerm}".`
+                    {globalFilter
+                      ? `Tidak ditemukan akun bidan yang cocok dengan pencarian "${globalFilter}".`
                       : "Belum ada akun Bidan yang didaftarkan. Klik tombol di atas untuk menambah akun Bidan baru."}
                   </p>
                 </div>
-                {searchTerm && (
+                {globalFilter && (
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => setSearchTerm("")}
+                    onClick={() => setGlobalFilter("")}
                     className="rounded-full text-xs font-bold"
                   >
                     Reset Pencarian
