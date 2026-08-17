@@ -11,6 +11,7 @@ import {
   Stethoscope,
   Globe,
   ChevronDown,
+  ShieldCheck,
 } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { GlobalSearch } from "@/Components/GlobalSearch";
@@ -89,9 +90,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             </span>
           </Link>
 
-          {/* Global Search Bar Component (Hanya Tampil Saat Logged In / Bukan di Landing Page) */}
+          {/* Global Search Bar Component (Lebar Kompak 280-320px) */}
           {isLoggedIn && (
-            <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md mx-2 sm:mx-4">
+            <div className="w-64 sm:w-72 md:w-80 shrink-0 mx-2 sm:mx-4">
               <GlobalSearch />
             </div>
           )}
@@ -169,17 +170,34 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               >
                 Tentang Kami
               </Link>
+
+              {/* Dropdown Menu: Admin (Superadmin) */}
               {user?.role === "superadmin" && (
-                <Link
-                  href="/admin/bidan"
-                  className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
-                    activeNav === "admin-bidan"
-                      ? "bg-rose-50 text-rose-600"
-                      : "text-slate-500 hover:text-slate-900 font-medium"
-                  }`}
-                >
-                  Kelola Bidan
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    className={`px-3 py-1.5 text-sm transition-colors inline-flex items-center gap-1 cursor-pointer ${
+                      activeNav === "admin-bidan"
+                        ? "text-rose-600 font-bold"
+                        : "text-slate-500 font-medium hover:text-slate-900"
+                    }`}
+                  >
+                    <span>Admin</span>
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white border border-slate-100/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+                    <DropdownMenuItem onClick={() => router.visit("/admin/bidan")} className="p-2.5 rounded-xl hover:bg-slate-50">
+                      <div className="flex items-center gap-2.5 w-full">
+                        <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                          <ShieldCheck className="h-4 w-4" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <span className="font-bold text-xs text-slate-800">Kelola Bidan</span>
+                          <span className="text-[10px] text-slate-500">Manajemen Nakes Wilayah</span>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </nav>
           )}
