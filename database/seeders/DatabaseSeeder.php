@@ -46,5 +46,8 @@ class DatabaseSeeder extends Seeder
             'role' => 'ibu_hamil',
             'no_telepon' => '081200000003',
         ]);
+
+        // 4. Kamus Kesehatan & Terapi Komplementer
+        $this->call(KamusItemSeeder::class);
     }
 }

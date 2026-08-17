@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\BidanController;
+use App\Http\Controllers\Admin\KamusAdminController;
+use App\Http\Controllers\KamusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScreeningController;
 use Illuminate\Support\Facades\Route;
@@ -67,10 +69,8 @@ Route::middleware('auth')->group(function () {
     // Screening Hasil (detail 1 screening)
     Route::get('/screening/{screening}', [ScreeningController::class, 'show'])->name('screening.show');
 
-    // Kamus Kesehatan & Terapi Komplementer
-    Route::get('/kamus', function () {
-        return Inertia::render('Kamus/Index');
-    })->name('kamus.index');
+    // Kamus Kesehatan & Terapi Komplementer (Publik)
+    Route::get('/kamus', [KamusController::class, 'index'])->name('kamus.index');
 
     // Profil & Riwayat Screening
     Route::get('/profil', [ScreeningController::class, 'history'])->name('profil.index');
@@ -83,12 +83,19 @@ Route::middleware('auth')->group(function () {
 });
 
 // ──────────────────────────────────────────────
-// Superadmin Routes — Kelola Akun Bidan
+// Superadmin Routes — Kelola Akun Bidan & Kamus
 // ──────────────────────────────────────────────
 Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function () {
+    // Kelola Bidan
     Route::get('/bidan', [BidanController::class, 'index'])->name('admin.bidan.index');
     Route::post('/bidan', [BidanController::class, 'store'])->name('admin.bidan.store');
     Route::delete('/bidan/{bidan}', [BidanController::class, 'destroy'])->name('admin.bidan.destroy');
+
+    // Kelola Kamus & Video Terapi
+    Route::get('/kamus', [KamusAdminController::class, 'index'])->name('admin.kamus.index');
+    Route::post('/kamus', [KamusAdminController::class, 'store'])->name('admin.kamus.store');
+    Route::put('/kamus/{kamus}', [KamusAdminController::class, 'update'])->name('admin.kamus.update');
+    Route::delete('/kamus/{kamus}', [KamusAdminController::class, 'destroy'])->name('admin.kamus.destroy');
 });
 
 require __DIR__.'/auth.php';

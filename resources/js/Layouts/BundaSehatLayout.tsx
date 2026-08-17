@@ -18,7 +18,7 @@ import { PageProps } from "@/types";
 
 interface LayoutProps {
   children: React.ReactNode;
-  activeNav?: "landing" | "beranda" | "kehamilan" | "persalinan" | "kamus" | "profil" | "tentang-kami" | "admin-bidan";
+  activeNav?: "landing" | "beranda" | "kehamilan" | "persalinan" | "kamus" | "profil" | "tentang-kami" | "admin-bidan" | "admin-kamus";
 }
 
 export const BundaSehatLayout: React.FC<LayoutProps> = ({
@@ -141,16 +141,28 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 Tentang Kami
               </Link>
               {user?.role === "superadmin" && (
-                <Link
-                  href="/admin/bidan"
-                  className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
-                    activeNav === "admin-bidan"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "text-emerald-700 hover:bg-emerald-50/60"
-                  }`}
-                >
-                  Kelola Bidan
-                </Link>
+                <>
+                  <Link
+                    href="/admin/bidan"
+                    className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
+                      activeNav === "admin-bidan"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "text-emerald-700 hover:bg-emerald-50/60"
+                    }`}
+                  >
+                    Kelola Bidan
+                  </Link>
+                  <Link
+                    href="/admin/kamus"
+                    className={`px-3 py-1.5 text-sm transition-colors rounded-full font-bold ${
+                      activeNav === "admin-kamus"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "text-emerald-700 hover:bg-emerald-50/60"
+                    }`}
+                  >
+                    Kelola Kamus
+                  </Link>
+                </>
               )}
             </nav>
           )}

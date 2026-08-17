@@ -193,7 +193,7 @@ const VIDEOS: VideoItem[] = [
     title: "Teknik Pijat Oxytocin Ibu Hamil & Pelancar ASI",
     badge: "TERAPI FISIK",
     category: "Trimester 3 · Laktasi",
-    instructor: "👩‍⚕️ dr. Sari, Sp.OG",
+    instructor: "dr. Sari, Sp.OG",
     youtubeId: "8F1Yj9tG134",
     duration: "6:24",
     description: "Panduan gerakan pijat sepanjang tulang belakang untuk merangsang hormon oksitosin dan mempersiapkan produksi ASI.",
@@ -203,7 +203,7 @@ const VIDEOS: VideoItem[] = [
     title: "Senam Hamil Trimester 3 Pelancar Pembukaan Persalinan",
     badge: "SENAM HAMIL",
     category: "Trimester 3 · Persalinan",
-    instructor: "👩‍⚕️ Bidan Anisa",
+    instructor: "Bidan Anisa",
     youtubeId: "dQw4w9WgXcQ",
     duration: "9:10",
     description: "Gerakan squat ringan dan pelenturan panggul yang aman untuk membantu kepala janin turun ke pintu panggul.",
@@ -213,7 +213,7 @@ const VIDEOS: VideoItem[] = [
     title: "Terapi Napas Deep Breathing Meredakan Nyeri Kontraksi",
     badge: "RELAKSASI",
     category: "Manajemen Nyeri",
-    instructor: "👩‍⚕️ dr. Putri, Sp.OG",
+    instructor: "dr. Putri, Sp.OG",
     youtubeId: "5qap5aO4i9A",
     duration: "5:47",
     description: "Teknik olah napas lambat untuk mengalihkan sensasi nyeri mulas saat pembukaan, edema, atau kontraksi awal.",
@@ -222,20 +222,36 @@ const VIDEOS: VideoItem[] = [
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-export default function KamusIndex() {
+interface KamusPageProps {
+  articles?: ArticleItem[];
+  videos?: VideoItem[];
+}
+
+export default function KamusIndex({ articles, videos }: KamusPageProps) {
   const [activeTab, setActiveTab] = useState<string>("artikel");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedLetter, setSelectedLetter] = useState<string>("semua");
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
-  const filteredArticles = ARTICLES.filter((art) => {
+  const articleList = articles && articles.length > 0 ? articles : ARTICLES;
+  const videoList = videos && videos.length > 0 ? videos : VIDEOS;
+
+  const filteredArticles = articleList.filter((art) => {
     const matchesSearch =
       art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       art.summary.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesLetter =
       selectedLetter === "semua" || art.letter.toUpperCase() === selectedLetter;
     return matchesSearch && matchesLetter;
+  });
+
+  const filteredVideos = videoList.filter((vid) => {
+    return (
+      vid.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      vid.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      vid.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
 
   return (
@@ -372,15 +388,21 @@ export default function KamusIndex() {
         {/* TAB 2: VIDEO TERAPI KOMPLEMENTER (NON-OBAT) */}
         {activeTab === "terapi" && (
           <div className="space-y-6 animate-fadeIn">
-            
-            {/* Custom Video Grid matching User Design */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {VIDEOS.map((vid) => (
-                <Card
-                  key={vid.id}
-                  className="rounded-3xl border border-slate-100 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all bg-white group cursor-pointer flex flex-col justify-between"
-                  onClick={() => setSelectedVideo(vid)}
-                >
+            {filteredVideos.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-8">
+                <Video className="h-10 w-10 text-slate-300 mx-auto mb-3" />
+                <h3 className="font-bold text-slate-800 text-sm">Tidak ada video ditemukan</h3>
+                <p className="text-xs text-slate-500 mt-1">Coba kata kunci pencarian terapi lainnya.</p>
+              </div>
+            ) : (
+              /* Custom Video Grid matching User Design */
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {filteredVideos.map((vid) => (
+                  <Card
+                    key={vid.id}
+                    className="rounded-3xl border border-slate-100 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all bg-white group cursor-pointer flex flex-col justify-between"
+                    onClick={() => setSelectedVideo(vid)}
+                  >
                   <div className="flex flex-col h-full">
                     {/* Thumbnail Container with Top Badge, Play Button, and Duration */}
                     <div className="relative aspect-video bg-slate-900 overflow-hidden">
@@ -440,6 +462,7 @@ export default function KamusIndex() {
                 </Card>
               ))}
             </div>
+            )}
 
             {/* Video Modal Player Pop-up (Cinema Mode) */}
             {selectedVideo && (
