@@ -921,13 +921,13 @@ export default function AdminKamusIndex() {
         </DrawerContent>
       </Drawer>
 
-      {/* DRAWER 2: FORM TAMBAH / EDIT ARTIKEL (SPACIOUS RICH TEXT WRITING SURFACE) */}
+      {/* DRAWER 2: FORM TAMBAH / EDIT ARTIKEL (RICH TEXT WRITING SURFACE) */}
       <Drawer
         open={isArticleModalOpen}
         onOpenChange={setIsArticleModalOpen}
         swipeDirection="right"
       >
-        <DrawerContent className="data-[swipe-axis=x]:w-[94vw] data-[swipe-axis=x]:sm:w-[580px] data-[swipe-axis=x]:md:w-[680px] data-[swipe-axis=x]:max-w-[720px]">
+        <DrawerContent>
           <form onSubmit={handleArticleSubmit} className="flex flex-col h-full">
             {/* Header Drawer (Official Shadcn p-4 pb-0) */}
             <DrawerHeader className="pb-3 border-b border-slate-100">

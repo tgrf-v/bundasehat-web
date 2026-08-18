@@ -124,7 +124,7 @@ function DrawerContent({
             // Base.
             "group/drawer-popup pointer-events-auto fixed z-50 flex flex-col bg-white text-slate-900 border border-slate-200/80 shadow-2xl transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform outline-none select-none",
             // Sizing.
-            "[--drawer-content-height:100dvh] data-[swipe-axis=x]:w-[88vw] data-[swipe-axis=x]:sm:w-[380px] data-[swipe-axis=x]:md:w-[400px] data-[swipe-axis=x]:max-w-[400px] data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-4rem)]",
+            "[--drawer-content-height:100dvh] data-[swipe-axis=x]:w-[90vw] data-[swipe-axis=x]:sm:w-[500px] data-[swipe-axis=x]:md:w-[520px] data-[swipe-axis=x]:max-w-[540px] data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-4rem)]",
             // Transitions & Slide states.
             "data-starting-style:data-[swipe-direction=right]:translate-x-full data-ending-style:data-[swipe-direction=right]:translate-x-full",
             "data-starting-style:data-[swipe-direction=left]:-translate-x-full data-ending-style:data-[swipe-direction=left]:-translate-x-full",
