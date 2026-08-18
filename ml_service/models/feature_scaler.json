@@ -1,0 +1,162 @@
+{
+  "GRAVIDA": {
+    "mean": 2.2479564032697548,
+    "std": 1.2039933496790305
+  },
+  "PARA": {
+    "mean": 1.0472611105891196,
+    "std": 1.7372843985671316
+  },
+  "ABORTUS": {
+    "mean": 0.230762003194588,
+    "std": 1.0508249558227754
+  },
+  "IMT": {
+    "mean": 27.82093394719534,
+    "std": 5.292994060320344
+  },
+  "HEMOGLOBIN (g/dL)": {
+    "mean": 13.579917316546087,
+    "std": 219.44892382238723
+  },
+  "LEOKOSIT (uL)": {
+    "mean": 15591.511791788029,
+    "std": 8976.154159250422
+  },
+  "TROMBOSIT (uL)": {
+    "mean": 254923.942628958,
+    "std": 80588.36703212204
+  },
+  "TEKANAN DARAH: Sistol": {
+    "mean": 135.82223057408626,
+    "std": 139.02288005351159
+  },
+  "TEKANAN DARAH: Diastol": {
+    "mean": 86.85708916658837,
+    "std": 70.22195837848659
+  },
+  "KEHAMILAN_ORD": {
+    "mean": 0.7530771399041624,
+    "std": 0.5854117269299238
+  },
+  "PENDIDIKAN_LEV": {
+    "mean": 2.4325847975194965,
+    "std": 1.0580047917983015
+  },
+  "MAP": {
+    "mean": 103.17880296908767,
+    "std": 66.69306958852789
+  },
+  "PP": {
+    "mean": 48.96514140749789,
+    "std": 154.17057823384556
+  },
+  "LEU_TROMBO_RATIO": {
+    "mean": 0.2147570733927989,
+    "std": 14.852850775448749
+  },
+  "HB_TROMBO_RATIO": {
+    "mean": 0.00015595474617523752,
+    "std": 0.010181615376237987
+  },
+  "HB_ANEMIA": {
+    "mean": 0.3460490463215259,
+    "std": 0.475731403816408
+  },
+  "LEU_FLAG": {
+    "mean": 0.7993047073193649,
+    "std": 0.40053934400980956
+  },
+  "TROMBO_FLAG": {
+    "mean": 0.050455698581227094,
+    "std": 0.218893634050429
+  },
+  "PEKERJAAN_Bekerja": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "PEKERJAAN_Ibu Rumah Tangga": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "PEKERJAAN_MISSING": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_Gemeli": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_MEANJANG": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_MEMAJANG": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_MISSING": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_Melintang": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_Memanjang": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_Obliq": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_Preterm": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_memanjang": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "LETAK JANIN_preskep": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "JENIS PERSALINAN_MISSING": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "JENIS PERSALINAN_PERSALINAN LAMA": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "JENIS PERSALINAN_Persalinan Pervaginam": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "JENIS PERSALINAN_Sectio Sesarea": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "JENIS PERSALINAN_Sectio Sesarea (OP GABUNGAN)": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "IMT_CAT_Normal": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "IMT_CAT_Obese": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "IMT_CAT_Overweight": {
+    "mean": 0.0,
+    "std": 1.0
+  },
+  "IMT_CAT_Underweight": {
+    "mean": 0.0,
+    "std": 1.0
+  }
+}

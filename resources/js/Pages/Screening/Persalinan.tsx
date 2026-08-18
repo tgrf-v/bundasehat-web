@@ -37,12 +37,16 @@ import {
   Stethoscope,
   RefreshCw,
   Info,
+  Layers,
+  FlaskConical,
+  BrainCircuit,
+  Baby,
 } from "lucide-react";
 
 import { PageProps } from "@/types";
 
 export default function PersalinanScreening() {
-  const { flash, screeningResult: propResult } = usePage<PageProps<{
+  const { auth, flash, screeningResult: propResult } = usePage<PageProps<{
     screeningResult?: ScreeningResult;
   }>>().props;
 
@@ -56,22 +60,37 @@ export default function PersalinanScreening() {
   const [rightPanelView, setRightPanelView] = useState<"summary" | "detail">("summary");
 
   const [formData, setFormData] = useState<ScreeningInput & {
+    tinggi_badan?: number;
+    berat_badan?: number;
     posisi_janin: string;
     ada_riwayat_sc: boolean;
     kondisi_ketuban: string;
   }>({
-    nama_pasien: "",
-    nik: "",
-    umur: 0,
+    nama_pasien: auth?.user?.name || "",
+    nik: auth?.user?.nik || "",
+    pekerjaan: auth?.user?.pekerjaan || "Ibu Rumah Tangga",
+    pendidikan: auth?.user?.pendidikan || "SLTA",
+    umur: 28,
+    gravida: 1,
     paritas: 0,
-    sistolik: 0,
-    diastolik: 0,
+    abortus: 0,
+    tinggi_badan: 158,
+    berat_badan: 56,
+    imt: 22.4,
+    sistolik: 115,
+    diastolik: 75,
+    letak_janin: "Memanjang",
+    umur_kehamilan: "Aterm",
+    jenis_persalinan: "Persalinan Pervaginam",
+    hb: 12.0,
+    leokosit: 9000,
+    trombosit: 250000,
     edema_level: "none",
     keluhan_spesifik: [],
     sudah_dapat_treatment: false,
     detail_treatment: "",
     tipe_screening: "persalinan",
-    wilayah_puskesmas: "",
+    wilayah_puskesmas: auth?.user?.puskesmas || "",
     posisi_janin: "kepala_bawah",
     ada_riwayat_sc: false,
     kondisi_ketuban: "utuh",
@@ -85,6 +104,33 @@ export default function PersalinanScreening() {
     }
   }, [serverResult]);
 
+  const handleTbBbChange = (tbVal?: number, bbVal?: number) => {
+    const tb = tbVal !== undefined ? tbVal : (formData.tinggi_badan || 158);
+    const bb = bbVal !== undefined ? bbVal : (formData.berat_badan || 56);
+    let imtCalc = formData.imt || 22.4;
+    if (tb > 0 && bb > 0) {
+      imtCalc = parseFloat((bb / Math.pow(tb / 100, 2)).toFixed(1));
+    }
+    setFormData((prev) => ({
+      ...prev,
+      tinggi_badan: tb,
+      berat_badan: bb,
+      imt: imtCalc,
+    }));
+  };
+
+  const handleCheckboxToggle = (value: string) => {
+    setFormData((prev) => {
+      const exists = prev.keluhan_spesifik.includes(value);
+      return {
+        ...prev,
+        keluhan_spesifik: exists
+          ? prev.keluhan_spesifik.filter((item) => item !== value)
+          : [...prev.keluhan_spesifik, value],
+      };
+    });
+  };
+
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -93,20 +139,18 @@ export default function PersalinanScreening() {
       if (!formData.umur || formData.umur < 12 || formData.umur > 60) {
         newErrors.umur = "Umur valid antara 12 - 60 tahun";
       }
-      if (formData.paritas < 0 || formData.paritas > 15) {
+      if ((formData.gravida ?? 1) < 1) newErrors.gravida = "Jumlah kehamilan (Gravida) minimal 1";
+      if (formData.paritas < 0 || formData.paritas > 20) {
         newErrors.paritas = "Jumlah paritas tidak valid";
       }
     }
 
     if (step === 2) {
-      if (!formData.sistolik || formData.sistolik < 60 || formData.sistolik > 240) {
-        newErrors.sistolik = "Tensi sistolik valid antara 60 - 240 mmHg";
+      if (!formData.sistolik || formData.sistolik < 60 || formData.sistolik > 260) {
+        newErrors.sistolik = "Tekanan sistolik valid antara 60 - 260 mmHg";
       }
       if (!formData.diastolik || formData.diastolik < 40 || formData.diastolik > 160) {
-        newErrors.diastolik = "Tensi diastolik valid antara 40 - 160 mmHg";
-      }
-      if (formData.sistolik <= formData.diastolik) {
-        newErrors.sistolik = "Sistolik harus lebih besar dari Diastolik";
+        newErrors.diastolik = "Tekanan diastolik valid antara 40 - 160 mmHg";
       }
     }
 
@@ -114,35 +158,22 @@ export default function PersalinanScreening() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNextStep = (e?: React.SyntheticEvent) => {
+  const handleNext = (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();
-    if (currentStep === 1 && validateStep(1)) {
-      setCurrentStep(2);
-    } else if (currentStep === 2 && validateStep(2)) {
-      setCurrentStep(3);
+    if (validateStep(currentStep)) {
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
     }
   };
 
-  const handlePrevStep = (e?: React.SyntheticEvent) => {
+  const handlePrev = (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();
-    if (currentStep > 1) setCurrentStep((prev) => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleCheckboxChange = (keluhanId: string, checked: boolean) => {
-    setFormData((prev) => {
-      const current = prev.keluhan_spesifik;
-      if (checked) {
-        return { ...prev, keluhan_spesifik: [...current, keluhanId] };
-      } else {
-        return { ...prev, keluhan_spesifik: current.filter((id) => id !== keluhanId) };
-      }
-    });
-  };
-
-  const handleSubmitScreening = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (currentStep < 3) {
-      handleNextStep(e);
+      handleNext(e);
       return;
     }
     if (!validateStep(1)) {
@@ -180,24 +211,22 @@ export default function PersalinanScreening() {
     <BundaSehatLayout activeNav="persalinan">
       <div className="max-w-[1240px] mx-auto px-0 sm:px-6 lg:px-8 py-0 min-h-[calc(100vh-144px)] lg:h-[calc(100vh-65px)] flex flex-col justify-center">
         
-        {/* Modern Split Card with Image Fade Overlay (2 Kolom - 50:50) */}
+        {/* Modern Split Card with Image Fade Overlay (2 Kolom) */}
         <div className="w-full mx-auto bg-white rounded-none border-0 sm:border border-slate-200 overflow-hidden h-full lg:h-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
             
             {/* Kolom Kiri (Gambar Locked / Static - 50%) */}
             <div className="relative lg:col-span-6 h-[240px] lg:h-full overflow-hidden">
               <img
-                src="/images/persalinan-screening.jpg?v=2"
+                src="/images/delivery-screening.jpg"
                 alt="Screening Persalinan"
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              {/* Overlay Gradient Memudar Ke Kanan (Desktop) */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-white hidden lg:block" />
-              {/* Overlay Gradient Memudar Ke Bawah (Mobile) */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white lg:hidden" />
             </div>
 
-            {/* Kolom Kanan (Konten Utama & Form Screening Persalinan - 50% - Scrollable Shadcn ScrollArea) */}
+            {/* Kolom Kanan (Konten Utama & Form - 50% - ScrollArea) */}
             <ScrollArea className="lg:col-span-6 h-full">
               <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
               
@@ -208,18 +237,16 @@ export default function PersalinanScreening() {
                 </h1>
                 <p className="text-sm text-slate-500 leading-relaxed">
                   {hasScreened
-                    ? "Hasil analisis & rekomendasi tempat persalinan Bunda."
-                    : "Cek kesiapan bersalin & rekomendasi Faskes rujukan."}
+                    ? "Hasil kesiapan persalinan & rekomendasi Faskes rujukan."
+                    : "Pemeriksaan letak janin, riwayat SC, ketuban, & kesiapan penolong."}
                 </p>
               </div>
 
-              {/* Dynamic Area: Form 3-Step, Result Summary, atau Result Detail */}
+              {/* Dynamic Area */}
               {hasScreened && persalinanResult ? (
                 rightPanelView === "detail" ? (
-                  /* CONDITION 1B: VIEW DETAIL PERHITUNGAN PERSALINAN (MENGGANTIKAN PANEL KANAN) */
+                  /* VIEW DETAIL PERHITUNGAN */
                   <div className="space-y-5 animate-fadeIn">
-                    
-                    {/* Header back button */}
                     <button
                       type="button"
                       onClick={() => setRightPanelView("summary")}
@@ -229,11 +256,10 @@ export default function PersalinanScreening() {
                       <span>Kembali ke Hasil Ringkas</span>
                     </button>
 
-                    {/* Card Top Level Risiko */}
                     <Card className="border border-slate-200/80 shadow-soft-sm bg-white rounded-2xl p-5 space-y-4 text-center">
                       <div>
                         <p className="text-xs font-medium text-slate-500">
-                          Level risiko Ibu Bersalin, <span className="font-semibold text-slate-700">{formData.umur || 28} thn</span>
+                          Level risiko Persalinan Pasien: <span className="font-semibold text-slate-700">{formData.umur || 28} thn</span>
                         </p>
                         <h2 className={`text-2xl font-bold tracking-tight mt-1 ${
                           persalinanResult.kategori_risiko === "KRR"
@@ -271,269 +297,166 @@ export default function PersalinanScreening() {
                       </div>
                     </Card>
 
-                    {/* Banner Cyan Informasi & Cetak Laporan */}
-                    <div className="p-3.5 px-5 rounded-full bg-cyan-50 border border-cyan-100/80 flex items-center justify-between gap-3 text-xs">
-                      <div className="flex items-center gap-2 text-cyan-900">
-                        <Info className="h-4 w-4 text-cyan-600 shrink-0" />
-                        <span className="text-[11px] sm:text-xs">Gunakan laporan rincian perhitungan ini untuk referensi tempat persalinan.</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => window.print()}
-                        className="font-bold text-cyan-700 hover:text-cyan-900 hover:underline shrink-0 text-xs"
-                      >
-                        Cetak
-                      </button>
-                    </div>
+                    {/* Machine Learning Output Card */}
+                    {persalinanResult.diagnosa_ml && (
+                      <Card className="p-5 rounded-2xl bg-slate-900 text-white border-0 shadow-soft-lg space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-rose-400 font-bold text-xs">
+                            <BrainCircuit className="h-4 w-4" />
+                            <span>Prediksi Model XGBoost ML</span>
+                          </div>
+                          {persalinanResult.skor_risiko_ml && (
+                            <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-bold text-[10px] border border-rose-500/30">
+                              Confidence {Math.round(persalinanResult.skor_risiko_ml * 100)}%
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-xl font-bold text-white tracking-wide">
+                            {persalinanResult.diagnosa_ml}
+                          </p>
+                          <p className="text-xs text-slate-400 mt-0.5">
+                            Klasifikasi berbasis dataset rekam medis maternal (15 variabel klinis).
+                          </p>
+                        </div>
+                      </Card>
+                    )}
 
-                    {/* Section 1: Perhitungan Skor Risiko */}
+                    {/* Section: Perhitungan Skor */}
                     <div className="space-y-2 pt-1">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Perhitungan skor risiko persalinan</h4>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        Gunakan perhitungan ini sebagai acuan Anda untuk menentukan tempat & penolong persalinan yang aman.
-                      </p>
-
-                      <div className="space-y-2 pt-1 text-xs">
-                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
-                          <div className="h-4 w-4 rounded bg-[#64B565] shrink-0 mt-0.5" />
-                          <div>
-                            <p className="font-bold text-slate-800">Skor 2 - Risiko Rendah</p>
-                            <p className="text-[11px] text-slate-500 leading-normal">Persalinan aman dilakukan di Bidan Praktik Mandiri (BPM) / Puskesmas.</p>
-                          </div>
+                      <div className="space-y-2 pt-1">
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs">
+                          <span className="font-medium text-slate-700">Skor Awal Persalinan</span>
+                          <span className="font-bold text-slate-900 px-2.5 py-0.5 rounded-full bg-slate-100">+2</span>
                         </div>
-
-                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
-                          <div className="h-4 w-4 rounded bg-[#F7D154] shrink-0 mt-0.5" />
-                          <div>
-                            <p className="font-bold text-slate-800">Skor 6-10 - Risiko Tinggi</p>
-                            <p className="text-[11px] text-slate-500 leading-normal">Persalinan wajib di Puskesmas PONED (Pengawasan Bidan & Dokter umum).</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3 p-3.5 px-5 rounded-2xl bg-slate-50 border border-slate-200/70">
-                          <div className="h-4 w-4 rounded bg-[#F83838] shrink-0 mt-0.5" />
-                          <div>
-                            <p className="font-bold text-slate-800">Skor &ge; 12 - Risiko Sangat Tinggi</p>
-                            <p className="text-[11px] text-slate-500 leading-normal">Wajib rujukan persalinan ke Rumah Sakit (RS) fasilitas SC & Spesialis SpOG.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Section 2: Informasi Umum */}
-                    <div className="space-y-2 pt-2">
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi umum</h4>
-                      <div className="space-y-2 text-xs">
-                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-                          <span className="font-medium text-slate-700">Umur</span>
-                          <span className="font-bold text-rose-600">{formData.umur} thn : 2 poin</span>
-                        </div>
-                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-                          <span className="font-medium text-slate-700">Jumlah Hamil / Melahirkan (Paritas)</span>
-                          <span className="font-bold text-slate-800">Anak ke-{formData.paritas} : {formData.paritas >= 4 ? "4 poin" : "0 poin"}</span>
-                        </div>
-                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-                          <span className="font-medium text-slate-700">Presentasi / Posisi Janin</span>
-                          <span className={`font-bold ${formData.posisi_janin !== "kepala_bawah" ? "text-rose-600" : "text-slate-800"}`}>
-                            {formData.posisi_janin === "kepala_bawah" ? "Kepala di Bawah (Normal) : 0 poin" : `${formData.posisi_janin} : 8 poin`}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Section 3: Informasi Kesehatan */}
-                    <div className="space-y-2 pt-2">
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi kesehatan</h4>
-                      <div className="space-y-2 text-xs">
-                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-                          <span className="font-medium text-slate-700">Tekanan Darah (Tensi)</span>
-                          <span className={`font-bold ${calculateMAP(formData.sistolik, formData.diastolik) >= 90 ? "text-rose-600" : "text-slate-800"}`}>
-                            {formData.sistolik}/{formData.diastolik} mmHg (MAP: {calculateMAP(formData.sistolik, formData.diastolik)} mmHg) : {calculateMAP(formData.sistolik, formData.diastolik) >= 90 ? "4 poin" : "0 poin"}
-                          </span>
-                        </div>
-                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-                          <span className="font-medium text-slate-700">Riwayat Operasi SC</span>
-                          <span className={`font-bold ${formData.ada_riwayat_sc ? "text-rose-600" : "text-slate-800"}`}>
-                            {formData.ada_riwayat_sc ? "Ada Riwayat SC : 8 poin" : "Tidak Ada : 0 poin"}
-                          </span>
-                        </div>
-                        <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-                          <span className="font-medium text-slate-700">Kondisi Ketuban</span>
-                          <span className={`font-bold ${formData.kondisi_ketuban === "pecah" ? "text-rose-600" : "text-slate-800"}`}>
-                            {formData.kondisi_ketuban === "utuh" ? "Utuh : 0 poin" : "Ketuban Pecah Dini : 4 poin"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Section 4: Faktor Risiko & Keluhan Terdeteksi */}
-                    <div className="space-y-2 pt-2">
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base">Faktor risiko & keluhan terdeteksi</h4>
-                      <div className="space-y-2 text-xs">
-                        {persalinanResult.detail_skor.length === 0 ? (
-                          <div className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 text-slate-500 text-center font-medium">
-                            Tidak ada faktor risiko komplikasi persalinan terdeteksi
-                          </div>
-                        ) : (
+                        {persalinanResult.detail_skor && persalinanResult.detail_skor.length > 0 ? (
                           persalinanResult.detail_skor.map((factor, idx) => (
-                            <div key={idx} className="p-3.5 px-5 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                            <div key={idx} className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs">
                               <span className="font-medium text-slate-700">{factor.deskripsi}</span>
-                              <span className="font-bold text-rose-600">+ {factor.skor} poin</span>
+                              <span className="font-bold text-rose-600 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-100">
+                                +{factor.skor}
+                              </span>
                             </div>
                           ))
-                        )}
+                        ) : null}
                       </div>
+                    </div>
+
+                    {/* Tombol Aksi Bawah */}
+                    <div className="pt-4 flex items-center gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleRescreen}
+                        className="flex-1 rounded-full text-xs font-bold py-2.5"
+                      >
+                        <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
+                        <span>Screening Ulang</span>
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={() => router.visit("/kamus")}
+                        className="flex-1 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2.5"
+                      >
+                        <span>Buka Kamus Terapi</span>
+                      </Button>
                     </div>
 
                   </div>
                 ) : (
-                  /* CONDITION 1A: VIEW RINGKASAN HASIL PERSALINAN */
+                  /* VIEW RESULT SUMMARY */
                   <div className="space-y-5 animate-fadeIn">
-                    
-                    {/* Card 1: Level Risiko & Tri-Color Risk Gauge Meter */}
-                    <Card className="border border-slate-200/80 shadow-soft-sm bg-white rounded-2xl p-6 sm:p-7 space-y-5 text-center">
-                      <div>
-                        <p className="text-xs sm:text-sm font-medium text-slate-500">
-                          Level risiko Ibu Bersalin, <span className="font-semibold text-slate-700">{formData.umur || 28} thn</span>
-                        </p>
-                        <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
-                          persalinanResult.kategori_risiko === "KRR"
-                            ? "text-emerald-700"
-                            : persalinanResult.kategori_risiko === "KRT"
-                            ? "text-amber-600"
-                            : "text-rose-600"
-                        }`}>
-                          {persalinanResult.status_label}
-                        </h2>
-                      </div>
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-sm text-center space-y-3">
+                      <p className="text-xs font-medium text-slate-500">
+                        Hasil Analisis Pasien: <strong className="text-slate-800">{persalinanResult.nama_pasien || formData.nama_pasien}</strong>
+                      </p>
+                      <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight ${
+                        persalinanResult.kategori_risiko === "KRR"
+                          ? "text-emerald-700"
+                          : persalinanResult.kategori_risiko === "KRT"
+                          ? "text-amber-600"
+                          : "text-rose-600"
+                      }`}>
+                        {persalinanResult.status_label}
+                      </h2>
 
-                      {/* Tri-Color Segmented Gauge Bar */}
-                      <div className="relative w-full max-w-md mx-auto pt-2 pb-7">
-                        <div className="h-4.5 sm:h-5 w-full rounded-full flex overflow-hidden">
-                          <div className="flex-1 bg-[#64B565]" />
-                          <div className="flex-1 bg-[#F7D154]" />
-                          <div className="flex-1 bg-[#F83838]" />
+                      {persalinanResult.diagnosa_ml && (
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold">
+                          <BrainCircuit className="h-3.5 w-3.5 text-rose-600" />
+                          <span>Prediksi ML: {persalinanResult.diagnosa_ml}</span>
+                          {persalinanResult.skor_risiko_ml && (
+                            <span className="text-[10px] text-rose-500 font-semibold">
+                              ({Math.round(persalinanResult.skor_risiko_ml * 100)}%)
+                            </span>
+                          )}
                         </div>
+                      )}
+                    </div>
 
-                        {/* Floating Black Score Pin Pointer */}
-                        {(() => {
-                          const score = persalinanResult.total_skor || 2;
-                          const percent = Math.min(Math.max((score / 20) * 100, 8), 92);
-                          return (
-                            <div
-                              className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
-                              style={{ left: `${percent}%` }}
-                            >
-                              <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
-                              <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
-                                {score}
-                              </div>
-                            </div>
-                          );
-                        })()}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-1">
+                        <div className="flex items-center gap-1.5 text-emerald-800 font-bold text-xs">
+                          <Stethoscope className="h-4 w-4 text-emerald-700" />
+                          <span>Rujukan Faskes</span>
+                        </div>
+                        <p className="text-xs text-slate-700 leading-relaxed font-semibold">
+                          {persalinanResult.rekomendasi_faskes}
+                        </p>
                       </div>
 
-                      <p className="text-xs text-slate-500 leading-relaxed font-medium max-w-sm mx-auto">
-                        Skor KSPR: <strong className="text-slate-800 font-bold">{persalinanResult.total_skor} Poin</strong> • Tensi: <strong className="text-slate-800 font-bold">{formData.sistolik}/{formData.diastolik} mmHg</strong> (MAP: {calculateMAP(formData.sistolik, formData.diastolik)} mmHg)
-                      </p>
-
-                      {/* Bottom Link Actions */}
-                      <div className="border-t border-slate-100 pt-4 flex items-center justify-between gap-2 text-xs font-bold text-emerald-700">
-                        <button
-                          type="button"
-                          onClick={() => setRightPanelView("detail")}
-                          className="hover:text-emerald-800 transition-colors"
-                        >
-                          Lihat Perhitungan
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={handleRescreen}
-                          className="hover:text-emerald-800 flex items-center gap-1.5 transition-colors"
-                        >
-                          <RefreshCw className="h-3.5 w-3.5" />
-                          <span>Cek Ulang</span>
-                        </button>
-                      </div>
-                    </Card>
-
-                    {/* Card 2: Rekomendasi Tempat & Penolong Persalinan */}
-                    <Card className="p-4 sm:p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100/80 space-y-1.5 text-left shadow-soft-xs">
-                      <h4 className="font-bold text-emerald-900 text-sm sm:text-base">
-                        Rekomendasi Tempat & Penolong Persalinan
-                      </h4>
-                      <p className="text-xs text-slate-700 leading-relaxed font-semibold">
-                        {persalinanResult.rekomendasi_tempat} ({persalinanResult.penolong_persalinan})
-                      </p>
-                    </Card>
-
-                    {/* Card 3: Rincian Faktor Risiko Terdeteksi */}
-                    <div id="rincian-faktor" className="space-y-2 pt-1">
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base mb-1">Rincian Faktor Risiko Terdeteksi:</h4>
-                      <div className="space-y-1.5">
-                        {persalinanResult.detail_skor.length === 0 ? (
-                          <div className="p-2.5 px-4 rounded-full bg-slate-50 border border-slate-200/70 text-xs text-slate-500 text-center font-medium">
-                            Kondisi janin & fisik normal tanpa komplikasi
-                          </div>
-                        ) : (
-                          persalinanResult.detail_skor.map((factor, idx) => (
-                            <div key={idx} className="p-2.5 px-4 rounded-full bg-slate-50 border border-slate-200/70 flex items-center justify-between text-xs">
-                              <span className="font-medium text-slate-800">{factor.deskripsi}</span>
-                              <span className="font-bold text-emerald-700 text-xs shrink-0">+ {factor.skor} Poin</span>
-                            </div>
-                          ))
-                        )}
+                      <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-1">
+                        <div className="flex items-center gap-1.5 text-rose-800 font-bold text-xs">
+                          <Heart className="h-4 w-4 text-rose-600" />
+                          <span>Tempat & Penolong</span>
+                        </div>
+                        <p className="text-xs text-slate-700 leading-relaxed font-semibold">
+                          {persalinanResult.penolong_persalinan}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Card 4: Saran Terapi Komplementer Non-Obat Khusus Persalinan (Accordion) */}
-                    <div className="space-y-3 pt-2">
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                        <Heart className="h-4.5 w-4.5 text-emerald-700 shrink-0" />
-                        <span>Saran Kesiapan & Terapi Persalinan</span>
-                      </h4>
-
-                      <Accordion type="single" collapsible defaultValue="terapi-0" className="w-full">
-                        {persalinanResult.saran_terapi.map((terapi, idx) => (
-                          <AccordionItem key={idx} value={`terapi-${idx}`} className="border-b border-slate-100 py-0.5">
-                            <AccordionTrigger className="py-2.5 text-xs font-bold text-slate-900 hover:text-emerald-700">
-                              {terapi}
-                            </AccordionTrigger>
-                            <AccordionContent className="text-[11px] text-slate-500 pb-2.5 pt-0 leading-relaxed">
-                              Metode aman persalinan lancar untuk mengoptimalkan posisi janin dan meredakan rasa cemas persalinan.
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
+                    <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                      <Button
+                        type="button"
+                        onClick={() => setRightPanelView("detail")}
+                        className="w-full sm:flex-1 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs py-2.5 shadow-soft-xs"
+                      >
+                        <span>Lihat Rincian Perhitungan</span>
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleRescreen}
+                        className="w-full sm:w-auto rounded-full text-xs font-bold py-2.5 px-4"
+                      >
+                        <RefreshCw className="h-3.5 w-3.5 mr-1" />
+                        <span>Screening Ulang</span>
+                      </Button>
                     </div>
 
                   </div>
                 )
               ) : (
-                /* CONDITION 2: BELUM SCREENED ATAU KLIK SCREENING ULANG -> DISPLAY FORM INPUT PERSALINAN 3-STEP */
+                /* FORM INPUT 3-STEP PERSALINAN */
                 <div className="space-y-5">
-                  
-                  {/* Step Indicator Progress */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
                       <span className={currentStep >= 1 ? "text-emerald-700 font-bold" : ""}>
-                        1. Data Diri & Paritas
+                        1. Data Diri & Obstetri
                       </span>
                       <span className={currentStep >= 2 ? "text-emerald-700 font-bold" : ""}>
-                        2. Tensi & Posisi Janin
+                        2. Kondisi Klinis & Tensi
                       </span>
                       <span className={currentStep >= 3 ? "text-emerald-700 font-bold" : ""}>
-                        3. Riwayat SC & Keluhan
+                        3. Ketuban & Riwayat SC
                       </span>
                     </div>
-                    <Progress value={(currentStep / 3) * 100} className="h-2" />
+                    <Progress value={(currentStep / 3) * 100} variant="default" className="h-2" />
                   </div>
 
-                  {/* Form Container */}
-                  <form onSubmit={handleSubmitScreening} className="space-y-5">
-                    
-                    {/* Error Banner */}
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     {Object.keys(errors).length > 0 && (
                       <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium space-y-1 animate-fadeIn">
                         {Object.values(errors).map((err, idx) => (
@@ -544,221 +467,363 @@ export default function PersalinanScreening() {
                         ))}
                       </div>
                     )}
-                    
-                    {/* STEP 1: DATA DIRI PASIEN */}
+
+                    {/* STEP 1 */}
                     {currentStep === 1 && (
                       <div className="space-y-4 animate-fadeIn">
-                        <div>
-                          <Label htmlFor="nama_pasien">Nama Lengkap Pasien</Label>
-                          <Input
-                            id="nama_pasien"
-                            placeholder="Masukkan nama lengkap ibu"
-                            value={formData.nama_pasien}
-                            onChange={(e) => setFormData({ ...formData, nama_pasien: e.target.value })}
-                            className="mt-1"
-                          />
-                          {errors.nama_pasien && <p className="text-xs text-rose-500 mt-1">{errors.nama_pasien}</p>}
+                        <div className="border-b border-slate-100 pb-2">
+                          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <User className="h-4 w-4 text-emerald-700" />
+                            <span>Langkah 1: Identitas & Riwayat Obstetri</span>
+                          </h3>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-3">
                           <div>
-                            <Label htmlFor="umur">Usia (Tahun)</Label>
+                            <Label htmlFor="nama_pasien">Nama Lengkap Pasien <span className="text-rose-600">*</span></Label>
                             <Input
-                              id="umur"
-                              type="number"
-                              placeholder="Contoh: 27"
-                              value={formData.umur || ""}
-                              onChange={(e) => setFormData({ ...formData, umur: Number(e.target.value) })}
+                              id="nama_pasien"
+                              placeholder="Masukkan nama pasien..."
+                              value={formData.nama_pasien}
+                              onChange={(e) => setFormData({ ...formData, nama_pasien: e.target.value })}
+                              error={errors.nama_pasien}
                               className="mt-1"
                             />
-                            {errors.umur && <p className="text-xs text-rose-500 mt-1">{errors.umur}</p>}
                           </div>
 
-                          <div>
-                            <Label htmlFor="paritas">Jumlah Hamil/Melahirkan (Paritas)</Label>
-                            <Input
-                              id="paritas"
-                              type="number"
-                              placeholder="Anak ke-berapa"
-                              value={formData.paritas}
-                              onChange={(e) => setFormData({ ...formData, paritas: Number(e.target.value) })}
-                              className="mt-1"
-                            />
-                            {errors.paritas && <p className="text-xs text-rose-500 mt-1">{errors.paritas}</p>}
-                          </div>
-                        </div>
-
-                        <div>
-                          <Label htmlFor="wilayah_puskesmas">Wilayah Faskes / Puskesmas Domisili</Label>
-                          <Select
-                            value={formData.wilayah_puskesmas}
-                            onValueChange={(value) => setFormData({ ...formData, wilayah_puskesmas: value })}
-                          >
-                            <SelectTrigger className="mt-1">
-                              <SelectValue placeholder="Pilih wilayah puskesmas..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Puskesmas Wilayah 1">Puskesmas Wilayah 1 (PONED)</SelectItem>
-                              <SelectItem value="Puskesmas Wilayah 2">Puskesmas Wilayah 2 (PONED)</SelectItem>
-                              <SelectItem value="Puskesmas Wilayah 3">Puskesmas Wilayah 3 (Non-PONED)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* STEP 2: TENSI DARAH & POSISI JANIN */}
-                    {currentStep === 2 && (
-                      <div className="space-y-4 animate-fadeIn">
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
-                          <Label className="text-xs font-bold text-slate-900">Tekanan Darah (Tensi)</Label>
-                          
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <Label htmlFor="sistolik" className="text-[11px] text-slate-500">Sistolik (mmHg)</Label>
+                              <Label htmlFor="umur">Usia (Tahun) <span className="text-rose-600">*</span></Label>
                               <Input
-                                id="sistolik"
+                                id="umur"
                                 type="number"
-                                placeholder="120"
-                                value={formData.sistolik || ""}
-                                onChange={(e) => setFormData({ ...formData, sistolik: Number(e.target.value) })}
-                                className="mt-1 bg-white"
+                                min={10}
+                                max={60}
+                                value={formData.umur || ""}
+                                onChange={(e) => setFormData({ ...formData, umur: Number(e.target.value) })}
+                                error={errors.umur}
+                                className="mt-1"
                               />
-                              {errors.sistolik && <p className="text-xs text-rose-500 mt-1">{errors.sistolik}</p>}
                             </div>
-
                             <div>
-                              <Label htmlFor="diastolik" className="text-[11px] text-slate-500">Diastolik (mmHg)</Label>
-                              <Input
-                                id="diastolik"
-                                type="number"
-                                placeholder="80"
-                                value={formData.diastolik || ""}
-                                onChange={(e) => setFormData({ ...formData, diastolik: Number(e.target.value) })}
-                                className="mt-1 bg-white"
-                              />
-                              {errors.diastolik && <p className="text-xs text-rose-500 mt-1">{errors.diastolik}</p>}
+                              <Label htmlFor="pekerjaan">Pekerjaan</Label>
+                              <Select
+                                value={formData.pekerjaan || "Ibu Rumah Tangga"}
+                                onValueChange={(val) => setFormData({ ...formData, pekerjaan: val })}
+                              >
+                                <SelectTrigger id="pekerjaan" className="mt-1">
+                                  <SelectValue placeholder="Pilih pekerjaan" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Ibu Rumah Tangga">Ibu Rumah Tangga</SelectItem>
+                                  <SelectItem value="Karyawan Swasta">Karyawan Swasta</SelectItem>
+                                  <SelectItem value="PNS">PNS / ASN</SelectItem>
+                                  <SelectItem value="Wiraswasta">Wiraswasta / Usaha</SelectItem>
+                                  <SelectItem value="Petani/Buruh">Buruh / Petani</SelectItem>
+                                  <SelectItem value="Pelajar/Mahasiswa">Pelajar / Mahasiswa</SelectItem>
+                                </SelectContent>
+                              </Select>
                             </div>
                           </div>
-                        </div>
 
-                        <div>
-                          <Label htmlFor="posisi_janin">Presentasi / Posisi Janin</Label>
-                          <Select
-                            value={formData.posisi_janin}
-                            onValueChange={(val) => setFormData({ ...formData, posisi_janin: val })}
-                          >
-                            <SelectTrigger id="posisi_janin" className="mt-1">
-                              <SelectValue placeholder="Pilih posisi janin..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="kepala_bawah">Kepala di Bawah (Normal / Preskep)</SelectItem>
-                              <SelectItem value="sungsang">Sungsang / Bokong di Bawah (Resti)</SelectItem>
-                              <SelectItem value="lintang">Posisi Lintang / Melintang (Wajib SC RS)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                          {/* Riwayat Obstetri G - P - A */}
+                          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                            <Label className="text-xs font-bold text-slate-800 block">
+                              Riwayat Obstetri Pasien (Gravida - Para - Abortus)
+                            </Label>
+                            <div className="grid grid-cols-3 gap-2">
+                              <div>
+                                <span className="text-[11px] text-slate-500 block mb-1">G (Hamil ke-)</span>
+                                <Input
+                                  type="number"
+                                  min={1}
+                                  max={20}
+                                  value={formData.gravida || 1}
+                                  onChange={(e) => setFormData({ ...formData, gravida: Number(e.target.value) })}
+                                  className="h-8 text-xs font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <span className="text-[11px] text-slate-500 block mb-1">P (Kelahiran)</span>
+                                <Input
+                                  type="number"
+                                  min={0}
+                                  max={20}
+                                  value={formData.paritas}
+                                  onChange={(e) => setFormData({ ...formData, paritas: Number(e.target.value) })}
+                                  className="h-8 text-xs font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <span className="text-[11px] text-slate-500 block mb-1">A (Keguguran)</span>
+                                <Input
+                                  type="number"
+                                  min={0}
+                                  max={15}
+                                  value={formData.abortus || 0}
+                                  onChange={(e) => setFormData({ ...formData, abortus: Number(e.target.value) })}
+                                  className="h-8 text-xs font-semibold"
+                                />
+                              </div>
+                            </div>
+                          </div>
 
-                        <div>
-                          <Label htmlFor="kondisi_ketuban">Kondisi Air Ketuban</Label>
-                          <Select
-                            value={formData.kondisi_ketuban}
-                            onValueChange={(val) => setFormData({ ...formData, kondisi_ketuban: val })}
-                          >
-                            <SelectTrigger id="kondisi_ketuban" className="mt-1">
-                              <SelectValue placeholder="Pilih kondisi ketuban..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="utuh">Ketuban Utuh (Normal)</SelectItem>
-                              <SelectItem value="pecah">Ketuban Pecah Dini (KPD)</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          {/* Antropometri TB & BB */}
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <Label htmlFor="tb">Tinggi Badan (cm)</Label>
+                              <Input
+                                id="tb"
+                                type="number"
+                                min={100}
+                                max={250}
+                                value={formData.tinggi_badan || 158}
+                                onChange={(e) => handleTbBbChange(Number(e.target.value), formData.berat_badan)}
+                                className="mt-1"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="bb">Berat Badan (kg)</Label>
+                              <Input
+                                id="bb"
+                                type="number"
+                                min={30}
+                                max={250}
+                                value={formData.berat_badan || 56}
+                                onChange={(e) => handleTbBbChange(formData.tinggi_badan, Number(e.target.value))}
+                                className="mt-1"
+                              />
+                            </div>
+                          </div>
+
                         </div>
                       </div>
                     )}
 
-                    {/* STEP 3: RIWAYAT SC & KELUHAN PERSALINAN */}
+                    {/* STEP 2 */}
+                    {currentStep === 2 && (
+                      <div className="space-y-4 animate-fadeIn">
+                        <div className="border-b border-slate-100 pb-2">
+                          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <Heart className="h-4 w-4 text-rose-600" />
+                            <span>Langkah 2: Tekanan Darah & Posisi Janin</span>
+                          </h3>
+                        </div>
+
+                        <div className="space-y-3">
+                          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2.5">
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <Label htmlFor="sistolik" className="text-xs text-slate-600">Sistolik (mmHg) <span className="text-rose-600">*</span></Label>
+                                <Input
+                                  id="sistolik"
+                                  type="number"
+                                  min={60}
+                                  max={260}
+                                  value={formData.sistolik || ""}
+                                  onChange={(e) => setFormData({ ...formData, sistolik: Number(e.target.value) })}
+                                  error={errors.sistolik}
+                                  className="mt-1 font-bold"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="diastolik" className="text-xs text-slate-600">Diastolik (mmHg) <span className="text-rose-600">*</span></Label>
+                                <Input
+                                  id="diastolik"
+                                  type="number"
+                                  min={40}
+                                  max={160}
+                                  value={formData.diastolik || ""}
+                                  onChange={(e) => setFormData({ ...formData, diastolik: Number(e.target.value) })}
+                                  error={errors.diastolik}
+                                  className="mt-1 font-bold"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <Label htmlFor="posisi_janin">Posisi / Letak Janin</Label>
+                            <Select
+                              value={formData.posisi_janin || "kepala_bawah"}
+                              onValueChange={(val) => setFormData({
+                                ...formData,
+                                posisi_janin: val,
+                                letak_janin: val === "sungsang" ? "Sungsang" : (val === "lintang" ? "Melintang" : "Memanjang"),
+                              })}
+                            >
+                              <SelectTrigger id="posisi_janin" className="mt-1">
+                                <SelectValue placeholder="Pilih posisi janin" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="kepala_bawah">Presentasi Kepala Normal (Memanjang)</SelectItem>
+                                <SelectItem value="sungsang">Letak Sungsang (Bokong di Bawah)</SelectItem>
+                                <SelectItem value="lintang">Letak Lintang / Melintang</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Hasil Lab Darah */}
+                          <div className="p-3 rounded-2xl bg-rose-50/40 border border-rose-100 space-y-2">
+                            <Label className="text-xs font-bold text-slate-800 block">
+                              Hasil Laboratorium Darah
+                            </Label>
+                            <div className="grid grid-cols-3 gap-2">
+                              <div>
+                                <span className="text-[11px] text-slate-600 block mb-1">Hb (g/dL)</span>
+                                <Input
+                                  type="number"
+                                  step="0.1"
+                                  min={3}
+                                  max={25}
+                                  value={formData.hb || 12.0}
+                                  onChange={(e) => setFormData({ ...formData, hb: Number(e.target.value) })}
+                                  className="h-8 text-xs font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <span className="text-[11px] text-slate-600 block mb-1">Leukosit</span>
+                                <Input
+                                  type="number"
+                                  min={500}
+                                  max={80000}
+                                  value={formData.leokosit || 9000}
+                                  onChange={(e) => setFormData({ ...formData, leokosit: Number(e.target.value) })}
+                                  className="h-8 text-xs font-semibold"
+                                />
+                              </div>
+                              <div>
+                                <span className="text-[11px] text-slate-600 block mb-1">Trombosit</span>
+                                <Input
+                                  type="number"
+                                  min={10000}
+                                  max={1000000}
+                                  value={formData.trombosit || 250000}
+                                  onChange={(e) => setFormData({ ...formData, trombosit: Number(e.target.value) })}
+                                  className="h-8 text-xs font-semibold"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    )}
+
+                    {/* STEP 3 */}
                     {currentStep === 3 && (
                       <div className="space-y-4 animate-fadeIn">
-                        <div className="p-4 rounded-2xl bg-pink-50/60 border border-pink-100 flex items-center justify-between">
-                          <div className="text-xs text-rose-900 font-semibold pr-4">
-                            <span>Apakah Ada Riwayat Operasi SC (Sectio Caesarea) Sebelumnya?</span>
-                          </div>
-                          <Checkbox
-                            id="riwayat_sc_check"
-                            checked={formData.ada_riwayat_sc}
-                            onCheckedChange={(checked) => setFormData({ ...formData, ada_riwayat_sc: checked === true })}
-                          />
+                        <div className="border-b border-slate-100 pb-2">
+                          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <Baby className="h-4 w-4 text-rose-600" />
+                            <span>Langkah 3: Ketuban, Riwayat SC & Tanda Bahaya</span>
+                          </h3>
                         </div>
 
-                        <div>
-                          <Label className="text-xs font-bold text-slate-900 block mb-2">
-                            Pilih Gejala / Keluhan Menjelang Persalinan (Jika Ada):
-                          </Label>
+                        <div className="space-y-3">
+                          {/* Kondisi Ketuban */}
+                          <div>
+                            <Label htmlFor="ketuban">Kondisi Air Ketuban</Label>
+                            <Select
+                              value={formData.kondisi_ketuban || "utuh"}
+                              onValueChange={(val) => setFormData({ ...formData, kondisi_ketuban: val })}
+                            >
+                              <SelectTrigger id="ketuban" className="mt-1">
+                                <SelectValue placeholder="Pilih kondisi ketuban" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="utuh">Ketuban Utuh (Belum Pecah)</SelectItem>
+                                <SelectItem value="pecah">Ketuban Pecah Dini (KPD / Merembes)</SelectItem>
+                                <SelectItem value="mekonium">Ketuban Keruh / Bercampur Mekonium</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
 
-                          <div className="space-y-2.5">
-                            {[
-                              { id: "perdarahan_antepartum", label: "Terjadi Perdarahan Hamil Tua / Jalan Lahir" },
-                              { id: "preeklamsia_berat", label: "Pusing Berat / Pandangan Kabur / Kejang" },
-                              { id: "bekas_operasisc", label: "Nyeri Hebat Bekas Operasi Caesar (SC)" },
-                              { id: "partus_kasep", label: "Mulai Mulas Tapi Persalinan Macet / Lama" },
-                              { id: "janin_kembar", label: "Kehamilan Kembar 2 / Lebih" },
-                            ].map((keluhan) => (
-                              <div key={keluhan.id} className="flex items-center space-x-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-                                <Checkbox
-                                  id={keluhan.id}
-                                  checked={formData.keluhan_spesifik.includes(keluhan.id)}
-                                  onCheckedChange={(checked) => handleCheckboxChange(keluhan.id, checked === true)}
-                                />
-                                <Label htmlFor={keluhan.id} className="text-xs font-medium text-slate-700 cursor-pointer">
-                                  {keluhan.label}
-                                </Label>
+                          {/* Riwayat Seksio Sesarea SC */}
+                          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                            <Label className="text-xs font-bold text-slate-800 block">
+                              Riwayat Operasi Caesar (Seksio Sesarea) Sebelumnya
+                            </Label>
+                            <RadioGroup
+                              value={formData.ada_riwayat_sc ? "true" : "false"}
+                              onValueChange={(val) => setFormData({
+                                ...formData,
+                                ada_riwayat_sc: val === "true",
+                                jenis_persalinan: val === "true" ? "Sectio Sesarea" : "Persalinan Pervaginam",
+                              })}
+                              className="flex gap-4 pt-1"
+                            >
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="false" id="sc-no" />
+                                <Label htmlFor="sc-no" className="text-xs cursor-pointer">Tidak Pernah (Persalinan Normal)</Label>
                               </div>
-                            ))}
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="true" id="sc-yes" />
+                                <Label htmlFor="sc-yes" className="text-xs cursor-pointer">Pernah Operasi SC</Label>
+                              </div>
+                            </RadioGroup>
                           </div>
-                        </div>
 
-                        {errors.general && (
-                          <p className="text-xs text-rose-500 font-semibold">{errors.general}</p>
-                        )}
+                          {/* Keluhan Bahaya Lainnya */}
+                          <div>
+                            <Label className="block mb-2 text-xs font-bold text-slate-900">
+                              Tanda Bahaya Persalinan (Centang Jika Ada):
+                            </Label>
+                            <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto p-1">
+                              {[
+                                { id: "perdarahan_hebat", label: "Keluar darah banyak dari jalan lahir" },
+                                { id: "pusing_hebat", label: "Pusing berat & pandangan kabur" },
+                                { id: "kejang", label: "Riwayat kejang saat melahirkan" },
+                                { id: "kontraksi_berhenti", label: "His / Kontraksi hilang timbul lemah" },
+                              ].map((item) => (
+                                <div key={item.id} className="flex items-center space-x-2 p-2 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors">
+                                  <Checkbox
+                                    id={item.id}
+                                    checked={formData.keluhan_spesifik.includes(item.id)}
+                                    onCheckedChange={() => handleCheckboxToggle(item.id)}
+                                  />
+                                  <Label htmlFor={item.id} className="text-xs font-normal text-slate-700 cursor-pointer">
+                                    {item.label}
+                                  </Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                        </div>
                       </div>
                     )}
 
                     {/* Step Navigation Buttons */}
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <div className="pt-4 flex items-center justify-between gap-3">
                       {currentStep > 1 ? (
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={handlePrevStep}
-                          className="gap-1.5 text-xs font-bold"
+                          onClick={handlePrev}
+                          className="rounded-full text-xs font-bold px-5"
                         >
-                          <ChevronLeft className="h-4 w-4" />
-                          <span>Kembali</span>
+                          <ChevronLeft className="h-4 w-4 mr-1" />
+                          <span>Sebelumnya</span>
                         </Button>
-                      ) : (
-                        <div />
-                      )}
+                      ) : <div />}
 
                       {currentStep < 3 ? (
                         <Button
                           type="button"
-                          variant="default"
-                          onClick={handleNextStep}
-                          className="gap-1.5 text-xs font-bold shadow-soft-sm"
+                          onClick={handleNext}
+                          className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-6 ml-auto"
                         >
                           <span>Lanjut</span>
-                          <ChevronRight className="h-4 w-4" />
+                          <ChevronRight className="h-4 w-4 ml-1" />
                         </Button>
                       ) : (
                         <Button
                           type="submit"
-                          variant="default"
-                          isLoading={isLoading}
-                          className="gap-2 text-xs font-bold shadow-soft-sm"
+                          disabled={isLoading}
+                          className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm"
                         >
-                          <CheckCircle2 className="h-4 w-4" />
-                          <span>Lihat Hasil</span>
+                          {isLoading ? "Menganalisis dengan ML..." : "Lihat Hasil Analisis"}
                         </Button>
                       )}
                     </div>
