@@ -861,9 +861,6 @@ export default function AdminKamusIndex() {
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                     {viewingArticle.category}
                   </span>
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
-                    {viewingArticle.letter || viewingArticle.title.trim().charAt(0).toUpperCase()}
-                  </span>
                 </div>
                 <DrawerTitle className="text-base sm:text-lg font-bold text-slate-900 leading-snug mt-2">
                   {viewingArticle.title}
@@ -872,34 +869,18 @@ export default function AdminKamusIndex() {
 
               {/* Body Drawer (Official Shadcn p-4 flex-1 overflow-y-auto) */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {viewingArticle.content ? (
+                {viewingArticle.content && viewingArticle.content.trim() !== "" ? (
                   <div
                     className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-800 leading-relaxed [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-3.5 [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-2.5 [&_h3]:mb-1 [&_p]:my-1.5 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-1.5 [&_li]:my-0.5 [&_blockquote]:border-l-4 [&_blockquote]:border-emerald-600 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:my-2 [&_blockquote]:text-slate-600 [&_hr]:my-3 [&_hr]:border-slate-200"
                     dangerouslySetInnerHTML={{ __html: viewingArticle.content }}
                   />
                 ) : (
-                  <>
-                    {/* Section 1: Pengertian & Gejala */}
-                    <div className="space-y-1.5">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                        Pengertian &amp; Gejala Medis
-                      </h4>
-                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm leading-relaxed font-medium">
-                        {viewingArticle.summary || "-"}
-                      </div>
+                  <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400 space-y-2">
+                    <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                      <FileText className="h-6 w-6" />
                     </div>
-
-                    {/* Section 2: Pertolongan Pertama Mandiri */}
-                    <div className="space-y-1.5">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                        <span>Pertolongan Pertama Mandiri</span>
-                      </h4>
-                      <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs sm:text-sm leading-relaxed font-medium">
-                        {viewingArticle.first_aid || "-"}
-                      </div>
-                    </div>
-                  </>
+                    <p className="text-xs font-medium text-slate-500">Konten artikel belum ditambahkan.</p>
+                  </div>
                 )}
               </div>
 

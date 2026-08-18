@@ -4,6 +4,7 @@ import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
+import { Dialog } from "@/Components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { ScreeningResult } from "@/types/screening";
 import {
@@ -54,6 +55,7 @@ export default function ProfilIndex() {
 
   const [activeView, setActiveView] = useState<"menu" | "edit_profil" | "riwayat" | "syarat" | "privasi" | "bantuan">("menu");
   const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
 
   const form = useForm<ProfileFormData>({
     name: user.name || "",
@@ -80,7 +82,7 @@ export default function ProfilIndex() {
     });
   };
 
-  const handleLogout = () => {
+  const handleLogoutConfirm = () => {
     router.post(route("logout"));
   };
 
@@ -199,7 +201,7 @@ export default function ProfilIndex() {
 
               {/* Logout Button Row */}
               <div
-                onClick={handleLogout}
+                onClick={() => setIsLogoutModalOpen(true)}
                 className="p-4 sm:p-5 bg-rose-50/40 hover:bg-rose-100/60 transition-colors cursor-pointer flex items-center justify-between text-rose-600 group"
               >
                 <div className="flex items-center gap-3.5">
@@ -582,6 +584,41 @@ export default function ProfilIndex() {
             </Card>
           </div>
         )}
+
+        {/* MODAL KONFIRMASI LOGOUT */}
+        <Dialog
+          isOpen={isLogoutModalOpen}
+          onClose={() => setIsLogoutModalOpen(false)}
+          title="Konfirmasi Keluar"
+          description="Apakah Anda yakin ingin keluar dari akun BundaSehat?"
+          className="max-w-md"
+        >
+          <div className="pt-2 space-y-4">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Anda harus masuk kembali menggunakan email dan kata sandi Anda untuk mengakses rekam medis dan data skrining.
+            </p>
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <Button
+                type="button"
+                variant="outline"
+                size="default"
+                onClick={() => setIsLogoutModalOpen(false)}
+                className="rounded-full text-xs font-bold px-5"
+              >
+                Batal
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="default"
+                onClick={handleLogoutConfirm}
+                className="rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-6"
+              >
+                Ya, Keluar
+              </Button>
+            </div>
+          </div>
+        </Dialog>
 
       </div>
     </BundaSehatLayout>

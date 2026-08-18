@@ -49,186 +49,6 @@ interface VideoItem {
   description: string;
 }
 
-const ARTICLES: ArticleItem[] = [
-  {
-    id: "anemia",
-    letter: "A",
-    title: "Anemia pada Ibu Hamil (Kekurangan Sel Darah Merah)",
-    category: "Komplikasi Umum",
-    summary: "Kondisi di mana kadar hemoglobin (Hb) ibu hamil < 11 g/dL pada trimester 1 & 3, atau < 10.5 g/dL pada trimester 2.",
-    firstAid: "Konsumsi suplemen Tablet Tambah Darah (TTD) bersama vitamin C (jus jeruk), hindari teh/kopi saat minum obat, dan perbanyak bayam & hati ayam.",
-  },
-  {
-    id: "abortus-imminens",
-    letter: "A",
-    title: "Abortus Imminens (Ancaman Keguguran Usia Dini)",
-    category: "Gawat Darurat T1",
-    summary: "Bercak darah atau perdarahan pervaginam pada usia kehamilan kurang dari 20 minggu dengan ostium uteri masih tertutup.",
-    firstAid: "Tirah baring (bed rest) total, batasi aktivitas fisik berat, hindari hubungan suami istri sementara, dan segera konsultasi SpOG.",
-  },
-  {
-    id: "air-ketuban-merembes",
-    letter: "A",
-    title: "Air Ketuban Merembes / Ketuban Pecah Dini (KPD)",
-    category: "Persalinan & Ketuban",
-    summary: "Keluarnya cairan ketuban berbau khas amis dari jalan lahir sebelum tanda-tanda persalinan atau pembukaan rahim dimulai.",
-    firstAid: "Gunakan pembalut bersih, catat warna & bau cairan, DILARANG mencuci vagina dengan sabun pembersih, dan langsung berangkat ke Puskesmas/RS.",
-  },
-  {
-    id: "diabetes-gestasional",
-    letter: "D",
-    title: "Diabetes Melitus Gestasional (DMG / Gula Darah Tinggi)",
-    category: "Metabolik",
-    summary: "Gangguan toleransi glukosa yang pertama kali terdeteksi saat kehamilan (GDS ≥ 200 mg/dL atau GDP ≥ 126 mg/dL).",
-    firstAid: "Kelola pola makan dengan konsultasi gizi, hindari minuman manis berkarbohidrat tinggi, lakukan jalan pagi ringan, dan cek gula rutin.",
-  },
-  {
-    id: "distosia-bahu",
-    letter: "D",
-    title: "Distosia Bahu (Kemacetan Bahu Janin Saat Persalinan)",
-    category: "Komplikasi Persalinan",
-    summary: "Kondisi darurat di mana kepala janin sudah lahir tetapi bahu tersangkut di belakang simfisis pubis ibu.",
-    firstAid: "Posisi penanganan medis khusus (fleksi panggul maksimal / manuver McRoberts). Penanganan wajib oleh Dokter Spesialis Kebidanan.",
-  },
-  {
-    id: "eklamsia",
-    letter: "E",
-    title: "Eklamsia & Kejang Kebidanan Darurat",
-    category: "Risiko Sangat Tinggi",
-    summary: "Komplikasi berat dari preeklamsia ditandai timbulnya kejang-kejang disertai penurunan kesadaran pada ibu hamil.",
-    firstAid: "Posisikan miring kiri, amankan dari cedera benturan, jangan masukkan benda ke mulut, dan segera panggil ambulans IGD RS rujukan.",
-  },
-  {
-    id: "edema-tungkai",
-    letter: "E",
-    title: "Edema Tungkai & Wajah (Pembengkakan Ekstremitas)",
-    category: "Vaskular",
-    summary: "Penumpukan cairan di jaringan tubuh yang menyebabkan kaki, tangan, atau wajah membengkak terutama saat berdiri lama.",
-    firstAid: "Tinggikan posisi kaki saat berbaring menggunakan bantal, ganti posisi duduk berkala, kurangi konsumsi makanan tinggi natrium.",
-  },
-  {
-    id: "hyperemesis-gravidarum",
-    letter: "H",
-    title: "Hyperemesis Gravidarum (Mual Muntah Berlebihan)",
-    category: "Gastrointestinal",
-    summary: "Mual dan muntah parah pada awal kehamilan yang menyebabkan dehidrasi, penurunan berat badan > 5%, dan ketonuria.",
-    firstAid: "Makan porsi kecil tapi sering (biskuit/roti bakar kering), minum air hangat hangat kuku atau air jahe, hindari bau menyengat.",
-  },
-  {
-    id: "hipertensi",
-    letter: "H",
-    title: "Hipertensi Gestasional (Tekanan Darah Tinggi Kehamilan)",
-    category: "Vaskular",
-    summary: "Tekanan darah sistolik ≥ 140 mmHg atau diastolik ≥ 90 mmHg yang pertama kali muncul setelah usia kehamilan 20 minggu.",
-    firstAid: "Tirah baring (rest) posisi miring ke kiri, batasi asupan garam tinggi, kelola stres dengan relaksasi napas, dan rutin cek tensi mingguan.",
-  },
-  {
-    id: "kehamilan-ektopik",
-    letter: "K",
-    title: "Kehamilan Ektopik Terganggu (KET / Luar Rahim)",
-    category: "Darurat Kebidanan",
-    summary: "Nyeri perut bawah hebat hebat yang timbul akibat pembuahan menempel di luar rahim (biasanya tuba falopi) dan pecah.",
-    firstAid: "Kondisi darurat operasi segera. Langsung rujuk ke RS fasilitas bedah tanpa ditunda.",
-  },
-  {
-    id: "map-tinggi",
-    letter: "M",
-    title: "Mean Arterial Pressure (MAP) ≥ 90 mmHg",
-    category: "Skrining Kardiovaskular",
-    summary: "Nilai rata-rata tekanan arteri rerata ≥ 90 mmHg sebagai indikator dini skrining risiko pre-hipertensi gestasional.",
-    firstAid: "Lakukan pemantauan tensi berkala 2 kali sehari, kurangi stres fisik & pikiran, serta lakukan kontrol ketat ke Bidan / Dokter.",
-  },
-  {
-    id: "oligohidramnion",
-    letter: "O",
-    title: "Oligohidramnion (Volume Air Ketuban Sedikit)",
-    category: "Cairan Ketuban",
-    summary: "Kondisi di mana indeks cairan ketuban (AFI) < 5 cm atau kantung tunggal teruji < 2 cm pada pemeriksaan USG.",
-    firstAid: "Perbanyak konsumsi air putih (min 2.5-3 liter/hari), tirah baring posisi miring kiri, dan evaluasi berkala USG fetomaternal.",
-  },
-  {
-    id: "preeklamsia",
-    letter: "P",
-    title: "Preeklamsia & Tanda Bahaya Epigastrium",
-    category: "Risiko Tinggi (KRST)",
-    summary: "Hipertensi kehamilan disertai proteinuria atau pembengkakan (edema) wajah/tangan serta nyeri ulu hati dan pandangan kabur.",
-    firstAid: "Segera rujukan ke RS / Faskes terdekat. Posisikan ibu miring kiri, longgarkan pakaian, dan hindari kebisingan.",
-  },
-  {
-    id: "perdarahan",
-    letter: "P",
-    title: "Perdarahan Antepartum (Plasenta Previa / Solusio)",
-    category: "Darurat Kebidanan",
-    summary: "Keluarnya darah dari jalan lahir pada usia kehamilan di atas 20 minggu yang bisa menandakan plasenta menutupi jalan lahir.",
-    firstAid: "Tirah baring total, DILARANG melakukan pemeriksaan dalam per vaginam, segera bawa ke IGD Rumah Sakit dengan ambulans.",
-  },
-  {
-    id: "posisi-lintang",
-    letter: "P",
-    title: "Posisi Janin Lintang / Sungsang (Presentasi Non-Kepala)",
-    category: "Letak Janin",
-    summary: "Kondisi letak janin melintang atau bokong di bagian bawah rahim pada usia kehamilan menjelang persalinan (aterm).",
-    firstAid: "Lakukan senam posisi Knee-Chest (sujud ringan) sesuai arahan Bidan/Dokter pada usia kehamilan 32-36 minggu.",
-  },
-  {
-    id: "seksio",
-    letter: "S",
-    title: "Seksio Sesarea (SC) & Indikasi Rujukan",
-    category: "Persalinan",
-    summary: "Operasi melahirkan janin melalui insisi dinding perut dan rahim pada kondisi panggul sempit atau posisi janin lintang.",
-    firstAid: "Persiapkan dokumen BPJS/Askes, mintalah pendampingan suami, dan ikuti instruksi puasa pre-operasi dari dokter spesialis.",
-  },
-  {
-    id: "simfisiolisis",
-    letter: "S",
-    title: "Simfisiolisis (Symphysis Pubis Dysfunction / SPD)",
-    category: "Muskuloskeletal",
-    summary: "Nyeri tajam di area tulang kemaluan dan panggul akibat pelonggaran sendi relaksin menyambut proses melahirkan.",
-    firstAid: "Gunakan sabuk penyangga panggul (maternity belt), hindari melangkah melebar, dan lakukan kompres hangat dingin bergantian.",
-  },
-  {
-    id: "trombofilia",
-    letter: "T",
-    title: "Trombofilia Gestasional (Risiko Penggumpalan Darah)",
-    category: "Hematologi",
-    summary: "Kecenderungan darah lebih mudah membeku selama kehamilan yang berisiko menyumbat aliran nutrisi plasenta janin.",
-    firstAid: "Konsultasi ke Dokter Spesialis Hematologi/SpOG untuk evaluasi terapi pengencer darah (heparin) dan hindari imobilitas berlebihan.",
-  },
-];
-
-const VIDEOS: VideoItem[] = [
-  {
-    id: "v1",
-    title: "Teknik Pijat Oxytocin Ibu Hamil & Pelancar ASI",
-    badge: "TERAPI FISIK",
-    category: "Trimester 3 · Laktasi",
-    instructor: "dr. Sari, Sp.OG",
-    youtubeId: "8F1Yj9tG134",
-    duration: "6:24",
-    description: "Panduan gerakan pijat sepanjang tulang belakang untuk merangsang hormon oksitosin dan mempersiapkan produksi ASI.",
-  },
-  {
-    id: "v2",
-    title: "Senam Hamil Trimester 3 Pelancar Pembukaan Persalinan",
-    badge: "SENAM HAMIL",
-    category: "Trimester 3 · Persalinan",
-    instructor: "Bidan Anisa",
-    youtubeId: "dQw4w9WgXcQ",
-    duration: "9:10",
-    description: "Gerakan squat ringan dan pelenturan panggul yang aman untuk membantu kepala janin turun ke pintu panggul.",
-  },
-  {
-    id: "v3",
-    title: "Terapi Napas Deep Breathing Meredakan Nyeri Kontraksi",
-    badge: "RELAKSASI",
-    category: "Manajemen Nyeri",
-    instructor: "dr. Putri, Sp.OG",
-    youtubeId: "5qap5aO4i9A",
-    duration: "5:47",
-    description: "Teknik olah napas lambat untuk mengalihkan sensasi nyeri mulas saat pembukaan, edema, atau kontraksi awal.",
-  },
-];
-
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 interface KamusPageProps {
@@ -236,15 +56,15 @@ interface KamusPageProps {
   videos?: VideoItem[];
 }
 
-export default function KamusIndex({ articles, videos }: KamusPageProps) {
+export default function KamusIndex({ articles = [], videos = [] }: KamusPageProps) {
   const [activeTab, setActiveTab] = useState<string>("artikel");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedLetter, setSelectedLetter] = useState<string>("semua");
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
-  const articleList = articles && articles.length > 0 ? articles : ARTICLES;
-  const videoList = videos && videos.length > 0 ? videos : VIDEOS;
+  const articleList = articles;
+  const videoList = videos;
 
   const filteredArticles = articleList.filter((art) => {
     const matchesSearch =
@@ -376,9 +196,6 @@ export default function KamusIndex({ articles, videos }: KamusPageProps) {
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                           {selectedArticle.category}
                         </span>
-                        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
-                          {selectedArticle.letter}
-                        </span>
                       </div>
                       <DrawerTitle className="text-base sm:text-lg font-bold text-slate-900 leading-snug mt-2">
                         {selectedArticle.title}
@@ -387,34 +204,18 @@ export default function KamusIndex({ articles, videos }: KamusPageProps) {
 
                     {/* Body Drawer (Official Shadcn p-4 flex-1 overflow-y-auto) */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                      {selectedArticle.content ? (
+                      {selectedArticle.content && selectedArticle.content.trim() !== "" ? (
                         <div
                           className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-800 leading-relaxed [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-3.5 [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-2.5 [&_h3]:mb-1 [&_p]:my-1.5 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-1.5 [&_li]:my-0.5 [&_blockquote]:border-l-4 [&_blockquote]:border-emerald-600 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:my-2 [&_blockquote]:text-slate-600 [&_hr]:my-3 [&_hr]:border-slate-200"
                           dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                         />
                       ) : (
-                        <>
-                          {/* Section 1: Pengertian & Gejala */}
-                          <div className="space-y-1.5">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                              Pengertian &amp; Gejala Medis
-                            </h4>
-                            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm leading-relaxed font-medium">
-                              {selectedArticle.summary}
-                            </div>
+                        <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400 space-y-2">
+                          <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                            <FileText className="h-6 w-6" />
                           </div>
-
-                          {/* Section 2: Pertolongan Pertama Mandiri */}
-                          <div className="space-y-1.5">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-                              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                              <span>Pertolongan Pertama Mandiri</span>
-                            </h4>
-                            <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs sm:text-sm leading-relaxed font-medium">
-                              {selectedArticle.firstAid}
-                            </div>
-                          </div>
-                        </>
+                          <p className="text-xs font-medium text-slate-500">Konten artikel belum ditambahkan.</p>
+                        </div>
                       )}
                     </div>
 
