@@ -6,6 +6,7 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { Dialog } from "@/Components/ui/dialog";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -152,11 +153,14 @@ export default function AdminBidanIndex() {
         cell: ({ row }) => {
           const bidan = row.original;
           return (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0 pr-2">
               <div className="h-8 w-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 border border-slate-200 shadow-soft-xs">
                 <User className="h-4 w-4 text-slate-500" />
               </div>
-              <div className="font-semibold text-slate-900 text-xs sm:text-sm">
+              <div
+                className="font-semibold text-slate-900 text-xs sm:text-sm truncate min-w-0 flex-1"
+                title={bidan.name}
+              >
                 {bidan.name}
               </div>
             </div>
@@ -201,52 +205,46 @@ export default function AdminBidanIndex() {
       },
       {
         accessorKey: "is_active",
-        size: 90,
         header: ({ column }) => (
-          <div className="w-[84px]">
-            <button
-              type="button"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
-            >
-              <span>Status</span>
-              <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Status</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
         ),
         cell: ({ row }) => {
           const isActive = row.original.is_active !== false;
           return (
-            <div className="w-[84px]">
+            <span
+              className={`inline-flex items-center justify-center gap-1.5 w-[76px] py-0.5 rounded-full text-[11px] font-semibold ${
+                isActive
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200/70"
+                  : "bg-slate-100 text-slate-600 border border-slate-200"
+              }`}
+            >
               <span
-                className={`inline-flex items-center justify-center gap-1.5 w-[76px] py-0.5 rounded-full text-[11px] font-semibold ${
-                  isActive
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200/70"
-                    : "bg-slate-100 text-slate-600 border border-slate-200"
+                className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                  isActive ? "bg-emerald-600" : "bg-slate-400"
                 }`}
-              >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full shrink-0 ${
-                    isActive ? "bg-emerald-600" : "bg-slate-400"
-                  }`}
-                />
-                <span>{isActive ? "Aktif" : "Nonaktif"}</span>
-              </span>
-            </div>
+              />
+              <span>{isActive ? "Aktif" : "Nonaktif"}</span>
+            </span>
           );
         },
       },
       {
         id: "actions",
-        size: 60,
         header: () => <span className="sr-only">Aksi</span>,
         cell: ({ row }) => {
           const bidan = row.original;
           const isActive = bidan.is_active !== false;
           return (
-            <div className="text-right w-12 ml-auto">
+            <div className="flex justify-end">
               <DropdownMenu>
-                <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors ml-auto focus:outline-none">
+                <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none">
                   <span className="sr-only">Buka menu</span>
                   <MoreHorizontal className="h-4 w-4" />
                 </DropdownMenuTrigger>
@@ -305,6 +303,23 @@ export default function AdminBidanIndex() {
     },
   });
 
+  const getColumnWidthClass = (id: string) => {
+    switch (id) {
+      case "name":
+        return "w-[32%]";
+      case "no_str":
+        return "w-[22%]";
+      case "no_telepon":
+        return "w-[22%]";
+      case "is_active":
+        return "w-[16%]";
+      case "actions":
+        return "w-[8%] text-right";
+      default:
+        return "";
+    }
+  };
+
   return (
     <BundaSehatLayout activeNav="admin-bidan">
       <Head title="Manajemen Akun Bidan - BundaSehat" />
@@ -355,14 +370,17 @@ export default function AdminBidanIndex() {
           {/* Table Container (Clean Rounded-xl Border) */}
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
             <div className="relative w-full overflow-x-auto">
-              <Table className="w-full caption-bottom text-sm">
+              <Table className="table-fixed w-full caption-bottom text-sm">
                 <TableHeader className="bg-white [&_tr]:border-b">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id} className="bg-white border-b border-slate-200 hover:bg-white">
                       {headerGroup.headers.map((header) => (
                         <TableHead
                           key={header.id}
-                          className="h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap bg-white"
+                          className={cn(
+                            "h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap bg-white",
+                            getColumnWidthClass(header.column.id)
+                          )}
                         >
                           {header.isPlaceholder
                             ? null
@@ -385,7 +403,10 @@ export default function AdminBidanIndex() {
                         {row.getVisibleCells().map((cell) => (
                           <TableCell
                             key={cell.id}
-                            className="p-4 align-middle whitespace-nowrap text-slate-700"
+                            className={cn(
+                              "p-4 align-middle whitespace-nowrap text-slate-700",
+                              getColumnWidthClass(cell.column.id)
+                            )}
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
@@ -455,16 +476,16 @@ export default function AdminBidanIndex() {
         {viewingBidan && (
           <div className="space-y-4 pt-2">
             
-            {/* Header Profil */}
-            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-              <div className="h-12 w-12 rounded-full bg-slate-200/80 text-slate-600 flex items-center justify-center shrink-0 border border-slate-300/80">
-                <User className="h-6 w-6 text-slate-600" />
+            {/* Header Profil Rata Tengah */}
+            <div className="flex flex-col items-center text-center py-2 space-y-2">
+              <div className="h-16 w-16 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-soft-xs">
+                <User className="h-8 w-8 text-slate-600" />
               </div>
-              <div className="min-w-0">
-                <h3 className="text-sm font-bold text-slate-900 truncate">
+              <div className="space-y-0.5 max-w-sm">
+                <h3 className="text-base font-bold text-slate-900 break-words">
                   {viewingBidan.name}
                 </h3>
-                <p className="text-xs text-slate-500 truncate mt-0.5">
+                <p className="text-xs text-slate-500 break-words">
                   {viewingBidan.email}
                 </p>
               </div>

@@ -1,9 +1,13 @@
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
 interface DropdownMenuContextType {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  triggerRect: DOMRect | null;
+  setTriggerRect: (rect: DOMRect | null) => void;
+  triggerRef: React.RefObject<HTMLButtonElement>;
 }
 
 const DropdownMenuContext = React.createContext<DropdownMenuContextType | undefined>(undefined);
@@ -22,37 +26,46 @@ export interface DropdownMenuProps {
 
 export function DropdownMenu({ children }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [triggerRect, setTriggerRect] = React.useState<DOMRect | null>(null);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setIsOpen(false);
       }
     }
 
+    function handleScrollOrResize() {
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    }
+
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("scroll", handleScrollOrResize, true);
+      window.addEventListener("resize", handleScrollOrResize);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", handleScrollOrResize, true);
+      window.removeEventListener("resize", handleScrollOrResize);
     };
   }, [isOpen]);
 
   return (
-    <DropdownMenuContext.Provider value={{ isOpen, setIsOpen }}>
-      <div ref={containerRef} className="relative inline-block text-left">
-        {children}
-      </div>
+    <DropdownMenuContext.Provider
+      value={{
+        isOpen,
+        setIsOpen,
+        triggerRect,
+        setTriggerRect,
+        triggerRef,
+      }}
+    >
+      <div className="relative inline-block text-left">{children}</div>
     </DropdownMenuContext.Provider>
   );
 }
@@ -68,9 +81,12 @@ export function DropdownMenuTrigger({
   onClick,
   ...props
 }: DropdownMenuTriggerProps) {
-  const { isOpen, setIsOpen } = useDropdownMenu();
+  const { isOpen, setIsOpen, setTriggerRect, triggerRef } = useDropdownMenu();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (triggerRef.current) {
+      setTriggerRect(triggerRef.current.getBoundingClientRect());
+    }
     setIsOpen((prev) => !prev);
     if (onClick) {
       onClick(e);
@@ -79,9 +95,10 @@ export function DropdownMenuTrigger({
 
   return (
     <button
+      ref={triggerRef}
       type="button"
       onClick={handleClick}
-      aria-haspopup="true"
+      aria-haspopup="menu"
       aria-expanded={isOpen}
       className={cn("outline-none select-none", className)}
       {...props}
@@ -102,29 +119,74 @@ export function DropdownMenuContent({
   children,
   ...props
 }: DropdownMenuContentProps) {
-  const { isOpen } = useDropdownMenu();
+  const { isOpen, setIsOpen, triggerRect, triggerRef } = useDropdownMenu();
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = React.useState(false);
 
-  if (!isOpen) return null;
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const alignmentClasses =
-    align === "end"
-      ? "right-0"
-      : align === "center"
-      ? "left-1/2 -translate-x-1/2"
-      : "left-0";
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
 
-  return (
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, setIsOpen, triggerRef]);
+
+  if (!isOpen || !mounted || !triggerRect) return null;
+
+  // Cek apakah posisi dekat bagian bawah layar untuk otomatis buka ke atas
+  const isNearBottom = triggerRect.bottom + 180 > window.innerHeight;
+
+  const style: React.CSSProperties = {
+    position: "fixed",
+    zIndex: 9999,
+  };
+
+  if (isNearBottom) {
+    style.bottom = `${window.innerHeight - triggerRect.top + 6}px`;
+  } else {
+    style.top = `${triggerRect.bottom + 6}px`;
+  }
+
+  if (align === "end") {
+    style.right = `${Math.max(12, window.innerWidth - triggerRect.right)}px`;
+  } else if (align === "center") {
+    style.left = `${triggerRect.left + triggerRect.width / 2}px`;
+    style.transform = "translateX(-50%)";
+  } else {
+    style.left = `${triggerRect.left}px`;
+  }
+
+  return createPortal(
     <div
+      ref={menuRef}
       role="menu"
+      style={style}
       className={cn(
-        "absolute top-full mt-2 z-50 min-w-[200px] rounded-2xl bg-white p-1.5 text-slate-800 shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-slate-100/90 outline-none animate-fadeIn",
-        alignmentClasses,
+        "min-w-[160px] rounded-2xl bg-white p-1.5 text-slate-800 shadow-[0_10px_35px_rgba(0,0,0,0.12)] border border-slate-200 outline-none animate-fadeIn",
         className
       )}
       {...props}
     >
       {children}
-    </div>
+    </div>,
+    document.body
   );
 }
 
