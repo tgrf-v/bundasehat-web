@@ -23,6 +23,7 @@ import {
   Pencil,
   Power,
   Check,
+  User,
 } from "lucide-react";
 import {
   ColumnDef,
@@ -149,8 +150,8 @@ export default function AdminBidanIndex() {
           const bidan = row.original;
           return (
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0 border border-emerald-100/70 shadow-soft-xs">
-                {bidan.name.charAt(0).toUpperCase()}
+              <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100/80 shadow-soft-xs">
+                <User className="h-4 w-4" />
               </div>
               <div className="font-semibold text-slate-900 text-xs sm:text-sm">
                 {bidan.name}
@@ -353,13 +354,13 @@ export default function AdminBidanIndex() {
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
             <div className="relative w-full overflow-x-auto">
               <Table className="w-full caption-bottom text-sm">
-                <TableHeader className="[&_tr]:border-b">
+                <TableHeader className="bg-white [&_tr]:border-b">
                   {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id} className="border-b border-slate-200 hover:bg-transparent">
+                    <TableRow key={headerGroup.id} className="bg-white border-b border-slate-200 hover:bg-white">
                       {headerGroup.headers.map((header) => (
                         <TableHead
                           key={header.id}
-                          className="h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap"
+                          className="h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap bg-white"
                         >
                           {header.isPlaceholder
                             ? null
