@@ -7,6 +7,14 @@ import { Input } from "@/Components/ui/input";
 import { Tabs } from "@/Components/ui/tabs";
 import { Dialog } from "@/Components/ui/dialog";
 import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+} from "@/Components/ui/drawer";
+import {
   BookOpen,
   Video,
   Heart,
@@ -347,40 +355,76 @@ export default function KamusIndex({ articles, videos }: KamusPageProps) {
               )}
             </div>
 
-            {/* Article Detail Modal Dialog */}
-            <Dialog
-              isOpen={Boolean(selectedArticle)}
-              onClose={() => setSelectedArticle(null)}
-              title={selectedArticle?.title}
-              className="max-w-lg"
+            {/* Article Detail Non-Modal Side Drawer (Slide from Right) */}
+            <Drawer
+              open={Boolean(selectedArticle)}
+              onOpenChange={(open) => {
+                if (!open) setSelectedArticle(null);
+              }}
+              modal={false}
+              disablePointerDismissal
+              swipeDirection="right"
             >
-              {selectedArticle && (
-                <div className="space-y-4 pt-1">
-                  <div className="space-y-3 text-xs text-slate-700">
-                    <div>
-                      <span className="font-bold text-slate-900 block mb-1">Pengertian &amp; Gejala:</span>
-                      <p className="leading-relaxed text-slate-600">{selectedArticle.summary}</p>
+              <DrawerContent className="p-6 sm:p-7">
+                {selectedArticle && (
+                  <div className="flex flex-col h-full space-y-6">
+                    
+                    {/* Header Drawer */}
+                    <DrawerHeader className="p-0 border-b border-slate-100 pb-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          {selectedArticle.category}
+                        </span>
+                        <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
+                          {selectedArticle.letter}
+                        </span>
+                      </div>
+                      <DrawerTitle className="text-lg sm:text-xl font-bold text-slate-900 leading-snug mt-3">
+                        {selectedArticle.title}
+                      </DrawerTitle>
+                    </DrawerHeader>
+
+                    {/* Body Drawer */}
+                    <div className="flex-1 space-y-5 overflow-y-auto pr-1">
+                      {/* Section 1: Pengertian & Gejala */}
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                          Pengertian &amp; Gejala Medis
+                        </h4>
+                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm leading-relaxed font-medium">
+                          {selectedArticle.summary}
+                        </div>
+                      </div>
+
+                      {/* Section 2: Pertolongan Pertama Mandiri */}
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                          <span>Pertolongan Pertama Mandiri</span>
+                        </h4>
+                        <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs sm:text-sm leading-relaxed font-medium">
+                          {selectedArticle.firstAid}
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-pink-50 border border-pink-100 space-y-1 text-rose-950">
-                      <span className="font-bold text-rose-900 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-4 w-4 text-rose-600 shrink-0" />
-                        <span>Pertolongan Pertama Mandiri:</span>
-                      </span>
-                      <p className="leading-relaxed text-slate-800 font-medium pl-5">
-                        {selectedArticle.firstAid}
-                      </p>
-                    </div>
-                  </div>
+                    {/* Footer Drawer */}
+                    <DrawerFooter className="p-0 pt-4 border-t border-slate-100 mt-auto flex-row justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="default"
+                        onClick={() => setSelectedArticle(null)}
+                        className="rounded-full font-bold text-xs px-6"
+                      >
+                        Tutup
+                      </Button>
+                    </DrawerFooter>
 
-                  <div className="pt-2 flex justify-end">
-                    <Button variant="default" size="sm" onClick={() => setSelectedArticle(null)} className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs">
-                      Mengerti &amp; Tutup
-                    </Button>
                   </div>
-                </div>
-              )}
-            </Dialog>
+                )}
+              </DrawerContent>
+            </Drawer>
 
           </div>
         )}
