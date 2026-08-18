@@ -6,6 +6,15 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Tabs } from "@/Components/ui/tabs";
 import { Dialog } from "@/Components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerClose,
+} from "@/Components/ui/drawer";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import {
   DropdownMenu,
@@ -832,162 +841,186 @@ export default function AdminKamusIndex() {
 
       </div>
 
-      {/* MODAL DIALOG: LIHAT DETAIL ARTIKEL */}
-      <Dialog
-        isOpen={Boolean(viewingArticle)}
-        onClose={() => setViewingArticle(null)}
-        title="Detail Istilah Medis"
-        description="Informasi klinis dan pertolongan pertama mandiri"
-        className="max-w-lg"
+      {/* DRAWER 1: LIVE PREVIEW DETAIL ARTIKEL (IDENTIK 1:1 DENGAN HALAMAN /kamus) */}
+      <Drawer
+        open={Boolean(viewingArticle)}
+        onOpenChange={(open) => {
+          if (!open) setViewingArticle(null);
+        }}
+        modal={false}
+        disablePointerDismissal
+        swipeDirection="right"
       >
-        {viewingArticle && (
-          <div className="space-y-4 pt-2">
-            
-            {/* Header Judul Rata Tengah */}
-            <div className="flex flex-col items-center text-center py-2 space-y-2">
-              <div className="h-14 w-14 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-soft-xs">
-                <BookOpen className="h-7 w-7 text-slate-600" />
-              </div>
-              <div className="space-y-1 max-w-md">
-                <h3 className="text-base font-bold text-slate-900 break-words">
-                  {viewingArticle.title}
-                </h3>
-                <div>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+        <DrawerContent>
+          {viewingArticle && (
+            <div className="flex flex-col h-full">
+              
+              {/* Header Drawer (Official Shadcn p-4 pb-0) */}
+              <DrawerHeader className="pb-3 border-b border-slate-100">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                     {viewingArticle.category}
                   </span>
+                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
+                    {viewingArticle.letter || viewingArticle.title.trim().charAt(0).toUpperCase()}
+                  </span>
                 </div>
+                <DrawerTitle className="text-base sm:text-lg font-bold text-slate-900 leading-snug mt-2">
+                  {viewingArticle.title}
+                </DrawerTitle>
+              </DrawerHeader>
+
+              {/* Body Drawer (Official Shadcn p-4 flex-1 overflow-y-auto) */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {viewingArticle.content ? (
+                  <div
+                    className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-800 leading-relaxed [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-3.5 [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-2.5 [&_h3]:mb-1 [&_p]:my-1.5 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-1.5 [&_li]:my-0.5 [&_blockquote]:border-l-4 [&_blockquote]:border-emerald-600 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:my-2 [&_blockquote]:text-slate-600 [&_hr]:my-3 [&_hr]:border-slate-200"
+                    dangerouslySetInnerHTML={{ __html: viewingArticle.content }}
+                  />
+                ) : (
+                  <>
+                    {/* Section 1: Pengertian & Gejala */}
+                    <div className="space-y-1.5">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Pengertian &amp; Gejala Medis
+                      </h4>
+                      <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm leading-relaxed font-medium">
+                        {viewingArticle.summary || "-"}
+                      </div>
+                    </div>
+
+                    {/* Section 2: Pertolongan Pertama Mandiri */}
+                    <div className="space-y-1.5">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                        <span>Pertolongan Pertama Mandiri</span>
+                      </h4>
+                      <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs sm:text-sm leading-relaxed font-medium">
+                        {viewingArticle.first_aid || "-"}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Footer Drawer (Official Shadcn p-4 pt-0 mt-auto) */}
+              <DrawerFooter className="pt-2 border-t border-slate-100 flex-row justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="default"
+                  onClick={() => setViewingArticle(null)}
+                  className="rounded-full font-bold text-xs px-5"
+                >
+                  Tutup
+                </Button>
+              </DrawerFooter>
+
+            </div>
+          )}
+        </DrawerContent>
+      </Drawer>
+
+      {/* DRAWER 2: FORM TAMBAH / EDIT ARTIKEL (SPACIOUS RICH TEXT WRITING SURFACE) */}
+      <Drawer
+        open={isArticleModalOpen}
+        onOpenChange={setIsArticleModalOpen}
+        swipeDirection="right"
+      >
+        <DrawerContent className="data-[swipe-axis=x]:w-[94vw] data-[swipe-axis=x]:sm:w-[580px] data-[swipe-axis=x]:md:w-[680px] data-[swipe-axis=x]:max-w-[720px]">
+          <form onSubmit={handleArticleSubmit} className="flex flex-col h-full">
+            {/* Header Drawer (Official Shadcn p-4 pb-0) */}
+            <DrawerHeader className="pb-3 border-b border-slate-100">
+              <DrawerTitle className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                {editingArticle ? "Edit Artikel Istilah Medis" : "Tambah Artikel Istilah Medis"}
+              </DrawerTitle>
+              <DrawerDescription className="text-xs text-slate-500 mt-0.5">
+                Lengkapi metadata dan susun konten artikel komplikasi klinis
+              </DrawerDescription>
+            </DrawerHeader>
+
+            {/* Body Form (Official Shadcn p-4 flex-1 overflow-y-auto) */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {/* Baris Metadata: Judul Istilah & Kategori Medis */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="article_title" className="text-xs font-bold text-slate-700">
+                    Judul Istilah / Komplikasi <span className="text-rose-500">*</span>
+                  </Label>
+                  <Input
+                    id="article_title"
+                    type="text"
+                    placeholder="Contoh: Abortus Imminens"
+                    value={articleForm.data.title}
+                    onChange={(e) => articleForm.setData("title", e.target.value)}
+                    className="mt-1"
+                    required
+                  />
+                  {articleForm.errors.title && (
+                    <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.title}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
+                    Kategori Medis <span className="text-rose-500">*</span>
+                  </Label>
+                  <Input
+                    id="article_category"
+                    type="text"
+                    placeholder="Contoh: Komplikasi Umum / Gawat Darurat T1"
+                    value={articleForm.data.category}
+                    onChange={(e) => articleForm.setData("category", e.target.value)}
+                    className="mt-1"
+                    required
+                  />
+                  {articleForm.errors.category && (
+                    <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Konten: Single Rich Text Editor Besar */}
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-slate-700">
+                  Isi Artikel &amp; Panduan Klinis <span className="text-rose-500">*</span>
+                </Label>
+                <RichTextEditor
+                  content={articleForm.data.content}
+                  onChange={(html) => articleForm.setData("content", html)}
+                  minHeight="min-h-[280px]"
+                  placeholder="Tuliskan pengertian medis, gejala klinis yang perlu diperhatikan, serta langkah pertolongan pertama mandiri..."
+                />
+                {articleForm.errors.content && (
+                  <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.content}</p>
+                )}
               </div>
             </div>
 
-            {/* Konten Detail */}
-            {viewingArticle.content ? (
-              <div className="p-4 rounded-2xl bg-white border border-slate-200/90 text-xs text-slate-800 leading-relaxed overflow-y-auto max-h-[380px]">
-                <div
-                  className="prose prose-slate max-w-none text-xs leading-relaxed [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-3 [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-2.5 [&_h3]:mb-1 [&_p]:my-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:list-decimal [&_ol]:pl-4 [&_blockquote]:border-l-4 [&_blockquote]:border-emerald-600 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-slate-600"
-                  dangerouslySetInnerHTML={{ __html: viewingArticle.content }}
-                />
-              </div>
-            ) : (
-              <div className="space-y-3 text-xs">
-                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-1.5">
-                  <span className="text-[11px] font-semibold text-slate-400">Pengertian &amp; Gejala Medis</span>
-                  <p className="text-slate-800 leading-relaxed whitespace-pre-line font-medium">
-                    {viewingArticle.summary || "-"}
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1.5">
-                  <span className="text-[11px] font-semibold text-emerald-800">Pertolongan Pertama Mandiri</span>
-                  <p className="text-emerald-950 leading-relaxed whitespace-pre-line font-medium">
-                    {viewingArticle.first_aid || "-"}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Footer Dialog */}
-            <div className="flex items-center justify-end pt-3 border-t border-slate-100">
+            {/* Footer Drawer (Official Shadcn p-4 pt-0 mt-auto) */}
+            <DrawerFooter className="pt-3 border-t border-slate-100 flex-row items-center justify-end gap-2">
               <Button
                 type="button"
                 variant="outline"
                 size="default"
-                onClick={() => setViewingArticle(null)}
-                className="rounded-full font-bold text-xs px-5"
+                onClick={() => setIsArticleModalOpen(false)}
+                className="rounded-full text-xs font-bold px-5"
               >
-                Tutup
+                Batal
               </Button>
-            </div>
-
-          </div>
-        )}
-      </Dialog>
-
-      {/* MODAL 1: FORM TAMBAH / EDIT ARTIKEL (RICH TEXT EDITOR) */}
-      <Dialog
-        isOpen={isArticleModalOpen}
-        onClose={() => setIsArticleModalOpen(false)}
-        title={editingArticle ? "Edit Artikel Istilah Medis" : "Tambah Artikel Istilah Medis"}
-        description="Isi metadata istilah serta tuliskan penjelasan klinis dan panduan edukasi"
-        className="max-w-2xl sm:max-w-3xl"
-      >
-        <form onSubmit={handleArticleSubmit} className="space-y-4 pt-1">
-          {/* Baris Metadata: Judul Istilah & Kategori Medis */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <div className="space-y-1.5">
-              <Label htmlFor="article_title" className="text-xs font-bold text-slate-700">
-                Judul Istilah / Komplikasi <span className="text-rose-500">*</span>
-              </Label>
-              <Input
-                id="article_title"
-                type="text"
-                placeholder="Contoh: Abortus Imminens"
-                value={articleForm.data.title}
-                onChange={(e) => articleForm.setData("title", e.target.value)}
-                className="mt-1"
-                required
-              />
-              {articleForm.errors.title && (
-                <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.title}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
-                Kategori Medis <span className="text-rose-500">*</span>
-              </Label>
-              <Input
-                id="article_category"
-                type="text"
-                placeholder="Contoh: Komplikasi Umum / Gawat Darurat T1"
-                value={articleForm.data.category}
-                onChange={(e) => articleForm.setData("category", e.target.value)}
-                className="mt-1"
-                required
-              />
-              {articleForm.errors.category && (
-                <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Konten: Single Rich Text Editor Besar */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-bold text-slate-700">
-              Isi Artikel &amp; Panduan Klinis <span className="text-rose-500">*</span>
-            </Label>
-            <RichTextEditor
-              content={articleForm.data.content}
-              onChange={(html) => articleForm.setData("content", html)}
-              placeholder="Tuliskan pengertian medis, gejala yang perlu diperhatikan, serta langkah pertolongan pertama..."
-            />
-            {articleForm.errors.content && (
-              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.content}</p>
-            )}
-          </div>
-
-          <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
-            <Button
-              type="button"
-              variant="outline"
-              size="default"
-              onClick={() => setIsArticleModalOpen(false)}
-              className="rounded-full text-xs font-bold px-4"
-            >
-              Batal
-            </Button>
-            <Button
-              type="submit"
-              variant="default"
-              size="default"
-              isLoading={articleForm.processing}
-              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5"
-            >
-              {editingArticle ? "Simpan Perubahan" : "Tambahkan Artikel"}
-            </Button>
-          </div>
-        </form>
-      </Dialog>
+              <Button
+                type="submit"
+                variant="default"
+                size="default"
+                isLoading={articleForm.processing}
+                className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-6"
+              >
+                {editingArticle ? "Simpan Perubahan" : "Tambahkan Artikel"}
+              </Button>
+            </DrawerFooter>
+          </form>
+        </DrawerContent>
+      </Drawer>
 
       {/* MODAL 2: FORM TAMBAH / EDIT VIDEO TERAPI */}
       <Dialog

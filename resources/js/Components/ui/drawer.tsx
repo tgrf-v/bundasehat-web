@@ -149,7 +149,7 @@ function DrawerContent({
           {showSwipeHandle && <DrawerSwipeHandle />}
           <DrawerPrimitive.Content
             data-slot="drawer-content"
-            className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain rounded-[inherit] transition-opacity duration-300 ease-[cubic-bezier(0.45,1.005,0,1.005)] select-text p-6"
+            className="flex min-h-0 flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit] transition-opacity duration-300 ease-[cubic-bezier(0.45,1.005,0,1.005)] select-text"
           >
             {children}
           </DrawerPrimitive.Content>
@@ -164,7 +164,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="drawer-header"
       className={cn(
-        "flex shrink-0 flex-col gap-1 pb-4 border-b border-slate-100",
+        "flex shrink-0 flex-col gap-1 p-4 pb-0 md:text-left",
         className
       )}
       {...props}
@@ -176,7 +176,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn("mt-auto flex shrink-0 flex-col gap-2 pt-4 border-t border-slate-100", className)}
+      className={cn("mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0", className)}
       {...props}
     />
   )
