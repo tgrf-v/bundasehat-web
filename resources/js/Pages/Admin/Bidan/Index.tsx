@@ -158,7 +158,7 @@ export default function AdminBidanIndex() {
                 <User className="h-4 w-4 text-slate-500" />
               </div>
               <div
-                className="font-semibold text-slate-900 text-xs sm:text-sm truncate min-w-0 flex-1"
+                className="font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] min-w-0 flex-1"
                 title={bidan.name}
               >
                 {bidan.name}
@@ -322,7 +322,7 @@ export default function AdminBidanIndex() {
 
   return (
     <BundaSehatLayout activeNav="admin-bidan">
-      <Head title="Manajemen Akun Bidan - BundaSehat" />
+      <Head title="Kelola Akun Bidan - BundaSehat" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
         
@@ -338,19 +338,19 @@ export default function AdminBidanIndex() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Manajemen Akun Bidan Wilayah
+              Kelola Akun Bidan
             </h1>
           </div>
 
           <Button
             type="button"
             variant="default"
-            size="lg"
+            size="default"
             onClick={() => setIsCreateModalOpen(true)}
-            className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-2 shadow-soft-sm shrink-0"
+            className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-1.5 shadow-soft-sm shrink-0"
           >
-            <UserPlus className="h-4 w-4" />
-            <span>Tambah Bidan Baru</span>
+            <Plus className="h-4 w-4" />
+            <span>Tambah</span>
           </Button>
         </div>
 
