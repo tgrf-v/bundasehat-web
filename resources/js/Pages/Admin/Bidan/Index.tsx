@@ -24,6 +24,7 @@ import {
   Power,
   Check,
   User,
+  ArrowUpDown,
 } from "lucide-react";
 import {
   ColumnDef,
@@ -141,17 +142,22 @@ export default function AdminBidanIndex() {
     () => [
       {
         accessorKey: "name",
-        header: () => (
-          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
-            Nama Bidan
-          </span>
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Nama Bidan</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
         ),
         cell: ({ row }) => {
           const bidan = row.original;
           return (
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100/80 shadow-soft-xs">
-                <User className="h-4 w-4" />
+              <div className="h-8 w-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 border border-slate-200 shadow-soft-xs">
+                <User className="h-4 w-4 text-slate-500" />
               </div>
               <div className="font-semibold text-slate-900 text-xs sm:text-sm">
                 {bidan.name}
@@ -162,10 +168,15 @@ export default function AdminBidanIndex() {
       },
       {
         accessorKey: "email",
-        header: () => (
-          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
-            Email
-          </span>
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Email</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
         ),
         cell: ({ row }) => (
           <span className="text-xs sm:text-sm text-slate-600 font-normal">
@@ -175,10 +186,15 @@ export default function AdminBidanIndex() {
       },
       {
         accessorKey: "no_str",
-        header: () => (
-          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
-            No. STR
-          </span>
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>No. STR</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
         ),
         cell: ({ row }) => (
           <span className="font-mono text-xs text-slate-700 font-medium">
@@ -188,10 +204,15 @@ export default function AdminBidanIndex() {
       },
       {
         accessorKey: "no_telepon",
-        header: () => (
-          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
-            No. WhatsApp
-          </span>
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>No. WhatsApp</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
         ),
         cell: ({ row }) => (
           <span className="text-xs text-slate-700 font-medium">
@@ -201,10 +222,15 @@ export default function AdminBidanIndex() {
       },
       {
         accessorKey: "is_active",
-        header: () => (
-          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
-            Status
-          </span>
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Status</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
         ),
         cell: ({ row }) => {
           const isActive = row.original.is_active !== false;

@@ -222,11 +222,11 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             <div className="hidden md:flex items-center justify-end shrink-0">
               <Link
                 href="/profil"
-                className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-emerald-100 transition-all shadow-soft-xs flex items-center justify-center"
+                className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-slate-200 transition-all shadow-soft-xs flex items-center justify-center"
                 title={`Profil Saya (${user?.name || "User"})`}
               >
-                <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-emerald-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">
-                  {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-4 w-4" />}
+                <div className="h-8 w-8 rounded-full overflow-hidden border-2 border-white shadow-soft-xs group-hover:scale-105 transition-transform bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                  <User className="h-4 w-4 text-slate-600" />
                 </div>
               </Link>
             </div>
