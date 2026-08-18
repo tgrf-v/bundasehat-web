@@ -122,23 +122,26 @@ function DrawerContent({
           data-snap-points={hasSnapPoints ? "" : undefined}
           className={cn(
             // Base.
-            "group/drawer-popup pointer-events-auto fixed z-50 flex flex-col bg-white text-slate-900 border border-slate-200/80 shadow-2xl transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none",
+            "group/drawer-popup pointer-events-auto fixed z-50 flex flex-col bg-white text-slate-900 border border-slate-200/80 shadow-2xl transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform outline-none select-none",
             // Sizing.
             "[--drawer-content-height:100dvh] data-[swipe-axis=x]:w-[88vw] data-[swipe-axis=x]:sm:w-[380px] data-[swipe-axis=x]:md:w-[400px] data-[swipe-axis=x]:max-w-[400px] data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-4rem)]",
-            // Transitions.
-            "data-ending-style:transform-(--closed-transform) data-ending-style:opacity-[0.9999] data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-nested-drawer-swiping:duration-0 data-starting-style:transform-(--closed-transform) data-swiping:duration-0",
+            // Transitions & Slide states.
+            "data-starting-style:data-[swipe-direction=right]:translate-x-full data-ending-style:data-[swipe-direction=right]:translate-x-full",
+            "data-starting-style:data-[swipe-direction=left]:-translate-x-full data-ending-style:data-[swipe-direction=left]:-translate-x-full",
+            "data-starting-style:data-[swipe-direction=down]:translate-y-full data-ending-style:data-[swipe-direction=down]:translate-y-full",
+            "data-starting-style:data-[swipe-direction=up]:-translate-y-full data-ending-style:data-[swipe-direction=up]:-translate-y-full",
             // Axis: y.
             "data-[swipe-axis=y]:inset-x-0 rounded-t-3xl",
             // Axis: x.
             "data-[swipe-axis=x]:inset-y-0 data-[swipe-axis=x]:flex-row",
             // Direction: down.
-            "data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:origin-bottom data-[swipe-direction=down]:[--closed-transform:translate3d(0,100%,0)]",
+            "data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:origin-bottom",
             // Direction: up.
-            "data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:origin-top data-[swipe-direction=up]:[--closed-transform:translate3d(0,-100%,0)]",
+            "data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:origin-top",
             // Direction: left.
-            "data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:origin-left data-[swipe-direction=left]:[--closed-transform:translate3d(-100%,0,0)] rounded-r-3xl",
+            "data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:origin-left rounded-r-3xl",
             // Direction: right.
-            "data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:origin-right data-[swipe-direction=right]:[--closed-transform:translate3d(100%,0,0)] rounded-l-3xl",
+            "data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:origin-right rounded-l-3xl",
             className
           )}
           {...props}
