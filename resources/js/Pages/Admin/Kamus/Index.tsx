@@ -1,28 +1,41 @@
-import React, { useState } from "react";
-import { useForm, router } from "@inertiajs/react";
+import React, { useState, useMemo } from "react";
+import { Head, useForm, router, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import { Tabs } from "@/Components/ui/tabs";
 import { Dialog } from "@/Components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import {
-  BookOpen,
-  Video,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/Components/ui/dropdown-menu";
+import {
   Plus,
-  Search,
-  Edit,
-  Trash2,
   CheckCircle2,
-  AlertCircle,
+  AlertTriangle,
   FileText,
+  Video,
   PlayCircle,
   Clock,
-  UserCheck,
-  Tag,
-  Eye,
+  MoreHorizontal,
+  ArrowUpDown,
 } from "lucide-react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
+import { PageProps } from "@/types";
 
 interface AdminArticle {
   id: number;
@@ -56,15 +69,11 @@ interface StatsData {
   total_categories: number;
 }
 
-interface Props {
+type AdminKamusPageProps = PageProps<{
   articles: AdminArticle[];
   videos: AdminVideo[];
   stats: StatsData;
-  flash?: {
-    success?: string;
-    error?: string;
-  };
-}
+}>;
 
 interface ArticleFormData {
   type: "article";
@@ -88,9 +97,13 @@ interface VideoFormData {
   is_published: boolean;
 }
 
-export default function AdminKamusIndex({ articles, videos, stats, flash }: Props) {
+export default function AdminKamusIndex() {
+  const { articles = [], videos = [], flash } = usePage<AdminKamusPageProps>().props;
+
   const [activeTab, setActiveTab] = useState<string>("articles");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [articleSorting, setArticleSorting] = useState<SortingState>([]);
+  const [videoSorting, setVideoSorting] = useState<SortingState>([]);
 
   // Modals state
   const [isArticleModalOpen, setIsArticleModalOpen] = useState<boolean>(false);
@@ -154,6 +167,7 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
     e.preventDefault();
     if (editingArticle) {
       articleForm.put(`/admin/kamus/${editingArticle.id}`, {
+        preserveScroll: true,
         onSuccess: () => {
           setIsArticleModalOpen(false);
           setEditingArticle(null);
@@ -161,6 +175,7 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
       });
     } else {
       articleForm.post("/admin/kamus", {
+        preserveScroll: true,
         onSuccess: () => {
           setIsArticleModalOpen(false);
           articleForm.reset();
@@ -200,6 +215,7 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
     e.preventDefault();
     if (editingVideo) {
       videoForm.put(`/admin/kamus/${editingVideo.id}`, {
+        preserveScroll: true,
         onSuccess: () => {
           setIsVideoModalOpen(false);
           setEditingVideo(null);
@@ -207,6 +223,7 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
       });
     } else {
       videoForm.post("/admin/kamus", {
+        preserveScroll: true,
         onSuccess: () => {
           setIsVideoModalOpen(false);
           videoForm.reset();
@@ -219,36 +236,365 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
   const handleConfirmDelete = () => {
     if (!deleteTarget) return;
     router.delete(`/admin/kamus/${deleteTarget.id}`, {
+      preserveScroll: true,
       onSuccess: () => {
         setDeleteTarget(null);
       },
     });
   };
 
-  // Filtered lists
-  const filteredArticles = articles.filter((art) => {
-    return (
-      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      art.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      art.summary.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  // Definisi Kolom Tabel Artikel
+  const articleColumns = useMemo<ColumnDef<AdminArticle>[]>(
+    () => [
+      {
+        accessorKey: "letter",
+        header: ({ column }) => (
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="inline-flex items-center gap-1 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+            >
+              <span>Huruf</span>
+              <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+            </button>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="text-center">
+            <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
+              {row.original.letter}
+            </span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "title",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Judul Istilah &amp; Komplikasi</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => {
+          const art = row.original;
+          return (
+            <div className="min-w-0 pr-2 space-y-0.5">
+              <div
+                className="font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)]"
+                title={art.title}
+              >
+                {art.title}
+              </div>
+              <div
+                className="text-[11px] text-slate-500 whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)]"
+                title={art.summary}
+              >
+                {art.summary}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "category",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Kategori Medis</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+            {row.original.category}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "first_aid",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Pertolongan Pertama Mandiri</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => (
+          <div
+            className="text-xs text-slate-600 font-medium whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)]"
+            title={row.original.first_aid || "-"}
+          >
+            {row.original.first_aid || "-"}
+          </div>
+        ),
+      },
+      {
+        id: "actions",
+        header: () => <span className="sr-only">Aksi</span>,
+        cell: ({ row }) => {
+          const art = row.original;
+          return (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none">
+                  <span className="sr-only">Buka menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[140px] p-1.5 rounded-2xl shadow-soft-md border-slate-100 bg-white">
+                  <DropdownMenuItem
+                    onClick={() => handleOpenEditArticle(art)}
+                    className="text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    Edit Artikel
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setDeleteTarget({ id: art.id, title: art.title, type: "article" })}
+                    className="text-xs font-medium text-rose-600 hover:bg-rose-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    Hapus Artikel
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
+
+  // Definisi Kolom Tabel Video
+  const videoColumns = useMemo<ColumnDef<AdminVideo>[]>(
+    () => [
+      {
+        accessorKey: "youtube_id",
+        header: () => <span>Preview</span>,
+        cell: ({ row }) => {
+          const vid = row.original;
+          return (
+            <div className="relative w-16 h-10 rounded-lg overflow-hidden bg-slate-900 shadow-soft-xs shrink-0">
+              <img
+                src={`https://img.youtube.com/vi/${vid.youtube_id}/hqdefault.jpg`}
+                alt={vid.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center">
+                <PlayCircle className="h-3.5 w-3.5 text-white" />
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "title",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Judul Video Terapi</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => {
+          const vid = row.original;
+          return (
+            <div className="min-w-0 pr-2 space-y-0.5">
+              <div
+                className="font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)]"
+                title={vid.title}
+              >
+                {vid.title}
+              </div>
+              <div
+                className="text-[11px] text-slate-500 whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)]"
+                title={vid.description}
+              >
+                {vid.description}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "category",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Badge &amp; Kategori</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => {
+          const vid = row.original;
+          return (
+            <div className="space-y-1">
+              <span className="inline-block px-2 py-0.5 rounded-full bg-slate-900 text-white text-[9px] font-bold tracking-wider uppercase">
+                {vid.video_badge}
+              </span>
+              <div className="text-[11px] text-slate-600 font-medium">{vid.category}</div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "instructor",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Instruktur &amp; Durasi</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => {
+          const vid = row.original;
+          return (
+            <div>
+              <div className="font-semibold text-slate-800 text-xs">{vid.instructor}</div>
+              <div className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                <Clock className="h-3 w-3" />
+                <span>{vid.duration}</span>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        header: () => <span className="sr-only">Aksi</span>,
+        cell: ({ row }) => {
+          const vid = row.original;
+          return (
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none">
+                  <span className="sr-only">Buka menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[140px] p-1.5 rounded-2xl shadow-soft-md border-slate-100 bg-white">
+                  <DropdownMenuItem
+                    onClick={() => handleOpenEditVideo(vid)}
+                    className="text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    Edit Video
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setDeleteTarget({ id: vid.id, title: vid.title, type: "video" })}
+                    className="text-xs font-medium text-rose-600 hover:bg-rose-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    Hapus Video
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
+
+  const articleTable = useReactTable({
+    data: articles,
+    columns: articleColumns,
+    state: {
+      globalFilter,
+      sorting: articleSorting,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setArticleSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
 
-  const filteredVideos = videos.filter((vid) => {
-    return (
-      vid.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      vid.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      vid.instructor.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const videoTable = useReactTable({
+    data: videos,
+    columns: videoColumns,
+    state: {
+      globalFilter,
+      sorting: videoSorting,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setVideoSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
+
+  const getArticleColumnWidthClass = (id: string) => {
+    switch (id) {
+      case "letter":
+        return "w-[8%] text-center";
+      case "title":
+        return "w-[36%]";
+      case "category":
+        return "w-[22%]";
+      case "first_aid":
+        return "w-[26%]";
+      case "actions":
+        return "w-[8%] text-right";
+      default:
+        return "";
+    }
+  };
+
+  const getVideoColumnWidthClass = (id: string) => {
+    switch (id) {
+      case "youtube_id":
+        return "w-[12%]";
+      case "title":
+        return "w-[38%]";
+      case "category":
+        return "w-[22%]";
+      case "instructor":
+        return "w-[20%]";
+      case "actions":
+        return "w-[8%] text-right";
+      default:
+        return "";
+    }
+  };
 
   return (
     <BundaSehatLayout activeNav="kamus">
-      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6">
+      <Head title="Kelola Kamus Kesehatan - BundaSehat" />
+
+      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
         
-        {/* Flash Message Notification */}
+        {/* FLASH NOTIFICATION */}
         {flash?.success && (
-          <div className="p-4 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs sm:text-sm font-bold flex items-center gap-2.5 shadow-soft-xs">
+          <div className="p-4 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs sm:text-sm font-bold flex items-center gap-2.5 animate-fadeIn shadow-soft-xs">
             <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
             <span>{flash.success}</span>
           </div>
@@ -258,545 +604,557 @@ export default function AdminKamusIndex({ articles, videos, stats, flash }: Prop
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              Manajemen Kamus Kesehatan &amp; Video Terapi
+              Kelola Kamus Kesehatan
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium max-w-2xl leading-relaxed">
-              Kelola daftar istilah komplikasi kebidanan A-Z, panduan pertolongan pertama, serta katalog video terapi komplementer non-obat.
-            </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            {activeTab === "articles" ? (
-              <Button
-                type="button"
-                variant="default"
-                size="lg"
-                onClick={handleOpenCreateArticle}
-                className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-2 shadow-soft-sm"
-              >
-                <Plus className="h-4 w-4" />
-                <span>Tambah Artikel A-Z</span>
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant="default"
-                size="lg"
-                onClick={handleOpenCreateVideo}
-                className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-2 shadow-soft-sm"
-              >
-                <Plus className="h-4 w-4" />
-                <span>Tambah Video Terapi</span>
-              </Button>
-            )}
+            <Button
+              type="button"
+              variant="default"
+              size="default"
+              onClick={activeTab === "articles" ? handleOpenCreateArticle : handleOpenCreateVideo}
+              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-1.5 shadow-soft-sm shrink-0"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Tambah</span>
+            </Button>
           </div>
         </div>
 
-        {/* BENTO STATS CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-5 flex items-center justify-between">
-            <div className="space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Artikel Istilah</span>
-              <div className="text-2xl font-bold text-slate-900">{stats.total_articles}</div>
-            </div>
-            <div className="h-12 w-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 shadow-soft-xs">
-              <FileText className="h-6 w-6" />
-            </div>
-          </Card>
-
-          <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-5 flex items-center justify-between">
-            <div className="space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Video Terapi</span>
-              <div className="text-2xl font-bold text-slate-900">{stats.total_videos}</div>
-            </div>
-            <div className="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 shadow-soft-xs">
-              <Video className="h-6 w-6" />
-            </div>
-          </Card>
-
-          <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-5 flex items-center justify-between">
-            <div className="space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kategori Medis</span>
-              <div className="text-2xl font-bold text-slate-900">{stats.total_categories}</div>
-            </div>
-            <div className="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-soft-xs">
-              <Tag className="h-6 w-6" />
-            </div>
-          </Card>
-        </div>
-
-        {/* TABS & SEARCH BAR */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        {/* TABS & SEARCH BAR TOOLBAR */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-1">
           <Tabs
             items={[
               { id: "articles", label: `Kamus Artikel (${articles.length})`, icon: <FileText className="h-4 w-4" /> },
               { id: "videos", label: `Video Terapi (${videos.length})`, icon: <Video className="h-4 w-4" /> },
             ]}
             activeTab={activeTab}
-            onChange={(tabId) => setActiveTab(tabId)}
+            onChange={(tabId) => {
+              setActiveTab(tabId);
+              setGlobalFilter("");
+            }}
           />
 
-          <div className="w-full sm:w-72 relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input
-              type="text"
-              placeholder="Cari judul, kategori..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10 rounded-full border-slate-200 bg-white text-xs shadow-soft-xs focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
-            />
-          </div>
+          <Input
+            placeholder={activeTab === "articles" ? "Filter artikel..." : "Filter video..."}
+            value={globalFilter ?? ""}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            className="max-w-sm h-9 rounded-full border border-slate-200 bg-white px-3.5 py-1 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-slate-400 focus-visible:ring-1 focus-visible:ring-slate-400"
+          />
         </div>
 
         {/* TAB 1: ARTIKEL A-Z */}
         {activeTab === "articles" && (
-          <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-hidden">
-            {filteredArticles.length === 0 ? (
-              <div className="text-center py-16 px-4 space-y-3">
-                <FileText className="h-12 w-12 text-slate-300 mx-auto" />
-                <h3 className="font-bold text-slate-800 text-sm">Tidak ada artikel ditemukan</h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  Belum ada artikel istilah medis yang cocok dengan pencarian Anda.
-                </p>
+          <div className="w-full space-y-4">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <div className="relative w-full overflow-x-auto">
+                <Table className="table-fixed w-full caption-bottom text-sm">
+                  <TableHeader className="bg-white [&_tr]:border-b">
+                    {articleTable.getHeaderGroups().map((headerGroup) => (
+                      <TableRow key={headerGroup.id} className="bg-white border-b border-slate-200 hover:bg-white">
+                        {headerGroup.headers.map((header) => (
+                          <TableHead
+                            key={header.id}
+                            className={cn(
+                              "h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap bg-white",
+                              getArticleColumnWidthClass(header.column.id)
+                            )}
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableHeader>
+                  <TableBody className="[&_tr:last-child]:border-0 divide-y divide-slate-100">
+                    {articleTable.getRowModel().rows?.length ? (
+                      articleTable.getRowModel().rows.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell
+                              key={cell.id}
+                              className={cn(
+                                "p-4 align-middle whitespace-nowrap text-slate-700",
+                                getArticleColumnWidthClass(cell.column.id)
+                              )}
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={articleColumns.length}
+                          className="h-24 text-center text-xs text-slate-500 font-medium"
+                        >
+                          {globalFilter
+                            ? `Tidak ditemukan artikel yang cocok dengan pencarian "${globalFilter}".`
+                            : "Belum ada artikel kamus istilah medis yang ditambahkan."}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+
+            {/* Pagination / Count Footer */}
+            <div className="flex items-center justify-between py-2 text-xs sm:text-sm text-slate-500">
+              <div>
+                Total {articleTable.getFilteredRowModel().rows.length} artikel terdaftar.
+              </div>
+              <div className="flex items-center space-x-2">
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
-                  onClick={handleOpenCreateArticle}
-                  className="rounded-full mt-2 font-bold text-xs"
+                  onClick={() => articleTable.previousPage()}
+                  disabled={!articleTable.getCanPreviousPage()}
+                  className="rounded-full font-bold text-xs h-8 px-3.5 border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
                 >
-                  <Plus className="h-3.5 w-3.5 mr-1" />
-                  Tambah Artikel Sekarang
+                  Sebelumnya
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => articleTable.nextPage()}
+                  disabled={!articleTable.getCanNextPage()}
+                  className="rounded-full font-bold text-xs h-8 px-3.5 border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                >
+                  Berikutnya
                 </Button>
               </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                    <tr>
-                      <th className="py-3.5 px-4 w-12 text-center">Huruf</th>
-                      <th className="py-3.5 px-4">Judul Istilah &amp; Komplikasi</th>
-                      <th className="py-3.5 px-4">Kategori</th>
-                      <th className="py-3.5 px-4">Pertolongan Pertama Mandiri</th>
-                      <th className="py-3.5 px-4 w-28 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {filteredArticles.map((art) => (
-                      <tr key={art.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-3.5 px-4 text-center">
-                          <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-rose-50 text-rose-700 font-bold text-xs">
-                            {art.letter}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <div className="font-bold text-slate-900 text-xs sm:text-sm">{art.title}</div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{art.summary}</div>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <Badge variant="outline" className="rounded-full bg-slate-50 border-slate-200 text-[10px] font-bold">
-                            {art.category}
-                          </Badge>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <span className="text-[11px] text-slate-600 line-clamp-1">{art.first_aid || "-"}</span>
-                        </td>
-                        <td className="py-3.5 px-4 text-center">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleOpenEditArticle(art)}
-                              className="h-8 w-8 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-full"
-                              title="Edit Artikel"
-                            >
-                              <Edit className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => setDeleteTarget({ id: art.id, title: art.title, type: "article" })}
-                              className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-full"
-                              title="Hapus Artikel"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* TAB 2: VIDEO TERAPI */}
         {activeTab === "videos" && (
-          <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-hidden">
-            {filteredVideos.length === 0 ? (
-              <div className="text-center py-16 px-4 space-y-3">
-                <Video className="h-12 w-12 text-slate-300 mx-auto" />
-                <h3 className="font-bold text-slate-800 text-sm">Tidak ada video ditemukan</h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  Belum ada video terapi komplementer yang cocok dengan pencarian Anda.
-                </p>
+          <div className="w-full space-y-4">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <div className="relative w-full overflow-x-auto">
+                <Table className="table-fixed w-full caption-bottom text-sm">
+                  <TableHeader className="bg-white [&_tr]:border-b">
+                    {videoTable.getHeaderGroups().map((headerGroup) => (
+                      <TableRow key={headerGroup.id} className="bg-white border-b border-slate-200 hover:bg-white">
+                        {headerGroup.headers.map((header) => (
+                          <TableHead
+                            key={header.id}
+                            className={cn(
+                              "h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap bg-white",
+                              getVideoColumnWidthClass(header.column.id)
+                            )}
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableHeader>
+                  <TableBody className="[&_tr:last-child]:border-0 divide-y divide-slate-100">
+                    {videoTable.getRowModel().rows?.length ? (
+                      videoTable.getRowModel().rows.map((row) => (
+                        <TableRow
+                          key={row.id}
+                          className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell
+                              key={cell.id}
+                              className={cn(
+                                "p-4 align-middle whitespace-nowrap text-slate-700",
+                                getVideoColumnWidthClass(cell.column.id)
+                              )}
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={videoColumns.length}
+                          className="h-24 text-center text-xs text-slate-500 font-medium"
+                        >
+                          {globalFilter
+                            ? `Tidak ditemukan video yang cocok dengan pencarian "${globalFilter}".`
+                            : "Belum ada video terapi komplementer yang ditambahkan."}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+
+            {/* Pagination / Count Footer */}
+            <div className="flex items-center justify-between py-2 text-xs sm:text-sm text-slate-500">
+              <div>
+                Total {videoTable.getFilteredRowModel().rows.length} video terdaftar.
+              </div>
+              <div className="flex items-center space-x-2">
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
-                  onClick={handleOpenCreateVideo}
-                  className="rounded-full mt-2 font-bold text-xs"
+                  onClick={() => videoTable.previousPage()}
+                  disabled={!videoTable.getCanPreviousPage()}
+                  className="rounded-full font-bold text-xs h-8 px-3.5 border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
                 >
-                  <Plus className="h-3.5 w-3.5 mr-1" />
-                  Tambah Video Sekarang
+                  Sebelumnya
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => videoTable.nextPage()}
+                  disabled={!videoTable.getCanNextPage()}
+                  className="rounded-full font-bold text-xs h-8 px-3.5 border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                >
+                  Berikutnya
                 </Button>
               </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                    <tr>
-                      <th className="py-3.5 px-4 w-28">Preview</th>
-                      <th className="py-3.5 px-4">Judul Video Terapi</th>
-                      <th className="py-3.5 px-4">Badge / Kategori</th>
-                      <th className="py-3.5 px-4">Instruktur &amp; Durasi</th>
-                      <th className="py-3.5 px-4 w-28 text-center">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {filteredVideos.map((vid) => (
-                      <tr key={vid.id} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-3.5 px-4">
-                          <div className="relative w-20 h-12 rounded-xl overflow-hidden bg-slate-900 shadow-soft-xs shrink-0">
-                            <img
-                              src={`https://img.youtube.com/vi/${vid.youtube_id}/hqdefault.jpg`}
-                              alt={vid.title}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center">
-                              <PlayCircle className="h-4 w-4 text-white" />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <div className="font-bold text-slate-900 text-xs sm:text-sm">{vid.title}</div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{vid.description}</div>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <div className="space-y-1">
-                            <span className="inline-block px-2 py-0.5 rounded-full bg-slate-900 text-white text-[9px] font-bold tracking-wider uppercase">
-                              {vid.video_badge}
-                            </span>
-                            <div className="text-[10px] text-rose-600 font-semibold">{vid.category}</div>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <div className="font-medium text-slate-800">{vid.instructor}</div>
-                          <div className="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5">
-                            <Clock className="h-3 w-3" />
-                            <span>{vid.duration}</span>
-                          </div>
-                        </td>
-                        <td className="py-3.5 px-4 text-center">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleOpenEditVideo(vid)}
-                              className="h-8 w-8 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-full"
-                              title="Edit Video"
-                            >
-                              <Edit className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => setDeleteTarget({ id: vid.id, title: vid.title, type: "video" })}
-                              className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-full"
-                              title="Hapus Video"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </Card>
-        )}
-
-        {/* MODAL 1: FORM TAMBAH / EDIT ARTIKEL */}
-        <Dialog
-          isOpen={isArticleModalOpen}
-          onClose={() => setIsArticleModalOpen(false)}
-          title={editingArticle ? "Edit Artikel Istilah Medis" : "Tambah Artikel Istilah Medis"}
-          className="max-w-lg"
-        >
-          <form onSubmit={handleArticleSubmit} className="space-y-4 pt-1">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Judul Istilah / Komplikasi *</label>
-              <Input
-                type="text"
-                placeholder="Contoh: Anemia pada Ibu Hamil"
-                value={articleForm.data.title}
-                onChange={(e) => articleForm.setData("title", e.target.value)}
-                className="h-10 rounded-full border-slate-200 text-xs"
-                required
-              />
-              {articleForm.errors.title && (
-                <p className="text-[11px] text-red-600 font-medium">{articleForm.errors.title}</p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Kategori Medis *</label>
-                <Input
-                  type="text"
-                  placeholder="Contoh: Komplikasi Umum"
-                  value={articleForm.data.category}
-                  onChange={(e) => articleForm.setData("category", e.target.value)}
-                  className="h-10 rounded-full border-slate-200 text-xs"
-                  required
-                />
-                {articleForm.errors.category && (
-                  <p className="text-[11px] text-red-600 font-medium">{articleForm.errors.category}</p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Huruf Alfabet (Otomatis)</label>
-                <Input
-                  type="text"
-                  maxLength={1}
-                  placeholder="A"
-                  value={articleForm.data.letter}
-                  onChange={(e) => articleForm.setData("letter", e.target.value.toUpperCase())}
-                  className="h-10 rounded-full border-slate-200 text-xs uppercase"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Pengertian &amp; Gejala Medis *</label>
-              <textarea
-                rows={3}
-                placeholder="Jelaskan kondisi klinis, batas parameter (misal: Hb < 11 g/dL), serta gejala yang dirasakan..."
-                value={articleForm.data.summary}
-                onChange={(e) => articleForm.setData("summary", e.target.value)}
-                className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
-                required
-              />
-              {articleForm.errors.summary && (
-                <p className="text-[11px] text-red-600 font-medium">{articleForm.errors.summary}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Pertolongan Pertama Mandiri *</label>
-              <textarea
-                rows={3}
-                placeholder="Langkah edukasi mandiri (misal: posisi tidur miring kiri, suplemen TTD + vit C, dll)..."
-                value={articleForm.data.first_aid}
-                onChange={(e) => articleForm.setData("first_aid", e.target.value)}
-                className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
-                required
-              />
-              {articleForm.errors.first_aid && (
-                <p className="text-[11px] text-red-600 font-medium">{articleForm.errors.first_aid}</p>
-              )}
-            </div>
-
-            <div className="pt-3 flex items-center justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsArticleModalOpen(false)}
-                className="rounded-full text-xs font-bold"
-              >
-                Batal
-              </Button>
-              <Button
-                type="submit"
-                variant="default"
-                size="sm"
-                isLoading={articleForm.processing}
-                className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold"
-              >
-                {editingArticle ? "Simpan Perubahan" : "Tambahkan Artikel"}
-              </Button>
-            </div>
-          </form>
-        </Dialog>
-
-        {/* MODAL 2: FORM TAMBAH / EDIT VIDEO TERAPI */}
-        <Dialog
-          isOpen={isVideoModalOpen}
-          onClose={() => setIsVideoModalOpen(false)}
-          title={editingVideo ? "Edit Video Terapi Komplementer" : "Tambah Video Terapi Komplementer"}
-          className="max-w-lg"
-        >
-          <form onSubmit={handleVideoSubmit} className="space-y-4 pt-1">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Judul Video Terapi *</label>
-              <Input
-                type="text"
-                placeholder="Contoh: Teknik Pijat Oxytocin Ibu Hamil & Pelancar ASI"
-                value={videoForm.data.title}
-                onChange={(e) => videoForm.setData("title", e.target.value)}
-                className="h-10 rounded-full border-slate-200 text-xs"
-                required
-              />
-              {videoForm.errors.title && (
-                <p className="text-[11px] text-red-600 font-medium">{videoForm.errors.title}</p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Badge Label *</label>
-                <Input
-                  type="text"
-                  placeholder="TERAPI FISIK / SENAM HAMIL"
-                  value={videoForm.data.video_badge}
-                  onChange={(e) => videoForm.setData("video_badge", e.target.value.toUpperCase())}
-                  className="h-10 rounded-full border-slate-200 text-xs uppercase"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Kategori / Fase *</label>
-                <Input
-                  type="text"
-                  placeholder="Trimester 3 · Laktasi"
-                  value={videoForm.data.category}
-                  onChange={(e) => videoForm.setData("category", e.target.value)}
-                  className="h-10 rounded-full border-slate-200 text-xs"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Link YouTube / Video ID *</label>
-                <Input
-                  type="text"
-                  placeholder="https://youtu.be/xxx atau ID"
-                  value={videoForm.data.youtube_id}
-                  onChange={(e) => videoForm.setData("youtube_id", e.target.value)}
-                  className="h-10 rounded-full border-slate-200 text-xs"
-                  required
-                />
-                {videoForm.errors.youtube_id && (
-                  <p className="text-[11px] text-red-600 font-medium">{videoForm.errors.youtube_id}</p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Durasi Video *</label>
-                <Input
-                  type="text"
-                  placeholder="08:34"
-                  value={videoForm.data.duration}
-                  onChange={(e) => videoForm.setData("duration", e.target.value)}
-                  className="h-10 rounded-full border-slate-200 text-xs"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Nama Bidan / Instruktur *</label>
-              <Input
-                type="text"
-                placeholder="Bidan Asih, S.ST., M.Keb"
-                value={videoForm.data.instructor}
-                onChange={(e) => videoForm.setData("instructor", e.target.value)}
-                className="h-10 rounded-full border-slate-200 text-xs"
-                required
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Deskripsi &amp; Manfaat Terapi</label>
-              <textarea
-                rows={3}
-                placeholder="Jelaskan gerakan yang diajarkan, persiapan yang diperlukan, serta manfaat terapeutik untuk ibu hamil..."
-                value={videoForm.data.description}
-                onChange={(e) => videoForm.setData("description", e.target.value)}
-                className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
-              />
-            </div>
-
-            <div className="pt-3 flex items-center justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setIsVideoModalOpen(false)}
-                className="rounded-full text-xs font-bold"
-              >
-                Batal
-              </Button>
-              <Button
-                type="submit"
-                variant="default"
-                size="sm"
-                isLoading={videoForm.processing}
-                className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold"
-              >
-                {editingVideo ? "Simpan Perubahan" : "Tambahkan Video"}
-              </Button>
-            </div>
-          </form>
-        </Dialog>
-
-        {/* MODAL 3: KONFIRMASI HAPUS */}
-        <Dialog
-          isOpen={Boolean(deleteTarget)}
-          onClose={() => setDeleteTarget(null)}
-          title="Konfirmasi Hapus Data"
-          className="max-w-md"
-        >
-          <div className="space-y-4 pt-1 text-xs text-slate-700">
-            <p className="leading-relaxed">
-              Apakah Anda yakin ingin menghapus {deleteTarget?.type === "article" ? "artikel" : "video"}{" "}
-              <strong className="text-slate-900 font-bold">"{deleteTarget?.title}"</strong>?
-            </p>
-            <p className="text-[11px] text-slate-500">
-              Data yang sudah dihapus tidak dapat dipulihkan kembali.
-            </p>
-
-            <div className="pt-2 flex items-center justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setDeleteTarget(null)}
-                className="rounded-full text-xs font-bold"
-              >
-                Batal
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={handleConfirmDelete}
-                className="rounded-full text-xs font-bold"
-              >
-                Ya, Hapus Data
-              </Button>
             </div>
           </div>
-        </Dialog>
+        )}
 
       </div>
+
+      {/* MODAL 1: FORM TAMBAH / EDIT ARTIKEL */}
+      <Dialog
+        isOpen={isArticleModalOpen}
+        onClose={() => setIsArticleModalOpen(false)}
+        title={editingArticle ? "Edit Artikel Istilah Medis" : "Tambah Artikel Istilah Medis"}
+        description="Daftar istilah komplikasi kebidanan A-Z & panduan edukasi"
+        className="max-w-lg"
+      >
+        <form onSubmit={handleArticleSubmit} className="space-y-4 pt-1">
+          <div className="space-y-1.5">
+            <Label htmlFor="article_title" className="text-xs font-bold text-slate-700">
+              Judul Istilah / Komplikasi <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="article_title"
+              type="text"
+              placeholder="Contoh: Anemia pada Ibu Hamil"
+              value={articleForm.data.title}
+              onChange={(e) => articleForm.setData("title", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {articleForm.errors.title && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.title}</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
+                Kategori Medis <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="article_category"
+                type="text"
+                placeholder="Contoh: Komplikasi Umum"
+                value={articleForm.data.category}
+                onChange={(e) => articleForm.setData("category", e.target.value)}
+                className="mt-1"
+                required
+              />
+              {articleForm.errors.category && (
+                <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="article_letter" className="text-xs font-bold text-slate-700">
+                Huruf Alfabet (Otomatis)
+              </Label>
+              <Input
+                id="article_letter"
+                type="text"
+                maxLength={1}
+                placeholder="A"
+                value={articleForm.data.letter}
+                onChange={(e) => articleForm.setData("letter", e.target.value.toUpperCase())}
+                className="mt-1 uppercase"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="article_summary" className="text-xs font-bold text-slate-700">
+              Pengertian &amp; Gejala Medis <span className="text-rose-500">*</span>
+            </Label>
+            <textarea
+              id="article_summary"
+              rows={3}
+              placeholder="Jelaskan kondisi klinis, batas parameter (misal: Hb < 11 g/dL), serta gejala yang dirasakan..."
+              value={articleForm.data.summary}
+              onChange={(e) => articleForm.setData("summary", e.target.value)}
+              className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              required
+            />
+            {articleForm.errors.summary && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.summary}</p>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="article_first_aid" className="text-xs font-bold text-slate-700">
+              Pertolongan Pertama Mandiri <span className="text-rose-500">*</span>
+            </Label>
+            <textarea
+              id="article_first_aid"
+              rows={3}
+              placeholder="Langkah edukasi mandiri (misal: posisi tidur miring kiri, suplemen TTD + vit C, dll)..."
+              value={articleForm.data.first_aid}
+              onChange={(e) => articleForm.setData("first_aid", e.target.value)}
+              className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              required
+            />
+            {articleForm.errors.first_aid && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.first_aid}</p>
+            )}
+          </div>
+
+          <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={() => setIsArticleModalOpen(false)}
+              className="rounded-full text-xs font-bold px-4"
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="default"
+              size="default"
+              isLoading={articleForm.processing}
+              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5"
+            >
+              {editingArticle ? "Simpan Perubahan" : "Tambahkan Artikel"}
+            </Button>
+          </div>
+        </form>
+      </Dialog>
+
+      {/* MODAL 2: FORM TAMBAH / EDIT VIDEO TERAPI */}
+      <Dialog
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+        title={editingVideo ? "Edit Video Terapi Komplementer" : "Tambah Video Terapi Komplementer"}
+        description="Katalog video panduan terapi non-obat untuk ibu hamil"
+        className="max-w-lg"
+      >
+        <form onSubmit={handleVideoSubmit} className="space-y-4 pt-1">
+          <div className="space-y-1.5">
+            <Label htmlFor="video_title" className="text-xs font-bold text-slate-700">
+              Judul Video Terapi <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="video_title"
+              type="text"
+              placeholder="Contoh: Teknik Pijat Oxytocin Ibu Hamil &amp; Pelancar ASI"
+              value={videoForm.data.title}
+              onChange={(e) => videoForm.setData("title", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {videoForm.errors.title && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">{videoForm.errors.title}</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="video_badge" className="text-xs font-bold text-slate-700">
+                Badge Label <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="video_badge"
+                type="text"
+                placeholder="TERAPI FISIK / SENAM HAMIL"
+                value={videoForm.data.video_badge}
+                onChange={(e) => videoForm.setData("video_badge", e.target.value.toUpperCase())}
+                className="mt-1 uppercase"
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="video_category" className="text-xs font-bold text-slate-700">
+                Kategori / Fase <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="video_category"
+                type="text"
+                placeholder="Trimester 3 · Laktasi"
+                value={videoForm.data.category}
+                onChange={(e) => videoForm.setData("category", e.target.value)}
+                className="mt-1"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="video_youtube_id" className="text-xs font-bold text-slate-700">
+                Link YouTube / Video ID <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="video_youtube_id"
+                type="text"
+                placeholder="https://youtu.be/xxx atau ID"
+                value={videoForm.data.youtube_id}
+                onChange={(e) => videoForm.setData("youtube_id", e.target.value)}
+                className="mt-1"
+                required
+              />
+              {videoForm.errors.youtube_id && (
+                <p className="text-[11px] text-rose-500 font-medium mt-1">{videoForm.errors.youtube_id}</p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="video_duration" className="text-xs font-bold text-slate-700">
+                Durasi Video <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="video_duration"
+                type="text"
+                placeholder="08:34"
+                value={videoForm.data.duration}
+                onChange={(e) => videoForm.setData("duration", e.target.value)}
+                className="mt-1"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="video_instructor" className="text-xs font-bold text-slate-700">
+              Nama Bidan / Instruktur <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="video_instructor"
+              type="text"
+              placeholder="Bidan Asih, S.ST., M.Keb"
+              value={videoForm.data.instructor}
+              onChange={(e) => videoForm.setData("instructor", e.target.value)}
+              className="mt-1"
+              required
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="video_description" className="text-xs font-bold text-slate-700">
+              Deskripsi &amp; Manfaat Terapi
+            </Label>
+            <textarea
+              id="video_description"
+              rows={3}
+              placeholder="Jelaskan gerakan yang diajarkan, persiapan yang diperlukan, serta manfaat terapeutik untuk ibu hamil..."
+              value={videoForm.data.description}
+              onChange={(e) => videoForm.setData("description", e.target.value)}
+              className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+            />
+          </div>
+
+          <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={() => setIsVideoModalOpen(false)}
+              className="rounded-full text-xs font-bold px-4"
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="default"
+              size="default"
+              isLoading={videoForm.processing}
+              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5"
+            >
+              {editingVideo ? "Simpan Perubahan" : "Tambahkan Video"}
+            </Button>
+          </div>
+        </form>
+      </Dialog>
+
+      {/* MODAL 3: KONFIRMASI HAPUS */}
+      <Dialog
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        showCloseButton={false}
+        className="max-w-md text-center p-6 sm:p-7"
+      >
+        <div className="space-y-5">
+          <div className="h-14 w-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+            <AlertTriangle className="h-7 w-7" />
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-base font-bold text-slate-900">
+              Hapus {deleteTarget?.type === "article" ? "Artikel Istilah" : "Video Terapi"}?
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Apakah Anda yakin ingin menghapus <strong className="text-slate-800 font-bold">"{deleteTarget?.title}"</strong>? Data yang telah dihapus tidak dapat dipulihkan kembali.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={() => setDeleteTarget(null)}
+              className="rounded-full font-bold text-xs px-5"
+            >
+              Batal
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="default"
+              onClick={handleConfirmDelete}
+              className="rounded-full font-bold text-xs px-5"
+            >
+              Ya, Hapus Data
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
     </BundaSehatLayout>
   );
 }
