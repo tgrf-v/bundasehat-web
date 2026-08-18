@@ -23,6 +23,7 @@ import {
   Clock,
   MoreHorizontal,
   ArrowUpDown,
+  BookOpen,
 } from "lucide-react";
 import {
   ColumnDef,
@@ -106,6 +107,7 @@ export default function AdminKamusIndex() {
   const [videoSorting, setVideoSorting] = useState<SortingState>([]);
 
   // Modals state
+  const [viewingArticle, setViewingArticle] = useState<AdminArticle | null>(null);
   const [isArticleModalOpen, setIsArticleModalOpen] = useState<boolean>(false);
   const [editingArticle, setEditingArticle] = useState<AdminArticle | null>(null);
 
@@ -153,7 +155,7 @@ export default function AdminKamusIndex() {
       type: "article",
       title: art.title,
       category: art.category,
-      letter: art.letter,
+      letter: art.letter || art.title.trim().charAt(0).toUpperCase(),
       summary: art.summary,
       first_aid: art.first_aid,
       is_published: art.is_published,
@@ -162,9 +164,15 @@ export default function AdminKamusIndex() {
     setIsArticleModalOpen(true);
   };
 
-  // Submit Article Form
+  // Submit Article Form (Otomatis ambil letter dari huruf pertama judul)
   const handleArticleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const computedLetter = articleForm.data.title.trim().charAt(0).toUpperCase() || "A";
+    articleForm.transform((data) => ({
+      ...data,
+      letter: computedLetter,
+    }));
+
     if (editingArticle) {
       articleForm.put(`/admin/kamus/${editingArticle.id}`, {
         preserveScroll: true,
@@ -243,31 +251,9 @@ export default function AdminKamusIndex() {
     });
   };
 
-  // Definisi Kolom Tabel Artikel
+  // Definisi Kolom Tabel Artikel: Judul Istilah & Komplikasi | Kategori Medis | Aksi
   const articleColumns = useMemo<ColumnDef<AdminArticle>[]>(
     () => [
-      {
-        accessorKey: "letter",
-        header: ({ column }) => (
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              className="inline-flex items-center gap-1 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
-            >
-              <span>Huruf</span>
-              <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-            </button>
-          </div>
-        ),
-        cell: ({ row }) => (
-          <div className="text-center">
-            <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">
-              {row.original.letter}
-            </span>
-          </div>
-        ),
-      },
       {
         accessorKey: "title",
         header: ({ column }) => (
@@ -319,27 +305,6 @@ export default function AdminKamusIndex() {
         ),
       },
       {
-        accessorKey: "first_aid",
-        header: ({ column }) => (
-          <button
-            type="button"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
-          >
-            <span>Pertolongan Pertama Mandiri</span>
-            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-          </button>
-        ),
-        cell: ({ row }) => (
-          <div
-            className="text-xs text-slate-600 font-medium whitespace-nowrap overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)] [-webkit-mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent_100%)]"
-            title={row.original.first_aid || "-"}
-          >
-            {row.original.first_aid || "-"}
-          </div>
-        ),
-      },
-      {
         id: "actions",
         header: () => <span className="sr-only">Aksi</span>,
         cell: ({ row }) => {
@@ -352,6 +317,12 @@ export default function AdminKamusIndex() {
                   <MoreHorizontal className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="min-w-[140px] p-1.5 rounded-2xl shadow-soft-md border-slate-100 bg-white">
+                  <DropdownMenuItem
+                    onClick={() => setViewingArticle(art)}
+                    className="text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    Lihat Detail
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => handleOpenEditArticle(art)}
                     className="text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
@@ -554,14 +525,10 @@ export default function AdminKamusIndex() {
 
   const getArticleColumnWidthClass = (id: string) => {
     switch (id) {
-      case "letter":
-        return "w-[8%] text-center";
       case "title":
-        return "w-[36%]";
+        return "w-[68%]";
       case "category":
-        return "w-[22%]";
-      case "first_aid":
-        return "w-[26%]";
+        return "w-[24%]";
       case "actions":
         return "w-[8%] text-right";
       default:
@@ -844,12 +811,74 @@ export default function AdminKamusIndex() {
 
       </div>
 
+      {/* MODAL DIALOG: LIHAT DETAIL ARTIKEL */}
+      <Dialog
+        isOpen={Boolean(viewingArticle)}
+        onClose={() => setViewingArticle(null)}
+        title="Detail Istilah Medis"
+        description="Informasi klinis dan pertolongan pertama mandiri"
+        className="max-w-lg"
+      >
+        {viewingArticle && (
+          <div className="space-y-4 pt-2">
+            
+            {/* Header Judul Rata Tengah */}
+            <div className="flex flex-col items-center text-center py-2 space-y-2">
+              <div className="h-14 w-14 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-soft-xs">
+                <BookOpen className="h-7 w-7 text-slate-600" />
+              </div>
+              <div className="space-y-1 max-w-md">
+                <h3 className="text-base font-bold text-slate-900 break-words">
+                  {viewingArticle.title}
+                </h3>
+                <div>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    {viewingArticle.category}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Konten Detail */}
+            <div className="space-y-3 text-xs">
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-1.5">
+                <span className="text-[11px] font-semibold text-slate-400">Pengertian &amp; Gejala Medis</span>
+                <p className="text-slate-800 leading-relaxed whitespace-pre-line font-medium">
+                  {viewingArticle.summary || "-"}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1.5">
+                <span className="text-[11px] font-semibold text-emerald-800">Pertolongan Pertama Mandiri</span>
+                <p className="text-emerald-950 leading-relaxed whitespace-pre-line font-medium">
+                  {viewingArticle.first_aid || "-"}
+                </p>
+              </div>
+            </div>
+
+            {/* Footer Dialog */}
+            <div className="flex items-center justify-end pt-3 border-t border-slate-100">
+              <Button
+                type="button"
+                variant="outline"
+                size="default"
+                onClick={() => setViewingArticle(null)}
+                className="rounded-full font-bold text-xs px-5"
+              >
+                Tutup
+              </Button>
+            </div>
+
+          </div>
+        )}
+      </Dialog>
+
       {/* MODAL 1: FORM TAMBAH / EDIT ARTIKEL */}
       <Dialog
         isOpen={isArticleModalOpen}
         onClose={() => setIsArticleModalOpen(false)}
         title={editingArticle ? "Edit Artikel Istilah Medis" : "Tambah Artikel Istilah Medis"}
-        description="Daftar istilah komplikasi kebidanan A-Z & panduan edukasi"
+        description="Daftar istilah komplikasi kebidanan A-Z &amp; panduan edukasi"
         className="max-w-lg"
       >
         <form onSubmit={handleArticleSubmit} className="space-y-4 pt-1">
@@ -871,39 +900,22 @@ export default function AdminKamusIndex() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
-                Kategori Medis <span className="text-rose-500">*</span>
-              </Label>
-              <Input
-                id="article_category"
-                type="text"
-                placeholder="Contoh: Komplikasi Umum"
-                value={articleForm.data.category}
-                onChange={(e) => articleForm.setData("category", e.target.value)}
-                className="mt-1"
-                required
-              />
-              {articleForm.errors.category && (
-                <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="article_letter" className="text-xs font-bold text-slate-700">
-                Huruf Alfabet (Otomatis)
-              </Label>
-              <Input
-                id="article_letter"
-                type="text"
-                maxLength={1}
-                placeholder="A"
-                value={articleForm.data.letter}
-                onChange={(e) => articleForm.setData("letter", e.target.value.toUpperCase())}
-                className="mt-1 uppercase"
-              />
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
+              Kategori Medis <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="article_category"
+              type="text"
+              placeholder="Contoh: Komplikasi Umum / Trimester 1"
+              value={articleForm.data.category}
+              onChange={(e) => articleForm.setData("category", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {articleForm.errors.category && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
+            )}
           </div>
 
           <div className="space-y-1.5">
