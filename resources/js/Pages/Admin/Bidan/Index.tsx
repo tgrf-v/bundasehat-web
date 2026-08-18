@@ -11,18 +11,14 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
 } from "@/Components/ui/dropdown-menu";
 import {
   Plus,
-  Trash2,
   AlertTriangle,
   CheckCircle2,
   UserPlus,
   MoreHorizontal,
   Pencil,
-  Power,
-  Check,
   User,
   ArrowUpDown,
 } from "lucide-react";
@@ -60,6 +56,7 @@ export default function AdminBidanIndex() {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+  const [viewingBidan, setViewingBidan] = useState<BidanItem | null>(null);
   const [editingBidan, setEditingBidan] = useState<BidanItem | null>(null);
   const [deletingBidan, setDeletingBidan] = useState<BidanItem | null>(null);
 
@@ -137,7 +134,7 @@ export default function AdminBidanIndex() {
     });
   };
 
-  // Definisi Kolom TanStack Table (Official Shadcn Data Table Architecture)
+  // Definisi Kolom TanStack Table: Nama Bidan | No. STR | No. WhatsApp | Status | Aksi
   const columns = useMemo<ColumnDef<BidanItem>[]>(
     () => [
       {
@@ -165,24 +162,6 @@ export default function AdminBidanIndex() {
             </div>
           );
         },
-      },
-      {
-        accessorKey: "email",
-        header: ({ column }) => (
-          <button
-            type="button"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
-          >
-            <span>Email</span>
-            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-          </button>
-        ),
-        cell: ({ row }) => (
-          <span className="text-xs sm:text-sm text-slate-600 font-normal">
-            {row.original.email}
-          </span>
-        ),
       },
       {
         accessorKey: "no_str",
@@ -222,82 +201,79 @@ export default function AdminBidanIndex() {
       },
       {
         accessorKey: "is_active",
+        size: 90,
         header: ({ column }) => (
-          <button
-            type="button"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
-          >
-            <span>Status</span>
-            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-          </button>
+          <div className="w-[84px]">
+            <button
+              type="button"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+            >
+              <span>Status</span>
+              <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+            </button>
+          </div>
         ),
         cell: ({ row }) => {
           const isActive = row.original.is_active !== false;
-          return isActive ? (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-              <span>Aktif</span>
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-              <span>Nonaktif</span>
-            </span>
+          return (
+            <div className="w-[84px]">
+              <span
+                className={`inline-flex items-center justify-center gap-1.5 w-[76px] py-0.5 rounded-full text-[11px] font-semibold ${
+                  isActive
+                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200/70"
+                    : "bg-slate-100 text-slate-600 border border-slate-200"
+                }`}
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                    isActive ? "bg-emerald-600" : "bg-slate-400"
+                  }`}
+                />
+                <span>{isActive ? "Aktif" : "Nonaktif"}</span>
+              </span>
+            </div>
           );
         },
       },
       {
         id: "actions",
+        size: 60,
         header: () => <span className="sr-only">Aksi</span>,
         cell: ({ row }) => {
           const bidan = row.original;
           const isActive = bidan.is_active !== false;
           return (
-            <div className="text-right">
+            <div className="text-right w-12 ml-auto">
               <DropdownMenu>
                 <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors ml-auto focus:outline-none">
                   <span className="sr-only">Buka menu</span>
                   <MoreHorizontal className="h-4 w-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-[180px] p-1.5 rounded-2xl shadow-soft-md border-slate-100">
+                <DropdownMenuContent align="end" className="min-w-[150px] p-1.5 rounded-2xl shadow-soft-md border-slate-100 bg-white">
+                  <DropdownMenuItem
+                    onClick={() => setViewingBidan(bidan)}
+                    className="text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    Lihat Detail
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem
                     onClick={() => handleOpenEditModal(bidan)}
-                    className="flex items-center gap-2 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
+                    className="text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
                   >
-                    <Pencil className="h-3.5 w-3.5 text-slate-500" />
-                    <span>Edit Akun Bidan</span>
+                    Edit Bidan
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
                     onClick={() => handleToggleStatus(bidan)}
-                    className={`flex items-center gap-2 text-xs font-medium cursor-pointer rounded-xl px-3 py-2 ${
+                    className={`text-xs font-medium cursor-pointer rounded-xl px-3 py-2 ${
                       isActive
-                        ? "text-amber-700 hover:bg-amber-50"
+                        ? "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
                         : "text-emerald-700 hover:bg-emerald-50"
                     }`}
                   >
-                    {isActive ? (
-                      <>
-                        <Power className="h-3.5 w-3.5 text-amber-600" />
-                        <span>Nonaktifkan Bidan</span>
-                      </>
-                    ) : (
-                      <>
-                        <Check className="h-3.5 w-3.5 text-emerald-600" />
-                        <span>Aktifkan Bidan</span>
-                      </>
-                    )}
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator className="my-1 bg-slate-100" />
-
-                  <DropdownMenuItem
-                    onClick={() => setDeletingBidan(bidan)}
-                    className="flex items-center gap-2 text-xs font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 cursor-pointer rounded-xl px-3 py-2"
-                  >
-                    <Trash2 className="h-3.5 w-3.5 text-rose-500" />
-                    <span>Hapus Akun Bidan</span>
+                    {isActive ? "Nonaktifkan Akun" : "Aktifkan Akun"}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -468,6 +444,89 @@ export default function AdminBidanIndex() {
         </div>
 
       </div>
+
+      {/* MODAL / DIALOG: LIHAT DETAIL BIDAN */}
+      <Dialog
+        isOpen={Boolean(viewingBidan)}
+        onClose={() => setViewingBidan(null)}
+        title="Detail Akun Bidan"
+        description="Informasi profil dan penugasan Bidan Wilayah"
+      >
+        {viewingBidan && (
+          <div className="space-y-4 pt-2">
+            
+            {/* Header Profil */}
+            <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div className="h-12 w-12 rounded-full bg-slate-200/80 text-slate-600 flex items-center justify-center shrink-0 border border-slate-300/80">
+                <User className="h-6 w-6 text-slate-600" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-sm font-bold text-slate-900 truncate">
+                  {viewingBidan.name}
+                </h3>
+                <p className="text-xs text-slate-500 truncate mt-0.5">
+                  {viewingBidan.email}
+                </p>
+              </div>
+            </div>
+
+            {/* Grid Informasi */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                <span className="text-[11px] font-semibold text-slate-400">Nomor STR</span>
+                <p className="font-mono font-semibold text-slate-800">
+                  {viewingBidan.no_str || "-"}
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                <span className="text-[11px] font-semibold text-slate-400">Status Akun</span>
+                <div>
+                  {viewingBidan.is_active !== false ? (
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                      <span>Aktif</span>
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                      <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+                      <span>Nonaktif</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                <span className="text-[11px] font-semibold text-slate-400">Nomor WhatsApp</span>
+                <p className="font-medium text-slate-800">
+                  {viewingBidan.no_telepon || "-"}
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                <span className="text-[11px] font-semibold text-slate-400">Wilayah Puskesmas</span>
+                <p className="font-medium text-slate-800">
+                  {viewingBidan.puskesmas_wilayah || "-"}
+                </p>
+              </div>
+            </div>
+
+            {/* Footer Dialog */}
+            <div className="flex items-center justify-end pt-3 border-t border-slate-100">
+              <Button
+                type="button"
+                variant="outline"
+                size="default"
+                onClick={() => setViewingBidan(null)}
+                className="rounded-full font-bold text-xs px-5"
+              >
+                Tutup
+              </Button>
+            </div>
+
+          </div>
+        )}
+      </Dialog>
 
       {/* MODAL / DIALOG: TAMBAH BIDAN BARU */}
       <Dialog
