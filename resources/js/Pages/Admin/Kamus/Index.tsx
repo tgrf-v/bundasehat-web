@@ -37,6 +37,7 @@ import {
 } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 import { PageProps } from "@/types";
+import { RichTextEditor } from "@/Components/ui/rich-text-editor";
 
 interface AdminArticle {
   id: number;
@@ -44,6 +45,7 @@ interface AdminArticle {
   letter: string;
   title: string;
   category: string;
+  content?: string;
   summary: string;
   first_aid: string;
   is_published: boolean;
@@ -81,8 +83,9 @@ interface ArticleFormData {
   title: string;
   category: string;
   letter: string;
-  summary: string;
-  first_aid: string;
+  content: string;
+  summary?: string;
+  first_aid?: string;
   is_published: boolean;
 }
 
@@ -116,12 +119,13 @@ export default function AdminKamusIndex() {
 
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; title: string; type: "article" | "video" } | null>(null);
 
-  // Article Form
+  // Article Form (Menggunakan Single Rich Text Editor)
   const articleForm = useForm<ArticleFormData>({
     type: "article",
     title: "",
     category: "",
     letter: "",
+    content: "",
     summary: "",
     first_aid: "",
     is_published: true,
@@ -144,6 +148,16 @@ export default function AdminKamusIndex() {
   const handleOpenCreateArticle = () => {
     setEditingArticle(null);
     articleForm.reset();
+    articleForm.setData({
+      type: "article",
+      title: "",
+      category: "",
+      letter: "",
+      content: "",
+      summary: "",
+      first_aid: "",
+      is_published: true,
+    });
     articleForm.clearErrors();
     setIsArticleModalOpen(true);
   };
@@ -151,13 +165,20 @@ export default function AdminKamusIndex() {
   // Open Edit Article Modal
   const handleOpenEditArticle = (art: AdminArticle) => {
     setEditingArticle(art);
+    // Backward compatibility: jika artikel lama belum punya field content, generate dari summary + first_aid
+    let initialContent = art.content || "";
+    if (!initialContent && (art.summary || art.first_aid)) {
+      initialContent = `<h2>Pengertian &amp; Gejala Medis</h2><p>${art.summary || ""}</p><h2>Pertolongan Pertama Mandiri</h2><p>${art.first_aid || ""}</p>`;
+    }
+
     articleForm.setData({
       type: "article",
       title: art.title,
       category: art.category,
       letter: art.letter || art.title.trim().charAt(0).toUpperCase(),
-      summary: art.summary,
-      first_aid: art.first_aid,
+      content: initialContent,
+      summary: art.summary || "",
+      first_aid: art.first_aid || "",
       is_published: art.is_published,
     });
     articleForm.clearErrors();
@@ -840,21 +861,30 @@ export default function AdminKamusIndex() {
             </div>
 
             {/* Konten Detail */}
-            <div className="space-y-3 text-xs">
-              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-1.5">
-                <span className="text-[11px] font-semibold text-slate-400">Pengertian &amp; Gejala Medis</span>
-                <p className="text-slate-800 leading-relaxed whitespace-pre-line font-medium">
-                  {viewingArticle.summary || "-"}
-                </p>
+            {viewingArticle.content ? (
+              <div className="p-4 rounded-2xl bg-white border border-slate-200/90 text-xs text-slate-800 leading-relaxed overflow-y-auto max-h-[380px]">
+                <div
+                  className="prose prose-slate max-w-none text-xs leading-relaxed [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-3 [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-2.5 [&_h3]:mb-1 [&_p]:my-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:list-decimal [&_ol]:pl-4 [&_blockquote]:border-l-4 [&_blockquote]:border-emerald-600 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-slate-600"
+                  dangerouslySetInnerHTML={{ __html: viewingArticle.content }}
+                />
               </div>
+            ) : (
+              <div className="space-y-3 text-xs">
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-1.5">
+                  <span className="text-[11px] font-semibold text-slate-400">Pengertian &amp; Gejala Medis</span>
+                  <p className="text-slate-800 leading-relaxed whitespace-pre-line font-medium">
+                    {viewingArticle.summary || "-"}
+                  </p>
+                </div>
 
-              <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1.5">
-                <span className="text-[11px] font-semibold text-emerald-800">Pertolongan Pertama Mandiri</span>
-                <p className="text-emerald-950 leading-relaxed whitespace-pre-line font-medium">
-                  {viewingArticle.first_aid || "-"}
-                </p>
+                <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1.5">
+                  <span className="text-[11px] font-semibold text-emerald-800">Pertolongan Pertama Mandiri</span>
+                  <p className="text-emerald-950 leading-relaxed whitespace-pre-line font-medium">
+                    {viewingArticle.first_aid || "-"}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Footer Dialog */}
             <div className="flex items-center justify-end pt-3 border-t border-slate-100">
@@ -873,84 +903,66 @@ export default function AdminKamusIndex() {
         )}
       </Dialog>
 
-      {/* MODAL 1: FORM TAMBAH / EDIT ARTIKEL */}
+      {/* MODAL 1: FORM TAMBAH / EDIT ARTIKEL (RICH TEXT EDITOR) */}
       <Dialog
         isOpen={isArticleModalOpen}
         onClose={() => setIsArticleModalOpen(false)}
         title={editingArticle ? "Edit Artikel Istilah Medis" : "Tambah Artikel Istilah Medis"}
-        description="Daftar istilah komplikasi kebidanan A-Z &amp; panduan edukasi"
-        className="max-w-lg"
+        description="Isi metadata istilah serta tuliskan penjelasan klinis dan panduan edukasi"
+        className="max-w-2xl sm:max-w-3xl"
       >
         <form onSubmit={handleArticleSubmit} className="space-y-4 pt-1">
-          <div className="space-y-1.5">
-            <Label htmlFor="article_title" className="text-xs font-bold text-slate-700">
-              Judul Istilah / Komplikasi <span className="text-rose-500">*</span>
-            </Label>
-            <Input
-              id="article_title"
-              type="text"
-              placeholder="Contoh: Anemia pada Ibu Hamil"
-              value={articleForm.data.title}
-              onChange={(e) => articleForm.setData("title", e.target.value)}
-              className="mt-1"
-              required
-            />
-            {articleForm.errors.title && (
-              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.title}</p>
-            )}
+          {/* Baris Metadata: Judul Istilah & Kategori Medis */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="space-y-1.5">
+              <Label htmlFor="article_title" className="text-xs font-bold text-slate-700">
+                Judul Istilah / Komplikasi <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="article_title"
+                type="text"
+                placeholder="Contoh: Abortus Imminens"
+                value={articleForm.data.title}
+                onChange={(e) => articleForm.setData("title", e.target.value)}
+                className="mt-1"
+                required
+              />
+              {articleForm.errors.title && (
+                <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.title}</p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
+                Kategori Medis <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="article_category"
+                type="text"
+                placeholder="Contoh: Komplikasi Umum / Gawat Darurat T1"
+                value={articleForm.data.category}
+                onChange={(e) => articleForm.setData("category", e.target.value)}
+                className="mt-1"
+                required
+              />
+              {articleForm.errors.category && (
+                <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
+              )}
+            </div>
           </div>
 
+          {/* Konten: Single Rich Text Editor Besar */}
           <div className="space-y-1.5">
-            <Label htmlFor="article_category" className="text-xs font-bold text-slate-700">
-              Kategori Medis <span className="text-rose-500">*</span>
+            <Label className="text-xs font-bold text-slate-700">
+              Isi Artikel &amp; Panduan Klinis <span className="text-rose-500">*</span>
             </Label>
-            <Input
-              id="article_category"
-              type="text"
-              placeholder="Contoh: Komplikasi Umum / Trimester 1"
-              value={articleForm.data.category}
-              onChange={(e) => articleForm.setData("category", e.target.value)}
-              className="mt-1"
-              required
+            <RichTextEditor
+              content={articleForm.data.content}
+              onChange={(html) => articleForm.setData("content", html)}
+              placeholder="Tuliskan pengertian medis, gejala yang perlu diperhatikan, serta langkah pertolongan pertama..."
             />
-            {articleForm.errors.category && (
-              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.category}</p>
-            )}
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="article_summary" className="text-xs font-bold text-slate-700">
-              Pengertian &amp; Gejala Medis <span className="text-rose-500">*</span>
-            </Label>
-            <textarea
-              id="article_summary"
-              rows={3}
-              placeholder="Jelaskan kondisi klinis, batas parameter (misal: Hb < 11 g/dL), serta gejala yang dirasakan..."
-              value={articleForm.data.summary}
-              onChange={(e) => articleForm.setData("summary", e.target.value)}
-              className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
-              required
-            />
-            {articleForm.errors.summary && (
-              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.summary}</p>
-            )}
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="article_first_aid" className="text-xs font-bold text-slate-700">
-              Pertolongan Pertama Mandiri <span className="text-rose-500">*</span>
-            </Label>
-            <textarea
-              id="article_first_aid"
-              rows={3}
-              placeholder="Langkah edukasi mandiri (misal: posisi tidur miring kiri, suplemen TTD + vit C, dll)..."
-              value={articleForm.data.first_aid}
-              onChange={(e) => articleForm.setData("first_aid", e.target.value)}
-              className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
-              required
-            />
-            {articleForm.errors.first_aid && (
-              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.first_aid}</p>
+            {articleForm.errors.content && (
+              <p className="text-[11px] text-rose-500 font-medium mt-1">{articleForm.errors.content}</p>
             )}
           </div>
 

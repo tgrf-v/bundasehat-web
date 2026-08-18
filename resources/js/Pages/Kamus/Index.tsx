@@ -33,6 +33,7 @@ interface ArticleItem {
   letter: string;
   title: string;
   category: string;
+  content?: string;
   summary: string;
   firstAid: string;
 }
@@ -386,26 +387,35 @@ export default function KamusIndex({ articles, videos }: KamusPageProps) {
 
                     {/* Body Drawer */}
                     <div className="flex-1 space-y-5 overflow-y-auto pr-1">
-                      {/* Section 1: Pengertian & Gejala */}
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                          Pengertian &amp; Gejala Medis
-                        </h4>
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm leading-relaxed font-medium">
-                          {selectedArticle.summary}
-                        </div>
-                      </div>
+                      {selectedArticle.content ? (
+                        <div
+                          className="prose prose-slate max-w-none text-xs sm:text-sm text-slate-800 leading-relaxed [&_h2]:text-sm [&_h2]:sm:text-base [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mt-4 [&_h2]:mb-2 [&_h3]:text-xs [&_h3]:sm:text-sm [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-3 [&_h3]:mb-1.5 [&_p]:my-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2 [&_li]:my-0.5 [&_blockquote]:border-l-4 [&_blockquote]:border-emerald-600 [&_blockquote]:pl-3.5 [&_blockquote]:italic [&_blockquote]:my-3 [&_blockquote]:text-slate-600 [&_hr]:my-4 [&_hr]:border-slate-200"
+                          dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
+                        />
+                      ) : (
+                        <>
+                          {/* Section 1: Pengertian & Gejala */}
+                          <div className="space-y-2">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                              Pengertian &amp; Gejala Medis
+                            </h4>
+                            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm leading-relaxed font-medium">
+                              {selectedArticle.summary}
+                            </div>
+                          </div>
 
-                      {/* Section 2: Pertolongan Pertama Mandiri */}
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-                          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                          <span>Pertolongan Pertama Mandiri</span>
-                        </h4>
-                        <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs sm:text-sm leading-relaxed font-medium">
-                          {selectedArticle.firstAid}
-                        </div>
-                      </div>
+                          {/* Section 2: Pertolongan Pertama Mandiri */}
+                          <div className="space-y-2">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                              <span>Pertolongan Pertama Mandiri</span>
+                            </h4>
+                            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 text-xs sm:text-sm leading-relaxed font-medium">
+                              {selectedArticle.firstAid}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     {/* Footer Drawer */}

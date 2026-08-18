@@ -24,6 +24,7 @@ class KamusController extends Controller
                     'letter' => $item->letter ?? strtoupper(substr($item->title, 0, 1)),
                     'title' => $item->title,
                     'category' => $item->category,
+                    'content' => $item->content ?? '',
                     'summary' => $item->summary ?? '',
                     'firstAid' => $item->first_aid ?? '',
                 ];

@@ -16,6 +16,7 @@ class KamusItem extends Model
         'letter',
         'title',
         'category',
+        'content',
         'summary',
         'first_aid',
         'video_badge',
