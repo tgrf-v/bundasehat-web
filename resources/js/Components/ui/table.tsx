@@ -5,7 +5,7 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto rounded-2xl border border-slate-100 bg-white shadow-soft-sm">
+  <div className="relative w-full overflow-auto">
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm text-left text-slate-700", className)}
@@ -19,7 +19,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("bg-slate-50/80 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wider", className)} {...props} />
+  <thead ref={ref} className={cn("bg-slate-50/70 border-b border-slate-200 text-xs font-semibold text-slate-600", className)} {...props} />
 ));
 TableHeader.displayName = "TableHeader";
 
@@ -29,7 +29,7 @@ const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn("divide-y divide-slate-100 bg-white", className)}
+    className={cn("[&_tr:last-child]:border-0 divide-y divide-slate-100 bg-white", className)}
     {...props}
   />
 ));
@@ -42,7 +42,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "transition-colors hover:bg-slate-50/60 data-[state=selected]:bg-slate-100",
+      "border-b border-slate-100 transition-colors hover:bg-slate-50/70 data-[state=selected]:bg-slate-100",
       className
     )}
     {...props}
@@ -57,7 +57,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-11 px-4 py-3 align-middle font-semibold text-slate-600 [&:has([role=checkbox])]:pr-0",
+      "h-11 px-4 py-3 align-middle font-semibold text-xs text-slate-600 [&:has([role=checkbox])]:pr-0",
       className
     )}
     {...props}
@@ -71,7 +71,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("p-4 align-middle text-slate-700 [&:has([role=checkbox])]:pr-0", className)}
+    className={cn("p-4 align-middle text-sm text-slate-700 [&:has([role=checkbox])]:pr-0", className)}
     {...props}
   />
 ));

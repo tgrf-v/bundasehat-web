@@ -27,6 +27,7 @@ class BidanController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'is_active' => (bool) ($user->is_active ?? true),
                 'no_telepon' => $user->no_telepon,
                 'no_str' => $user->bidanProfile?->no_str,
                 'puskesmas_wilayah' => $user->bidanProfile?->puskesmas_wilayah,
@@ -36,6 +37,23 @@ class BidanController extends Controller
         return Inertia::render('Admin/Bidan/Index', [
             'bidanList' => $bidanList,
         ]);
+    }
+
+    /**
+     * Toggle status aktif / nonaktif akun Bidan.
+     */
+    public function toggleStatus(User $bidan): RedirectResponse
+    {
+        if ($bidan->role !== 'bidan') {
+            abort(403, 'User ini bukan Bidan.');
+        }
+
+        $bidan->is_active = ! ((bool) ($bidan->is_active ?? true));
+        $bidan->save();
+
+        $statusText = $bidan->is_active ? 'diaktifkan' : 'dinonaktifkan';
+
+        return redirect()->back()->with('success', "Akun Bidan {$bidan->name} berhasil {$statusText}.");
     }
 
     /**
@@ -67,6 +85,52 @@ class BidanController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Akun Bidan berhasil dibuat.');
+    }
+
+    /**
+     * Update data akun Bidan.
+     */
+    public function update(Request $request, User $bidan): RedirectResponse
+    {
+        if ($bidan->role !== 'bidan') {
+            abort(403, 'User ini bukan Bidan.');
+        }
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $bidan->id],
+            'no_telepon' => ['nullable', 'string', 'max:20'],
+            'no_str' => ['required', 'string', 'max:100'],
+            'puskesmas_wilayah' => ['nullable', 'string', 'max:255'],
+            'password' => ['nullable', Rules\Password::defaults()],
+        ]);
+
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'no_telepon' => $validated['no_telepon'] ?? null,
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $bidan->update($updateData);
+
+        if ($bidan->bidanProfile) {
+            $bidan->bidanProfile->update([
+                'no_str' => $validated['no_str'],
+                'puskesmas_wilayah' => $validated['puskesmas_wilayah'] ?? $bidan->bidanProfile->puskesmas_wilayah,
+            ]);
+        } else {
+            BidanProfile::create([
+                'user_id' => $bidan->id,
+                'no_str' => $validated['no_str'],
+                'puskesmas_wilayah' => $validated['puskesmas_wilayah'] ?? 'Puskesmas Wilayah Binaan',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Data Bidan berhasil diperbarui.');
     }
 
     /**

@@ -1,23 +1,28 @@
 import React, { useState, useMemo } from "react";
-import { Link, router, useForm, usePage } from "@inertiajs/react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
-import { Card, CardContent, CardTitle } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { Dialog } from "@/Components/ui/dialog";
 import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/Components/ui/dropdown-menu";
+import {
   Plus,
   Trash2,
-  Search,
-  Phone,
-  Mail,
   AlertTriangle,
   CheckCircle2,
   UserPlus,
-  MapPin,
+  MoreHorizontal,
+  Pencil,
+  Power,
+  Check,
 } from "lucide-react";
 import {
   ColumnDef,
@@ -36,6 +41,7 @@ interface BidanItem {
   id: number;
   name: string;
   email: string;
+  is_active?: boolean;
   no_telepon?: string | null;
   no_str?: string | null;
   puskesmas_wilayah?: string | null;
@@ -52,6 +58,7 @@ export default function AdminBidanIndex() {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+  const [editingBidan, setEditingBidan] = useState<BidanItem | null>(null);
   const [deletingBidan, setDeletingBidan] = useState<BidanItem | null>(null);
 
   // Form untuk Tambah Bidan
@@ -64,6 +71,29 @@ export default function AdminBidanIndex() {
     puskesmas_wilayah: "",
   });
 
+  // Form untuk Edit Bidan
+  const editForm = useForm({
+    name: "",
+    email: "",
+    password: "",
+    no_telepon: "",
+    no_str: "",
+    puskesmas_wilayah: "",
+  });
+
+  const handleOpenEditModal = (bidan: BidanItem) => {
+    setEditingBidan(bidan);
+    editForm.setData({
+      name: bidan.name || "",
+      email: bidan.email || "",
+      password: "",
+      no_telepon: bidan.no_telepon || "",
+      no_str: bidan.no_str || "",
+      puskesmas_wilayah: bidan.puskesmas_wilayah || "",
+    });
+    editForm.clearErrors();
+  };
+
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createForm.post(route("admin.bidan.store"), {
@@ -72,6 +102,25 @@ export default function AdminBidanIndex() {
         setIsCreateModalOpen(false);
         createForm.reset();
       },
+    });
+  };
+
+  const handleEditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingBidan) return;
+
+    editForm.put(route("admin.bidan.update", { bidan: editingBidan.id }), {
+      preserveScroll: true,
+      onSuccess: () => {
+        setEditingBidan(null);
+        editForm.reset();
+      },
+    });
+  };
+
+  const handleToggleStatus = (bidan: BidanItem) => {
+    router.patch(route("admin.bidan.toggle-status", { bidan: bidan.id }), {}, {
+      preserveScroll: true,
     });
   };
 
@@ -86,90 +135,148 @@ export default function AdminBidanIndex() {
     });
   };
 
-  // Definisi Kolom TanStack Table
+  // Definisi Kolom TanStack Table (Official Shadcn Data Table Architecture)
   const columns = useMemo<ColumnDef<BidanItem>[]>(
     () => [
       {
         accessorKey: "name",
-        header: "Nama Bidan",
+        header: () => (
+          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
+            Nama Bidan
+          </span>
+        ),
         cell: ({ row }) => {
           const bidan = row.original;
           return (
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0">
+              <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0 border border-emerald-100/70 shadow-soft-xs">
                 {bidan.name.charAt(0).toUpperCase()}
               </div>
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">
-                  {bidan.name}
-                </p>
-                <p className="text-[11px] text-slate-500 font-medium truncate flex items-center gap-1 mt-0.5">
-                  <Mail className="h-3 w-3 text-slate-400" />
-                  <span>{bidan.email}</span>
-                </p>
+              <div className="font-semibold text-slate-900 text-xs sm:text-sm">
+                {bidan.name}
               </div>
             </div>
           );
         },
       },
       {
-        accessorKey: "no_str",
-        header: "No. STR",
+        accessorKey: "email",
+        header: () => (
+          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
+            Email
+          </span>
+        ),
         cell: ({ row }) => (
-          <Badge variant="outline" className="text-[11px] font-mono font-bold bg-slate-50 border-slate-200">
-            {row.original.no_str || "-"}
-          </Badge>
+          <span className="text-xs sm:text-sm text-slate-600 font-normal">
+            {row.original.email}
+          </span>
         ),
       },
       {
-        accessorKey: "puskesmas_wilayah",
-        header: "Wilayah Puskesmas",
+        accessorKey: "no_str",
+        header: () => (
+          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
+            No. STR
+          </span>
+        ),
         cell: ({ row }) => (
-          <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
-            <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-            <span>{row.original.puskesmas_wilayah || "Puskesmas Belum Diatur"}</span>
-          </div>
+          <span className="font-mono text-xs text-slate-700 font-medium">
+            {row.original.no_str || "-"}
+          </span>
         ),
       },
       {
         accessorKey: "no_telepon",
-        header: "No. WhatsApp",
+        header: () => (
+          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
+            No. WhatsApp
+          </span>
+        ),
+        cell: ({ row }) => (
+          <span className="text-xs text-slate-700 font-medium">
+            {row.original.no_telepon || "-"}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "is_active",
+        header: () => (
+          <span className="text-slate-900 font-semibold text-xs sm:text-sm">
+            Status
+          </span>
+        ),
         cell: ({ row }) => {
-          const phone = row.original.no_telepon;
-          return phone ? (
-            <span className="flex items-center gap-1 text-xs text-slate-600 font-medium">
-              <Phone className="h-3 w-3 text-slate-400" />
-              <span>{phone}</span>
+          const isActive = row.original.is_active !== false;
+          return isActive ? (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+              <span>Aktif</span>
             </span>
           ) : (
-            <span className="text-xs text-slate-400 font-medium">-</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+              <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+              <span>Nonaktif</span>
+            </span>
           );
         },
       },
       {
-        accessorKey: "created_at",
-        header: "Terdaftar",
-        cell: ({ row }) => (
-          <span className="text-xs text-slate-500">{row.original.created_at}</span>
-        ),
-      },
-      {
         id: "actions",
-        header: () => <div className="text-right pr-2">Aksi</div>,
-        cell: ({ row }) => (
-          <div className="text-right pr-2">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setDeletingBidan(row.original)}
-              className="h-8 w-8 p-0 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-              title="Hapus Akun Bidan"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        ),
+        header: () => <span className="sr-only">Aksi</span>,
+        cell: ({ row }) => {
+          const bidan = row.original;
+          const isActive = bidan.is_active !== false;
+          return (
+            <div className="text-right">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors ml-auto focus:outline-none">
+                  <span className="sr-only">Buka menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[180px] p-1.5 rounded-2xl shadow-soft-md border-slate-100">
+                  <DropdownMenuItem
+                    onClick={() => handleOpenEditModal(bidan)}
+                    className="flex items-center gap-2 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    <Pencil className="h-3.5 w-3.5 text-slate-500" />
+                    <span>Edit Akun Bidan</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => handleToggleStatus(bidan)}
+                    className={`flex items-center gap-2 text-xs font-medium cursor-pointer rounded-xl px-3 py-2 ${
+                      isActive
+                        ? "text-amber-700 hover:bg-amber-50"
+                        : "text-emerald-700 hover:bg-emerald-50"
+                    }`}
+                  >
+                    {isActive ? (
+                      <>
+                        <Power className="h-3.5 w-3.5 text-amber-600" />
+                        <span>Nonaktifkan Bidan</span>
+                      </>
+                    ) : (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-600" />
+                        <span>Aktifkan Bidan</span>
+                      </>
+                    )}
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator className="my-1 bg-slate-100" />
+
+                  <DropdownMenuItem
+                    onClick={() => setDeletingBidan(bidan)}
+                    className="flex items-center gap-2 text-xs font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 cursor-pointer rounded-xl px-3 py-2"
+                  >
+                    <Trash2 className="h-3.5 w-3.5 text-rose-500" />
+                    <span>Hapus Akun Bidan</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          );
+        },
       },
     ],
     []
@@ -197,7 +304,9 @@ export default function AdminBidanIndex() {
 
   return (
     <BundaSehatLayout activeNav="admin-bidan">
-      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8 animate-fadeIn">
+      <Head title="Manajemen Akun Bidan - BundaSehat" />
+
+      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
         
         {/* FLASH NOTIFICATION */}
         {flash?.success && (
@@ -227,130 +336,109 @@ export default function AdminBidanIndex() {
           </Button>
         </div>
 
-        {/* SEARCH & TABLE SECTION */}
-        <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] overflow-hidden space-y-0">
+        {/* OFFICIAL SHADCN UI DATA TABLE ARCHITECTURE */}
+        <div className="w-full space-y-4">
           
-          <div className="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <CardTitle className="text-base font-bold text-slate-900">
-                Daftar Bidan
-              </CardTitle>
-            </div>
+          {/* Toolbar: Minimal Search Filter */}
+          <div className="flex items-center py-1">
+            <Input
+              placeholder="Filter data bidan..."
+              value={globalFilter ?? ""}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+              className="max-w-sm h-9 rounded-full border border-slate-200 bg-white px-3.5 py-1 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-slate-400 focus-visible:ring-1 focus-visible:ring-slate-400"
+            />
+          </div>
 
-            {/* Search Input */}
-            <div className="relative w-full sm:w-72">
-              <Input
-                type="text"
-                value={globalFilter ?? ""}
-                onChange={(e) => setGlobalFilter(e.target.value)}
-                placeholder="Cari nama, STR, puskesmas..."
-                className="pl-9 text-xs h-10 rounded-full border border-slate-200 bg-white"
-              />
-              <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+          {/* Table Container (Clean Rounded-xl Border) */}
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <div className="relative w-full overflow-x-auto">
+              <Table className="w-full caption-bottom text-sm">
+                <TableHeader className="[&_tr]:border-b">
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id} className="border-b border-slate-200 hover:bg-transparent">
+                      {headerGroup.headers.map((header) => (
+                        <TableHead
+                          key={header.id}
+                          className="h-10 px-4 text-left align-middle font-semibold text-slate-900 text-xs sm:text-sm whitespace-nowrap"
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody className="[&_tr:last-child]:border-0 divide-y divide-slate-100">
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell
+                            key={cell.id}
+                            className="p-4 align-middle whitespace-nowrap text-slate-700"
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center text-xs text-slate-500 font-medium"
+                      >
+                        {globalFilter
+                          ? `Tidak ditemukan akun bidan yang cocok dengan pencarian "${globalFilter}".`
+                          : "Belum ada akun Bidan yang didaftarkan."}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </div>
           </div>
 
-          <CardContent className="p-0">
-            {table.getRowModel().rows?.length ? (
-              <>
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="bg-slate-50/70">
-                          {headerGroup.headers.map((header) => (
-                            <TableHead key={header.id} className="text-xs font-bold px-6 py-3.5">
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
-                                  )}
-                            </TableHead>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableHeader>
-                    <TableBody>
-                      {table.getRowModel().rows.map((row) => (
-                        <TableRow
-                          key={row.id}
-                          className="hover:bg-slate-50/60 transition-colors"
-                        >
-                          {row.getVisibleCells().map((cell) => (
-                            <TableCell key={cell.id} className="px-6 py-4">
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+          {/* Pagination / Count Footer */}
+          <div className="flex items-center justify-between py-2 text-xs sm:text-sm text-slate-500">
+            <div>
+              Total {table.getFilteredRowModel().rows.length} akun bidan terdaftar.
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                className="rounded-full font-bold text-xs h-8 px-3.5 border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Sebelumnya
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                className="rounded-full font-bold text-xs h-8 px-3.5 border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Berikutnya
+              </Button>
+            </div>
+          </div>
 
-                {/* Pagination Controls (jika data melebihi 10 baris) */}
-                {table.getPageCount() > 1 && (
-                  <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 text-xs text-slate-500">
-                    <div>
-                      Halaman {table.getState().pagination.pageIndex + 1} dari {table.getPageCount()}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                        className="rounded-full text-xs font-bold h-8 px-3"
-                      >
-                        Sebelumnya
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                        className="rounded-full text-xs font-bold h-8 px-3"
-                      >
-                        Berikutnya
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="p-12 text-center space-y-3">
-                <div className="h-14 w-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
-                  <Search className="h-6 w-6" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-800">Tidak Ada Data Bidan</h4>
-                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                    {globalFilter
-                      ? `Tidak ditemukan akun bidan yang cocok dengan pencarian "${globalFilter}".`
-                      : "Belum ada akun Bidan yang didaftarkan. Klik tombol di atas untuk menambah akun Bidan baru."}
-                  </p>
-                </div>
-                {globalFilter && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setGlobalFilter("")}
-                    className="rounded-full text-xs font-bold"
-                  >
-                    Reset Pencarian
-                  </Button>
-                )}
-              </div>
-            )}
-          </CardContent>
-
-        </Card>
+        </div>
 
       </div>
 
@@ -365,11 +453,11 @@ export default function AdminBidanIndex() {
           
           {/* Field 1: Nama Lengkap */}
           <div>
-            <Label htmlFor="bidan_name" className="text-xs font-bold text-slate-700">
+            <Label htmlFor="create_name" className="text-xs font-bold text-slate-700">
               Nama Lengkap &amp; Gelar <span className="text-rose-500">*</span>
             </Label>
             <Input
-              id="bidan_name"
+              id="create_name"
               type="text"
               placeholder="Contoh: Bidan Siti Rahayu, S.Tr.Keb"
               value={createForm.data.name}
@@ -384,11 +472,11 @@ export default function AdminBidanIndex() {
 
           {/* Field 2: Email Login */}
           <div>
-            <Label htmlFor="bidan_email" className="text-xs font-bold text-slate-700">
+            <Label htmlFor="create_email" className="text-xs font-bold text-slate-700">
               Alamat Email Akun <span className="text-rose-500">*</span>
             </Label>
             <Input
-              id="bidan_email"
+              id="create_email"
               type="email"
               placeholder="bidan.siti@puskesmas.go.id"
               value={createForm.data.email}
@@ -403,11 +491,11 @@ export default function AdminBidanIndex() {
 
           {/* Field 3: Password Akun */}
           <div>
-            <Label htmlFor="bidan_password" className="text-xs font-bold text-slate-700">
+            <Label htmlFor="create_password" className="text-xs font-bold text-slate-700">
               Password Login <span className="text-rose-500">*</span>
             </Label>
             <Input
-              id="bidan_password"
+              id="create_password"
               type="password"
               placeholder="Minimal 8 karakter"
               value={createForm.data.password}
@@ -422,11 +510,11 @@ export default function AdminBidanIndex() {
 
           {/* Field 4: No. STR Bidan */}
           <div>
-            <Label htmlFor="bidan_str" className="text-xs font-bold text-slate-700">
+            <Label htmlFor="create_str" className="text-xs font-bold text-slate-700">
               Nomor STR Bidan <span className="text-rose-500">*</span>
             </Label>
             <Input
-              id="bidan_str"
+              id="create_str"
               type="text"
               placeholder="Contoh: STR-BDN-2026-0912"
               value={createForm.data.no_str}
@@ -441,11 +529,11 @@ export default function AdminBidanIndex() {
 
           {/* Field 5: Wilayah Puskesmas */}
           <div>
-            <Label htmlFor="bidan_puskesmas" className="text-xs font-bold text-slate-700">
+            <Label htmlFor="create_puskesmas" className="text-xs font-bold text-slate-700">
               Wilayah Penugasan Puskesmas <span className="text-rose-500">*</span>
             </Label>
             <Input
-              id="bidan_puskesmas"
+              id="create_puskesmas"
               type="text"
               placeholder="Contoh: Puskesmas Kecamatan Cilandak"
               value={createForm.data.puskesmas_wilayah}
@@ -460,11 +548,11 @@ export default function AdminBidanIndex() {
 
           {/* Field 6: No. WhatsApp / Telepon */}
           <div>
-            <Label htmlFor="bidan_phone" className="text-xs font-bold text-slate-700">
+            <Label htmlFor="create_phone" className="text-xs font-bold text-slate-700">
               Nomor WhatsApp / Kontak
             </Label>
             <Input
-              id="bidan_phone"
+              id="create_phone"
               type="tel"
               placeholder="Contoh: 081234567890"
               value={createForm.data.no_telepon}
@@ -497,6 +585,153 @@ export default function AdminBidanIndex() {
             >
               <Plus className="h-4 w-4" />
               <span>Simpan Akun Bidan</span>
+            </Button>
+          </div>
+
+        </form>
+      </Dialog>
+
+      {/* MODAL / DIALOG: EDIT DATA BIDAN */}
+      <Dialog
+        isOpen={Boolean(editingBidan)}
+        onClose={() => setEditingBidan(null)}
+        title="Edit Data Bidan"
+        description="Perbarui informasi akun dan data STR Bidan"
+      >
+        <form onSubmit={handleEditSubmit} className="space-y-4 pt-1">
+          
+          {/* Field 1: Nama Lengkap */}
+          <div>
+            <Label htmlFor="edit_name" className="text-xs font-bold text-slate-700">
+              Nama Lengkap &amp; Gelar <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="edit_name"
+              type="text"
+              placeholder="Contoh: Bidan Siti Rahayu, S.Tr.Keb"
+              value={editForm.data.name}
+              onChange={(e) => editForm.setData("name", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {editForm.errors.name && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{editForm.errors.name}</p>
+            )}
+          </div>
+
+          {/* Field 2: Email Login */}
+          <div>
+            <Label htmlFor="edit_email" className="text-xs font-bold text-slate-700">
+              Alamat Email Akun <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="edit_email"
+              type="email"
+              placeholder="bidan.siti@puskesmas.go.id"
+              value={editForm.data.email}
+              onChange={(e) => editForm.setData("email", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {editForm.errors.email && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{editForm.errors.email}</p>
+            )}
+          </div>
+
+          {/* Field 3: Password Akun (Opsional) */}
+          <div>
+            <Label htmlFor="edit_password" className="text-xs font-bold text-slate-700">
+              Password Baru <span className="text-slate-400 font-normal">(Kosongkan jika tidak diubah)</span>
+            </Label>
+            <Input
+              id="edit_password"
+              type="password"
+              placeholder="Minimal 8 karakter baru"
+              value={editForm.data.password}
+              onChange={(e) => editForm.setData("password", e.target.value)}
+              className="mt-1"
+            />
+            {editForm.errors.password && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{editForm.errors.password}</p>
+            )}
+          </div>
+
+          {/* Field 4: No. STR Bidan */}
+          <div>
+            <Label htmlFor="edit_str" className="text-xs font-bold text-slate-700">
+              Nomor STR Bidan <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="edit_str"
+              type="text"
+              placeholder="Contoh: STR-BDN-2026-0912"
+              value={editForm.data.no_str}
+              onChange={(e) => editForm.setData("no_str", e.target.value)}
+              className="mt-1"
+              required
+            />
+            {editForm.errors.no_str && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{editForm.errors.no_str}</p>
+            )}
+          </div>
+
+          {/* Field 5: Wilayah Puskesmas */}
+          <div>
+            <Label htmlFor="edit_puskesmas" className="text-xs font-bold text-slate-700">
+              Wilayah Penugasan Puskesmas
+            </Label>
+            <Input
+              id="edit_puskesmas"
+              type="text"
+              placeholder="Contoh: Puskesmas Kecamatan Cilandak"
+              value={editForm.data.puskesmas_wilayah}
+              onChange={(e) => editForm.setData("puskesmas_wilayah", e.target.value)}
+              className="mt-1"
+            />
+            {editForm.errors.puskesmas_wilayah && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{editForm.errors.puskesmas_wilayah}</p>
+            )}
+          </div>
+
+          {/* Field 6: No. WhatsApp / Telepon */}
+          <div>
+            <Label htmlFor="edit_phone" className="text-xs font-bold text-slate-700">
+              Nomor WhatsApp / Kontak
+            </Label>
+            <Input
+              id="edit_phone"
+              type="tel"
+              placeholder="Contoh: 081234567890"
+              value={editForm.data.no_telepon}
+              onChange={(e) => editForm.setData("no_telepon", e.target.value)}
+              className="mt-1"
+            />
+            {editForm.errors.no_telepon && (
+              <p className="text-[11px] text-rose-500 mt-1 pl-3">{editForm.errors.no_telepon}</p>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="outline"
+              size="default"
+              onClick={() => setEditingBidan(null)}
+              className="rounded-full font-bold text-xs"
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="default"
+              size="default"
+              isLoading={editForm.processing}
+              disabled={editForm.processing}
+              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs gap-1.5 shadow-soft-sm"
+            >
+              <Pencil className="h-4 w-4" />
+              <span>Simpan Perubahan</span>
             </Button>
           </div>
 

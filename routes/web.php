@@ -80,6 +80,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/design-system', function () {
         return Inertia::render('DesignSystem');
     })->name('design-system');
+
+    // Table Design Preview Showcase
+    Route::get('/table-preview', function () {
+        return Inertia::render('TablePreview');
+    })->name('table-preview');
 });
 
 // ──────────────────────────────────────────────
@@ -89,6 +94,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     // Kelola Bidan
     Route::get('/bidan', [BidanController::class, 'index'])->name('admin.bidan.index');
     Route::post('/bidan', [BidanController::class, 'store'])->name('admin.bidan.store');
+    Route::put('/bidan/{bidan}', [BidanController::class, 'update'])->name('admin.bidan.update');
+    Route::patch('/bidan/{bidan}/toggle-status', [BidanController::class, 'toggleStatus'])->name('admin.bidan.toggle-status');
     Route::delete('/bidan/{bidan}', [BidanController::class, 'destroy'])->name('admin.bidan.destroy');
 
     // Kelola Kamus & Video Terapi
