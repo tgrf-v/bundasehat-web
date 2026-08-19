@@ -19,6 +19,8 @@ class Screening extends Model
         // Input DSS
         'nama_pasien',
         'nik',
+        'pekerjaan',
+        'pendidikan',
         'umur',
         'paritas',
         'hpht',
@@ -61,9 +63,11 @@ class Screening extends Model
         'detail_skor',
         'taksiran_hpl',
 
-        // Output ML (future)
+        // Output ML (FastAPI Microservice)
         'diagnosa_ml',
+        'kategori_ml',
         'skor_risiko_ml',
+        'probabilitas_ml',
     ];
 
     /**
@@ -76,6 +80,7 @@ class Screening extends Model
             'diagnosa_komplikasi' => 'array',
             'saran_terapi' => 'array',
             'detail_skor' => 'array',
+            'probabilitas_ml' => 'array',
             'sudah_dapat_treatment' => 'boolean',
             'ada_riwayat_sc' => 'boolean',
             'map_value' => 'decimal:2',

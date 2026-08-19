@@ -11,22 +11,38 @@ export interface PasienData {
   wilayahPuskesmas?: string;
 }
 
-export type EdemaLevel = 'none' | 'ringan_kaki' | 'sedang_tungkai' | 'berat_wajah_tangan';
+export type EdemaLevel = 'none' | 'ringan_kaki' | 'sedang_tungkai' | 'berat_wajah_tangan' | 'bengkak_muka_tangan';
 
 export interface ScreeningInput {
   nama_pasien: string;
   nik?: string;
+  pekerjaan?: string;
+  pendidikan?: string;
   umur: number;
+  gravida?: number;
   paritas: number;
+  abortus?: number;
+  tinggi_badan?: number;
+  berat_badan?: number;
+  imt?: number;
   hpht?: string;
   sistolik: number;
   diastolik: number;
+  letak_janin?: string;
+  umur_kehamilan?: string;
+  jenis_persalinan?: string;
+  hb?: number;
+  leokosit?: number;
+  trombosit?: number;
   edema_level: EdemaLevel;
   keluhan_spesifik: string[];
   sudah_dapat_treatment: boolean;
   detail_treatment?: string;
   tipe_screening: 'kehamilan' | 'persalinan';
   wilayah_puskesmas?: string;
+  posisi_janin?: string;
+  ada_riwayat_sc?: boolean;
+  kondisi_ketuban?: string;
 }
 
 export type RiskLevel = 'Ringan' | 'Sedang' | 'Berat';
@@ -53,6 +69,10 @@ export interface ScreeningResult {
   saran_terapi_ids: number[];
   saran_terapi: string[];
   detail_skor: DetailSkorFactor[];
+  diagnosa_ml?: string;
+  kategori_ml?: 'KRR' | 'KRT' | 'KRST';
+  skor_risiko_ml?: number;
+  probabilitas_ml?: Record<string, number>;
   input_summary: ScreeningInput;
   nama_pasien?: string;
   created_at: string;

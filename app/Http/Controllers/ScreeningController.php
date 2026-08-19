@@ -53,20 +53,86 @@ class ScreeningController extends Controller
         // Map tipe_screening ke format DB
         $tipeDb = $validated['tipe_screening'] === 'kehamilan' ? 'dss' : 'dss';
 
+        // Prepare 15 Maternal Parameters for FastAPI ML
+        $tb = (float) ($validated['tinggi_badan'] ?? 155);
+        $bb = (float) ($validated['berat_badan'] ?? 55);
+        $calculatedImt = (float) ($validated['imt'] ?? ($tb > 0 ? round($bb / (($tb / 100) ** 2), 1) : 22.0));
+
+        $pekerjaan = $validated['pekerjaan'] ?? $user->pekerjaan ?? 'Ibu Rumah Tangga';
+        $pendidikan = $validated['pendidikan'] ?? $user->pendidikan ?? 'SLTA';
+        $gravida = (int) ($validated['gravida'] ?? ($validated['paritas'] + ($validated['abortus'] ?? 0) + 1));
+        $para = (int) $validated['paritas'];
+        $abortus = (int) ($validated['abortus'] ?? 0);
+        $sistolik = (int) $validated['sistolik'];
+        $diastolik = (int) $validated['diastolik'];
+        $letakJanin = $validated['letak_janin'] ?? (isset($validated['posisi_janin']) && $validated['posisi_janin'] === 'sungsang' ? 'Sungsang' : (isset($validated['posisi_janin']) && $validated['posisi_janin'] === 'lintang' ? 'Melintang' : 'Memanjang'));
+        $umurKehamilan = $validated['umur_kehamilan'] ?? 'Aterm';
+        $jenisPersalinan = $validated['jenis_persalinan'] ?? (!empty($validated['ada_riwayat_sc']) ? 'Sectio Sesarea' : 'Persalinan Pervaginam');
+        $hb = (float) ($validated['hb'] ?? 12.0);
+        $leokosit = (int) ($validated['leokosit'] ?? 9000);
+        $trombosit = (int) ($validated['trombosit'] ?? 250000);
+
+        // Call FastAPI Microservice (XGBoost)
+        $diagnosaMl = null;
+        $kategoriMl = null;
+        $skorRisikoMl = null;
+        $probabilitasMl = null;
+
+        try {
+            $mlResponse = \Illuminate\Support\Facades\Http::timeout(3)->post('http://127.0.0.1:8000/predict', [
+                'usia' => (int) $validated['umur'],
+                'pekerjaan' => $pekerjaan,
+                'pendidikan' => $pendidikan,
+                'gravida' => $gravida,
+                'para' => $para,
+                'abortus' => $abortus,
+                'imt' => $calculatedImt,
+                'sistolik' => $sistolik,
+                'diastolik' => $diastolik,
+                'letak_janin' => $letakJanin,
+                'umur_kehamilan' => $umurKehamilan,
+                'jenis_persalinan' => $jenisPersalinan,
+                'hemoglobin' => $hb,
+                'leukosit' => $leokosit,
+                'trombosit' => $trombosit,
+            ]);
+
+            if ($mlResponse->successful()) {
+                $mlData = $mlResponse->json();
+                $diagnosaMl = $mlData['primary_diagnosis'] ?? null;
+                $kategoriMl = $mlData['risk_category'] ?? null;
+                $skorRisikoMl = $mlData['confidence_score'] ?? null;
+                $probabilitasMl = $mlData['probabilities'] ?? null;
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('FastAPI ML Service connection notice: ' . $e->getMessage());
+        }
+
         // Simpan ke database
         $screening = Screening::create([
             'ibu_hamil_id' => $user->id,
             'bidan_id' => null,
             'tipe_screening' => $tipeDb,
 
-            // Input data
+            // Input data (15 variabel dataset maternal)
             'nama_pasien' => $validated['nama_pasien'],
             'nik' => $validated['nik'] ?? null,
+            'pekerjaan' => $pekerjaan,
+            'pendidikan' => $pendidikan,
             'umur' => $validated['umur'],
-            'paritas' => $validated['paritas'],
+            'gravida' => $gravida,
+            'paritas' => $para,
+            'abortus' => $abortus,
+            'imt' => $calculatedImt,
             'hpht' => $validated['hpht'] ?? null,
-            'sistolik' => $validated['sistolik'],
-            'diastolik' => $validated['diastolik'],
+            'sistolik' => $sistolik,
+            'diastolik' => $diastolik,
+            'letak_janin' => $letakJanin,
+            'umur_kehamilan' => $umurKehamilan,
+            'jenis_persalinan' => $jenisPersalinan,
+            'hb' => $hb,
+            'leokosit' => $leokosit,
+            'trombosit' => $trombosit,
             'edema_level' => $validated['edema_level'],
             'keluhan_spesifik' => $keluhanSpesifik,
             'sudah_dapat_treatment' => $validated['sudah_dapat_treatment'],
@@ -92,6 +158,12 @@ class ScreeningController extends Controller
             'saran_terapi' => $scoringResult['saran_terapi'],
             'detail_skor' => $scoringResult['detail_skor'],
             'taksiran_hpl' => $scoringResult['taksiran_hpl'],
+
+            // Output Machine Learning
+            'diagnosa_ml' => $diagnosaMl,
+            'kategori_ml' => $kategoriMl,
+            'skor_risiko_ml' => $skorRisikoMl,
+            'probabilitas_ml' => $probabilitasMl,
         ]);
 
         return redirect()->back()->with('screeningResult', $this->formatScreeningResult($screening));
@@ -159,14 +231,29 @@ class ScreeningController extends Controller
             'saran_terapi_ids' => $screening->tingkat_risiko === 'Berat' ? [3, 4] : ($screening->tingkat_risiko === 'Sedang' ? [1, 2] : [2]),
             'saran_terapi' => $screening->saran_terapi ?? [],
             'detail_skor' => $screening->detail_skor ?? [],
+            'diagnosa_ml' => $screening->diagnosa_ml,
+            'kategori_ml' => $screening->kategori_ml,
+            'skor_risiko_ml' => $screening->skor_risiko_ml ? (float) $screening->skor_risiko_ml : null,
+            'probabilitas_ml' => $screening->probabilitas_ml ?? [],
             'input_summary' => [
                 'nama_pasien' => $screening->nama_pasien,
                 'nik' => $screening->nik,
+                'pekerjaan' => $screening->pekerjaan,
+                'pendidikan' => $screening->pendidikan,
                 'umur' => $screening->umur,
+                'gravida' => $screening->gravida,
                 'paritas' => $screening->paritas,
+                'abortus' => $screening->abortus,
+                'imt' => (float) $screening->imt,
                 'hpht' => $screening->hpht,
                 'sistolik' => $screening->sistolik,
                 'diastolik' => $screening->diastolik,
+                'letak_janin' => $screening->letak_janin,
+                'umur_kehamilan' => $screening->umur_kehamilan,
+                'jenis_persalinan' => $screening->jenis_persalinan,
+                'hb' => (float) $screening->hb,
+                'leokosit' => $screening->leokosit,
+                'trombosit' => $screening->trombosit,
                 'edema_level' => $screening->edema_level,
                 'keluhan_spesifik' => $screening->keluhan_spesifik ?? [],
                 'sudah_dapat_treatment' => $screening->sudah_dapat_treatment,

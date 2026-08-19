@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\KamusAdminController;
 use App\Http\Controllers\KamusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScreeningController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -71,6 +72,9 @@ Route::middleware('auth')->group(function () {
 
     // Kamus Kesehatan & Terapi Komplementer (Publik)
     Route::get('/kamus', [KamusController::class, 'index'])->name('kamus.index');
+
+    // Global Search Endpoint
+    Route::get('/api/search', [SearchController::class, 'search'])->name('api.search');
 
     // Profil & Riwayat Screening
     Route::get('/profil', [ScreeningController::class, 'history'])->name('profil.index');

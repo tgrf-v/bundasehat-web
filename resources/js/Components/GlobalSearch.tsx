@@ -4,6 +4,7 @@ import {
   Search,
   X,
   Loader2,
+  ChevronRight,
   Activity,
   Stethoscope,
   BookOpen,
@@ -11,7 +12,7 @@ import {
   FileText,
   Video,
   Hospital,
-  ChevronRight,
+  ShieldCheck,
 } from "lucide-react";
 
 interface SearchResultItem {
@@ -20,138 +21,7 @@ interface SearchResultItem {
   category: "Fitur Navigasi" | "Edukasi Kebidanan" | "Video Terapi" | "Rujukan Faskes";
   description: string;
   url: string;
-  icon: React.ElementType;
 }
-
-const SEARCH_INDEX: SearchResultItem[] = [
-  // Fitur Navigasi
-  {
-    id: "nav-kehamilan",
-    title: "Screening Kehamilan",
-    category: "Fitur Navigasi",
-    description: "Evaluasi risiko trimester, tensi darah (MAP), dan edema kaki",
-    url: "/screening/kehamilan",
-    icon: Activity,
-  },
-  {
-    id: "nav-persalinan",
-    title: "Screening Persalinan",
-    category: "Fitur Navigasi",
-    description: "Kesiapan tempat & penolong bersalin aman (PONED / RS)",
-    url: "/screening/persalinan",
-    icon: Stethoscope,
-  },
-  {
-    id: "nav-kamus",
-    title: "Kamus Kesehatan Kebidanan",
-    category: "Fitur Navigasi",
-    description: "Modul komplikasi, pertolongan pertama, dan terapi video",
-    url: "/kamus",
-    icon: BookOpen,
-  },
-  {
-    id: "nav-profil",
-    title: "Profil Saya & Riwayat",
-    category: "Fitur Navigasi",
-    description: "Data HPHT, Puskesmas domisili, dan riwayat screening",
-    url: "/profil",
-    icon: User,
-  },
-
-  // Edukasi Kebidanan
-  {
-    id: "edu-anemia",
-    title: "Anemia pada Ibu Hamil (Hb Rendah)",
-    category: "Edukasi Kebidanan",
-    description: "Kadar hemoglobin < 11 g/dL, penggunaan Tablet Tambah Darah (TTD)",
-    url: "/kamus#anemia",
-    icon: FileText,
-  },
-  {
-    id: "edu-hipertensi",
-    title: "Hipertensi Gestasional (Tensi Tinggi)",
-    category: "Edukasi Kebidanan",
-    description: "Tekanan darah sistolik ≥ 140 / diastolik ≥ 90 mmHg usia > 20 minggu",
-    url: "/kamus#hipertensi",
-    icon: FileText,
-  },
-  {
-    id: "edu-preeklamsia",
-    title: "Preeklamsia & Nyeri Epigastrium",
-    category: "Edukasi Kebidanan",
-    description: "Tanda bahaya pusing berat, pandangan kabur, dan ulu hati nyeri",
-    url: "/kamus#preeklamsia",
-    icon: FileText,
-  },
-  {
-    id: "edu-perdarahan",
-    title: "Perdarahan Antepartum",
-    category: "Edukasi Kebidanan",
-    description: "Tanda darurat plasenta previa / solusio, rujukan emergency RS",
-    url: "/kamus#perdarahan",
-    icon: FileText,
-  },
-  {
-    id: "edu-sc",
-    title: "Seksio Sesarea (SC)",
-    category: "Edukasi Kebidanan",
-    description: "Indikasi rujukan operasi melahirkan pada kondisi khusus",
-    url: "/kamus#seksio",
-    icon: FileText,
-  },
-
-  // Video Terapi
-  {
-    id: "vid-oxytocin",
-    title: "Pijat Oxytocin Tulang Belakang",
-    category: "Video Terapi",
-    description: "Panduan relaksasi perangsang kontraksi dan pelancar ASI",
-    url: "/kamus#video-oxytocin",
-    icon: Video,
-  },
-  {
-    id: "vid-breathing",
-    title: "Teknik Pernapasan Deep Breathing",
-    category: "Video Terapi",
-    description: "Latihan pernapasan dalam penurun stres dan penstabil tensi",
-    url: "/kamus#video-breathing",
-    icon: Video,
-  },
-  {
-    id: "vid-panggul",
-    title: "Senam Pelenturan Panggul Trimester 3",
-    category: "Video Terapi",
-    description: "Gerakan pemenuhan posisi jalan lahir janin mendekati HPL",
-    url: "/kamus#video-panggul",
-    icon: Video,
-  },
-  {
-    id: "vid-edema",
-    title: "Elevasi & Kompres Pergelangan Kaki",
-    category: "Video Terapi",
-    description: "Terapi meredakan bengkak pembuluh ekstremitas bawah",
-    url: "/kamus#video-edema",
-    icon: Video,
-  },
-
-  // Rujukan Faskes
-  {
-    id: "faskes-poned",
-    title: "Puskesmas PONED (Pelayanan Obstetri Neonatal)",
-    category: "Rujukan Faskes",
-    description: "Fasilitas penanganan kegawatdaruratan kebidanan tingkat awal",
-    url: "/screening/persalinan",
-    icon: Hospital,
-  },
-  {
-    id: "faskes-rs",
-    title: "Rumah Sakit Rujukan Spesialis Sp.OG",
-    category: "Rujukan Faskes",
-    description: "Fasilitas rujukan lanjutan persalinan tindakan Seksio Sesarea (SC)",
-    url: "/screening/persalinan",
-    icon: Hospital,
-  },
-];
 
 export function GlobalSearch() {
   const [query, setQuery] = useState("");
@@ -160,10 +30,11 @@ export function GlobalSearch() {
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Debounced search evaluation
+  // Dynamic async search from database endpoint
   useEffect(() => {
-    const trimmed = query.trim().toLowerCase();
+    const trimmed = query.trim();
     if (!trimmed) {
       setResults([]);
       setIsLoading(false);
@@ -171,18 +42,42 @@ export function GlobalSearch() {
     }
 
     setIsLoading(true);
-    const timer = setTimeout(() => {
-      const filtered = SEARCH_INDEX.filter(
-        (item) =>
-          item.title.toLowerCase().includes(trimmed) ||
-          item.description.toLowerCase().includes(trimmed) ||
-          item.category.toLowerCase().includes(trimmed)
-      );
-      setResults(filtered);
-      setIsLoading(false);
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(trimmed)}`, {
+          signal: controller.signal,
+          headers: {
+            "Accept": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setResults(data.results || []);
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
+        console.error("Global search error:", err);
+      } finally {
+        setIsLoading(false);
+      }
     }, 200);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [query]);
 
   // Click outside to close
@@ -230,8 +125,9 @@ export function GlobalSearch() {
   // Group results by category
   const groupedResults = results.reduce<Record<string, SearchResultItem[]>>(
     (acc, item) => {
-      if (!acc[item.category]) acc[item.category] = [];
-      acc[item.category].push(item);
+      const cat = item.category || "Hasil Lainnya";
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(item);
       return acc;
     },
     {}
@@ -299,10 +195,17 @@ export function GlobalSearch() {
                     onClick={() => handleSelectResult(item.url)}
                     className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50/70 transition-colors flex items-center justify-between group"
                   >
-                    <p className="text-xs font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
-                      {item.title}
-                    </p>
-                    <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                    <div className="flex flex-col min-w-0 pr-2">
+                      <p className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
+                        {item.title}
+                      </p>
+                      {item.description && (
+                        <p className="text-[11px] text-slate-500 line-clamp-1">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-emerald-700 group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
                   </button>
                 ))}
               </div>
