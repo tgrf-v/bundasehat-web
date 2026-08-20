@@ -157,7 +157,7 @@ export default function PersalinanScreening() {
             {/* Kolom Kiri (Gambar Static - 50%) */}
             <div className="relative lg:col-span-6 h-[240px] lg:h-full overflow-hidden">
               <img
-                src="/images/delivery-screening.jpg"
+                src="/images/persalinan-screening.jpg"
                 alt="Screening Persalinan"
                 className="absolute inset-0 w-full h-full object-cover"
               />
