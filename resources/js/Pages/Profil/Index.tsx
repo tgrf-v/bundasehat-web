@@ -20,6 +20,8 @@ import {
   FileText,
   HelpCircle,
   Headphones,
+  Info,
+  BookOpen,
   ArrowLeft,
   X,
   Inbox,
@@ -148,10 +150,80 @@ export default function ProfilIndex() {
               </div>
             </Card>
 
+            {/* Menu Superadmin: Panel Kelola (Khusus Mobile) */}
+            {user?.role === "superadmin" && (
+              <Card className="md:hidden rounded-3xl border border-rose-100/90 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] divide-y divide-slate-100 overflow-hidden space-y-0">
+                <div className="px-4 py-2.5 bg-rose-50/70 flex items-center justify-between border-b border-rose-100/70">
+                  <span className="text-xs font-bold text-rose-700 tracking-wide">Panel Superadmin</span>
+                  <span className="text-[10px] font-bold text-rose-600 bg-white px-2.5 py-0.5 rounded-full border border-rose-200/80 shadow-soft-xs">
+                    Khusus Dosen / Admin
+                  </span>
+                </div>
+
+                {/* Kelola Bidan */}
+                <Link
+                  href="/admin/bidan"
+                  className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="h-10 w-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <ShieldCheck className="h-5 w-5 text-rose-600" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                        Kelola Bidan
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        Manajemen Akun &amp; Nakes Wilayah
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
+                </Link>
+
+                {/* Kelola Kamus & Video Terapi */}
+                <Link
+                  href="/admin/kamus"
+                  className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="h-10 w-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <BookOpen className="h-5 w-5 text-rose-600" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-rose-600 transition-colors">
+                        Kelola Kamus
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        Istilah Medis &amp; Video Terapi
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all" />
+                </Link>
+              </Card>
+            )}
+
             {/* Menu 2: Grouped Menu Box Card */}
             <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] divide-y divide-slate-100 overflow-hidden space-y-0">
               
-              {/* Row 1: Syarat dan Ketentuan */}
+              {/* Row 1: Tentang Kami */}
+              <Link
+                href="/tentang-kami"
+                className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <Info className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
+                    Tentang Kami
+                  </span>
+                </div>
+                <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
+              </Link>
+
+              {/* Row 2: Syarat dan Ketentuan */}
               <div
                 onClick={() => setActiveView("syarat")}
                 className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
@@ -167,7 +239,7 @@ export default function ProfilIndex() {
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
               </div>
 
-              {/* Row 2: Kebijakan Privasi */}
+              {/* Row 3: Kebijakan Privasi */}
               <div
                 onClick={() => setActiveView("privasi")}
                 className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
@@ -183,7 +255,7 @@ export default function ProfilIndex() {
                 <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
               </div>
 
-              {/* Row 3: Bantuan */}
+              {/* Row 4: Bantuan */}
               <div
                 onClick={() => setActiveView("bantuan")}
                 className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
