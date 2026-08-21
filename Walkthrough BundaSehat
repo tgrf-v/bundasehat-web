@@ -1,73 +1,31 @@
-# Walkthrough — Backend BundaSehat
+# Walkthrough Proyek BundaSehat (Production Status)
 
-## Ringkasan Perubahan
-
-Implementasi backend penuh untuk BundaSehat: RBAC multi-role, screening KSPR/MAP dengan persistensi database, dan wiring frontend ke Inertia server-side.
-
----
-
-## File yang Dibuat (New)
-
-| File | Fungsi |
-|---|---|
-| [2026_08_13_100001_add_role_and_phone_to_users_table.php](file:///c:/laragon/www/bundasehat/database/migrations/2026_08_13_100001_add_role_and_phone_to_users_table.php) | Tambah kolom `role` dan `no_telepon` ke users |
-| [2026_08_13_100002_create_bidan_profiles_table.php](file:///c:/laragon/www/bundasehat/database/migrations/2026_08_13_100002_create_bidan_profiles_table.php) | Tabel profil bidan (STR, wilayah) |
-| [2026_08_13_100003_create_screenings_table.php](file:///c:/laragon/www/bundasehat/database/migrations/2026_08_13_100003_create_screenings_table.php) | Tabel screenings — 30+ kolom input/output |
-| [BidanProfile.php](file:///c:/laragon/www/bundasehat/app/Models/BidanProfile.php) | Eloquent model bidan profile |
-| [Screening.php](file:///c:/laragon/www/bundasehat/app/Models/Screening.php) | Eloquent model screening + JSON casts |
-| [ScoringService.php](file:///c:/laragon/www/bundasehat/app/Services/ScoringService.php) | PHP port lengkap dari scoringEngine.ts (KSPR + MAP) |
-| [ScreeningRequest.php](file:///c:/laragon/www/bundasehat/app/Http/Requests/ScreeningRequest.php) | Form validation untuk DSS screening |
-| [ScreeningController.php](file:///c:/laragon/www/bundasehat/app/Http/Controllers/ScreeningController.php) | Store, show, history |
-| [BidanController.php](file:///c:/laragon/www/bundasehat/app/Http/Controllers/Admin/BidanController.php) | CRUD akun Bidan (Superadmin only) |
-| [CheckRole.php](file:///c:/laragon/www/bundasehat/app/Http/Middleware/CheckRole.php) | Middleware RBAC reusable |
-
-## File yang Dimodifikasi
-
-| File | Perubahan |
-|---|---|
-| [User.php](file:///c:/laragon/www/bundasehat/app/Models/User.php) | Tambah role, relasi, helper methods |
-| [web.php](file:///c:/laragon/www/bundasehat/routes/web.php) | Semua halaman auth required + screening routes |
-| [bootstrap/app.php](file:///c:/laragon/www/bundasehat/bootstrap/app.php) | Register middleware alias `role` |
-| [RegisteredUserController.php](file:///c:/laragon/www/bundasehat/app/Http/Controllers/Auth/RegisteredUserController.php) | Default role `ibu_hamil`, redirect ke beranda |
-| [AuthenticatedSessionController.php](file:///c:/laragon/www/bundasehat/app/Http/Controllers/Auth/AuthenticatedSessionController.php) | Redirect ke beranda |
-| [DatabaseSeeder.php](file:///c:/laragon/www/bundasehat/database/seeders/DatabaseSeeder.php) | 3 akun demo |
-| [Login.tsx](file:///c:/laragon/www/bundasehat/resources/js/Pages/Auth/Login.tsx) | Real Inertia auth (useForm + POST) |
-| [Kehamilan.tsx](file:///c:/laragon/www/bundasehat/resources/js/Pages/Screening/Kehamilan.tsx) | Server-side submit via router.post |
-| [Persalinan.tsx](file:///c:/laragon/www/bundasehat/resources/js/Pages/Screening/Persalinan.tsx) | Server-side submit via router.post |
-| [Hasil.tsx](file:///c:/laragon/www/bundasehat/resources/js/Pages/Screening/Hasil.tsx) | Terima data dari Inertia server props |
-| [Profil/Index.tsx](file:///c:/laragon/www/bundasehat/resources/js/Pages/Profil/Index.tsx) | Server props + real logout + dynamic riwayat |
-| [Beranda.tsx](file:///c:/laragon/www/bundasehat/resources/js/Pages/Beranda.tsx) | Server props untuk latest screening |
-| [index.d.ts](file:///c:/laragon/www/bundasehat/resources/js/types/index.d.ts) | Tambah `role`, `no_telepon` ke User type |
-| [screening.ts](file:///c:/laragon/www/bundasehat/resources/js/types/screening.ts) | Tambah `id` ke ScreeningResult |
+## Status Keseluruhan
+- **Live URL**: https://app.novos.co.id/
+- **Production Stack**: Laravel 12 + React 19 Inertia + FastAPI XGBoost Python 3 + Nginx + MySQL di Dokploy Docker container.
+- **Status Pengujian**: 100% Lulus Uji pada Desktop & Mobile.
 
 ---
 
-## Akun Demo untuk Testing
+## 👥 Kredensial Akun Pengujian
 
-| Role | Email | Password |
-|---|---|---|
-| Superadmin | `superadmin@bundasehat.test` | `password` |
-| Bidan | `bidan@bundasehat.test` | `password` |
-| Ibu Hamil | `ibuhamil@bundasehat.test` | `password` |
+1. **Superadmin (Dosen Kebidanan)**
+   - Email: `superadmin@bundasehat.test`
+   - Password: `password`
+   - Fitur: Kelola Bidan (`/admin/bidan`), Kelola Kamus & Video Terapi (`/admin/kamus`), Full Access.
+
+2. **Bidan (Nakes Wilayah)**
+   - Email: `bidan@bundasehat.test`
+   - Password: `password`
+   - Fitur: Skrining Klinis (14 Parameter) + Prediksi ML XGBoost, Riwayat Pasien Wilayah.
+
+3. **Ibu Hamil (Pasien Mandiri)**
+   - Email: `ibuhamil@bundasehat.test`
+   - Password: `password`
+   - Fitur: Skrining Mandiri (6 Parameter Non-Medis), Kamus Kesehatan, Video Terapi Komplementer, Riwayat Pribadi.
 
 ---
 
-## Verification Results
-
-- `php artisan migrate:fresh --seed` — Semua 6 migration DONE, seeder berhasil
-- `php artisan route:list` — 32 routes terdaftar, semua nama route benar
-- Scoring engine PHP di-port identik dari TypeScript (sama persis logic & threshold)
-
----
-
-## Yang Belum Dikerjakan (Untuk Iterasi Selanjutnya)
-
-> [!IMPORTANT]
-> Berikut daftar fitur yang belum diimplementasikan dan perlu dikerjakan terpisah:
-
-1. **Frontend Admin (Superadmin manage Bidan)** — Backend routes sudah siap (`/admin/bidan`), tapi halaman React (`Admin/Bidan/Index.tsx`) belum dibuat.
-2. **Edit Profil via Backend** — Form edit profil di `Profil/Index.tsx` masih local state. Perlu `ProfileController` + route untuk persist ke DB.
-3. **Kamus Kesehatan CRUD** — Halaman Kamus masih static. Perlu tabel `kamus_items` + controller + seeder konten.
-4. **Bidan Expert System (ES)** — Form 15 variabel klinis + integrasi FastAPI ML. Backend sudah disiapkan kolom di tabel `screenings`.
-5. **Upload & Re-train Dataset ML (Superadmin)** — Fitur untuk upload dataset ke FastAPI.
-6. **Surat Rujukan Cetak (Bidan)** — Route `GET /screening/{id}/print` untuk generate PDF rujukan formal.
+## 📋 Detail Laporan Pengujian Lengkap
+Laporan pengujian lengkap dapat dilihat pada file:
+👉 [LAPORAN_HASIL_TESTING.md](file:///c:/laragon/www/bundasehat/LAPORAN_HASIL_TESTING.md)
