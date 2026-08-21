@@ -8,6 +8,9 @@
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui"
     },
+    "engines": {
+        "node": ">=22.0.0"
+    },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
         "@inertiajs/react": "^2.0.0",
