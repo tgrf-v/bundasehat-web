@@ -23,7 +23,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
 
-        if ($this->app->environment('production') || env('APP_ENV') === 'production') {
+        if (
+            $this->app->environment('production') ||
+            env('APP_ENV') === 'production' ||
+            str_starts_with((string) config('app.url'), 'https://') ||
+            (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+        ) {
             URL::forceScheme('https');
         }
 
