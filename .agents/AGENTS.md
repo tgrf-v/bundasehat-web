@@ -68,6 +68,12 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 - **Pasien / Guest**: Landing page header / Login trigger.
 - **DILARANG KERAS** menambah menu baru, mengubah struktur hierarki navigasi, atau mengotak-atik permission/role logic navbar tanpa instruksi eksplisit dari user.
 
+### 17. ATURAN KETAT MODIFIKASI FORM SCREENING (STYLE & QUESTION LOCK)
+- **DILARANG KERAS** mengubah style, desain visual, layout split-card, warna, padding, kartu (cards), tri-color gauge, font, atau tampilan hasil screening yang sudah ada saat ini. Style dan layout antarmuka dinyatakan **BEKU (STYLE FROZEN)**.
+- **HANYA UBAH PERTANYAAN / INPUT**: Modifikasi hanya diperbolehkan pada teks label, opsi pilihan, dan data input pertanyaan form.
+- **ABAIKAN PERTANYAAN DI PRD LAMA**: Jangan menggunakan daftar pertanyaan di PRD lama; selalu tunggu dan gunakan daftar pertanyaan resmi yang dikirimkan langsung oleh user.
+- **IZIN EKSPLISIT SEBELUM MENAMBAH ELEMEN**: Jika ada kebutuhan untuk menambah elemen/fitur baru atau mengubah alur form, **WAJIB** meminta izin dan konfirmasi terlebih dahulu kepada user sebelum melakukan perubahan apa pun.
+
 ---
 
 ## 📌 Ringkasan Spesifikasi Proyek BundaSehat
