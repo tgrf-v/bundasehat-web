@@ -60,11 +60,11 @@ class ScreeningController extends Controller
 
         $pekerjaan = $validated['pekerjaan'] ?? $user->pekerjaan ?? 'Ibu Rumah Tangga';
         $pendidikan = $validated['pendidikan'] ?? $user->pendidikan ?? 'SLTA';
-        $gravida = (int) ($validated['gravida'] ?? ($validated['paritas'] + ($validated['abortus'] ?? 0) + 1));
-        $para = (int) $validated['paritas'];
+        $gravida = (int) ($validated['gravida'] ?? ($validated['kehamilan_ke'] ?? (($validated['paritas'] ?? 0) + ($validated['abortus'] ?? 0) + 1)));
+        $para = (int) ($validated['paritas'] ?? $validated['jumlah_anak_hidup'] ?? 0);
         $abortus = (int) ($validated['abortus'] ?? 0);
-        $sistolik = (int) $validated['sistolik'];
-        $diastolik = (int) $validated['diastolik'];
+        $sistolik = (int) ($validated['sistolik'] ?? 120);
+        $diastolik = (int) ($validated['diastolik'] ?? 80);
         $letakJanin = $validated['letak_janin'] ?? (isset($validated['posisi_janin']) && $validated['posisi_janin'] === 'sungsang' ? 'Sungsang' : (isset($validated['posisi_janin']) && $validated['posisi_janin'] === 'lintang' ? 'Melintang' : 'Memanjang'));
         $umurKehamilan = $validated['umur_kehamilan'] ?? 'Aterm';
         $jenisPersalinan = $validated['jenis_persalinan'] ?? (!empty($validated['ada_riwayat_sc']) ? 'Sectio Sesarea' : 'Persalinan Pervaginam');
@@ -133,9 +133,9 @@ class ScreeningController extends Controller
             'hb' => $hb,
             'leokosit' => $leokosit,
             'trombosit' => $trombosit,
-            'edema_level' => $validated['edema_level'],
+            'edema_level' => $validated['edema_level'] ?? 'none',
             'keluhan_spesifik' => $keluhanSpesifik,
-            'sudah_dapat_treatment' => $validated['sudah_dapat_treatment'],
+            'sudah_dapat_treatment' => $validated['sudah_dapat_treatment'] ?? false,
             'detail_treatment' => $validated['detail_treatment'] ?? null,
             'wilayah_puskesmas' => $validated['wilayah_puskesmas'] ?? null,
 
