@@ -690,7 +690,7 @@ export default function PersalinanScreening() {
                         <Button
                           type="button"
                           onClick={handleNext}
-                          className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-6 ml-auto"
+                          className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-6 ml-auto"
                         >
                           <span>Lanjut</span>
                           <ChevronRight className="h-4 w-4 ml-1" />
@@ -699,7 +699,7 @@ export default function PersalinanScreening() {
                         <Button
                           type="submit"
                           disabled={isLoading}
-                          className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm"
+                          className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm"
                         >
                           {isLoading ? "Menghitung Kesiapan..." : "Lihat Hasil Kesiapan"}
                         </Button>

@@ -392,7 +392,7 @@ export default function KehamilanScreening() {
                       <Button
                         type="button"
                         onClick={() => router.visit("/kamus")}
-                        className="flex-1 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2.5"
+                        className="flex-1 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2.5"
                       >
                         <span>Buka Kamus Terapi</span>
                       </Button>
@@ -829,12 +829,12 @@ export default function KehamilanScreening() {
                         </Button>
                       ) : <div />}
                       {currentStep < TOTAL_STEPS ? (
-                        <Button type="button" onClick={handleNextStep} className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-6 ml-auto">
+                        <Button type="button" onClick={handleNextStep} className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-6 ml-auto">
                           <span>Lanjut</span>
                           <ChevronRight className="h-4 w-4 ml-1" />
                         </Button>
                       ) : (
-                        <Button type="submit" disabled={isLoading} className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm">
+                        <Button type="submit" disabled={isLoading} className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm">
                           {isLoading ? "Menghitung Risiko..." : "Lihat Hasil Analisis"}
                         </Button>
                       )}

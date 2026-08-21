@@ -106,7 +106,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   href="/"
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
                     activeNav === "beranda"
-                      ? "text-rose-600 font-bold"
+                      ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
                 >
@@ -118,7 +118,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   <DropdownMenuTrigger
                     className={`px-3 py-1.5 text-sm transition-colors rounded-full inline-flex items-center gap-1 cursor-pointer ${
                       isScreeningActive
-                        ? "text-rose-600 font-bold"
+                        ? "text-emerald-700 font-bold"
                         : "text-slate-600 font-medium hover:text-slate-900"
                     }`}
                   >
@@ -128,7 +128,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   <DropdownMenuContent align="start" className="w-56 p-1.5 rounded-2xl bg-white border border-slate-100/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
                     <DropdownMenuItem onClick={() => router.visit("/screening/kehamilan")} className="p-2.5 rounded-xl hover:bg-slate-50">
                       <div className="flex items-center gap-2.5 w-full">
-                        <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                        <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
                           <Activity className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col text-left">
@@ -140,7 +140,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
                     <DropdownMenuItem onClick={() => router.visit("/screening/persalinan")} className="p-2.5 rounded-xl hover:bg-slate-50 mt-0.5">
                       <div className="flex items-center gap-2.5 w-full">
-                        <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                        <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
                           <Stethoscope className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col text-left">
@@ -156,7 +156,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   href="/kamus"
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
                     activeNav === "kamus"
-                      ? "text-rose-600 font-bold"
+                      ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
                 >
@@ -166,7 +166,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   href="/tentang-kami"
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
                     activeNav === "tentang-kami"
-                      ? "text-rose-600 font-bold"
+                      ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
                 >
@@ -179,7 +179,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                     <DropdownMenuTrigger
                       className={`px-3 py-1.5 text-sm transition-colors rounded-full inline-flex items-center gap-1 cursor-pointer ${
                         activeNav === "admin-bidan" || activeNav === "admin-kamus"
-                          ? "text-rose-600 font-bold"
+                          ? "text-emerald-700 font-bold"
                           : "text-slate-600 font-medium hover:text-slate-900"
                       }`}
                     >
@@ -189,7 +189,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                     <DropdownMenuContent align="end" className="w-56 p-1.5 rounded-2xl bg-white border border-slate-100/90 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
                       <DropdownMenuItem onClick={() => router.visit("/admin/bidan")} className="p-2.5 rounded-xl hover:bg-slate-50">
                         <div className="flex items-center gap-2.5 w-full">
-                          <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                          <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
                             <ShieldCheck className="h-4 w-4" />
                           </div>
                           <div className="flex flex-col text-left">
@@ -201,7 +201,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
                       <DropdownMenuItem onClick={() => router.visit("/admin/kamus")} className="p-2.5 rounded-xl hover:bg-slate-50 mt-0.5">
                         <div className="flex items-center gap-2.5 w-full">
-                          <div className="h-8 w-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                          <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
                             <BookOpen className="h-4 w-4" />
                           </div>
                           <div className="flex flex-col text-left">
@@ -245,7 +245,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "beranda"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -257,7 +257,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/screening/kehamilan"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "kehamilan"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -269,7 +269,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/screening/persalinan"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "persalinan"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -281,7 +281,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/kamus"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "kamus"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -293,7 +293,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               href="/profil"
               className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
                 activeNav === "profil"
-                  ? "text-rose-600 font-bold"
+                  ? "text-emerald-700 font-bold"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
