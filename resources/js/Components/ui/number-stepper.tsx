@@ -98,7 +98,7 @@ export const NumberStepper: React.FC<NumberStepperProps> = ({
             onChange={handleInputChange}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full bg-transparent text-center text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="w-full border-0 bg-transparent text-center text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400 focus:border-0 focus:outline-none focus:ring-0 focus-visible:border-0 focus-visible:outline-none focus-visible:ring-0 shadow-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
           {suffix && (
             <span className="shrink-0 text-xs font-medium text-slate-500 ml-1">
