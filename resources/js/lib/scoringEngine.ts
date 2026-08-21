@@ -1,4 +1,4 @@
-import { ScreeningInput, ScreeningResult, RiskLevel, DetailSkorFactor } from "@/types/screening";
+﻿import { ScreeningInput, ScreeningResult, RiskLevel, DetailSkorFactor } from "@/types/screening";
 
 export function calculateGestationalAge(hphtString?: string): {
   weeks: number;
@@ -8,24 +8,15 @@ export function calculateGestationalAge(hphtString?: string): {
   try {
     const hpht = new Date(hphtString);
     if (isNaN(hpht.getTime())) return { weeks: 0 };
-
     const today = new Date();
     const diffTime = Math.abs(today.getTime() - hpht.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const weeks = Math.floor(diffDays / 7);
-
-    // Naegele's rule: HPHT + 7 days - 3 months + 1 year
     const hpl = new Date(hpht);
     hpl.setDate(hpl.getDate() + 7);
     hpl.setMonth(hpl.getMonth() - 3);
     hpl.setFullYear(hpl.getFullYear() + 1);
-
-    const formattedDate = hpl.toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
+    const formattedDate = hpl.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
     return { weeks: Math.max(0, weeks), dueDate: formattedDate };
   } catch (error) {
     return { weeks: 0 };
@@ -38,155 +29,139 @@ export function calculateMAP(sistolik: number, diastolik: number): number {
 }
 
 export function evaluateScreening(input: ScreeningInput): ScreeningResult {
-  let score = 2; // Initial score for pregnant mothers
+  let score = 2;
   const komplikasi: string[] = [];
-  const detailSkorList: DetailSkorFactor[] = [
-    { deskripsi: "Skor Awal Ibu Hamil (KSPR)", skor: 2 }
-  ];
+  const detailSkorList: DetailSkorFactor[] = [{ deskripsi: "Skor Awal Ibu Hamil (KSPR)", skor: 2 }];
 
-  // Age & Parity evaluation
-  if (input.umur < 20) {
-    score += 4;
-    komplikasi.push("Usia Terlalu Muda (<20 Tahun)");
-    detailSkorList.push({ deskripsi: "Usia Terlalu Muda (<20 Tahun)", skor: 4 });
-  } else if (input.umur >= 35) {
-    score += 4;
-    komplikasi.push("Usia Resti / Terlalu Tua (>=35 Tahun)");
-    detailSkorList.push({ deskripsi: "Usia Primi Tua / Terlalu Tua (>=35 Tahun)", skor: 4 });
-  }
+  const kehamilanKe = input.kehamilan_ke ?? (input.gravida ?? 1);
+  const isHamilPertama = kehamilanKe === 1;
+  const umur = input.umur ?? 0;
 
-  if (input.paritas >= 4) {
-    score += 4;
-    komplikasi.push("Grande Multipara (Paritas >= 4)");
-    detailSkorList.push({ deskripsi: "Grande Multipara (Paritas >= 4)", skor: 4 });
+  // KELOMPOK I — APGO
+  if (isHamilPertama && umur <= 16) {
+    score += 4; komplikasi.push("Terlalu Muda Hamil I"); detailSkorList.push({ deskripsi: "Terlalu Muda Hamil I (<=16 Tahun)", skor: 4 });
+  } else if (isHamilPertama && umur >= 35) {
+    score += 4; komplikasi.push("Terlalu Tua Hamil I (>=35 Tahun)"); detailSkorList.push({ deskripsi: "Terlalu Tua Hamil I (>=35 Tahun)", skor: 4 });
+  } else if (!isHamilPertama && umur >= 35) {
+    score += 4; komplikasi.push("Usia Terlalu Tua (>=35 Tahun)"); detailSkorList.push({ deskripsi: "Usia Terlalu Tua (>=35 Tahun)", skor: 4 });
   }
 
-  // Blood Pressure & MAP
-  const mapVal = calculateMAP(input.sistolik, input.diastolik);
-  const isHipertensiBerat = input.sistolik >= 140 || input.diastolik >= 90;
-  const isHipertensiRingan =
-    (input.sistolik >= 120 && input.sistolik < 140) ||
-    (input.diastolik >= 80 && input.diastolik < 90);
-
-  if (isHipertensiBerat) {
-    score += 8;
-    komplikasi.push("Hipertensi Dalam Kehamilan (HDK) / Preeklamsia");
-    detailSkorList.push({ deskripsi: "Hipertensi Dalam Kehamilan (Sistolik >=140 / Diastolik >=90)", skor: 8 });
-  } else if (isHipertensiRingan) {
-    score += 4;
-    komplikasi.push("Pre-Hipertensi Gestasional");
-    detailSkorList.push({ deskripsi: "Pre-Hipertensi Gestasional", skor: 4 });
+  if (isHamilPertama && input.lama_menikah === ">=4") {
+    score += 4; komplikasi.push("Terlalu Lambat Hamil I (Menikah >=4 Tahun)"); detailSkorList.push({ deskripsi: "Terlalu Lambat Hamil I (Menikah >=4 Tahun)", skor: 4 });
   }
 
-  if (mapVal >= 90 && !komplikasi.includes("Indikator MAP Tinggi (>= 90 mmHg)")) {
-    score += 4;
-    komplikasi.push("Indikator MAP Tinggi (>= 90 mmHg)");
-    detailSkorList.push({ deskripsi: "Mean Arterial Pressure (MAP) >= 90 mmHg", skor: 4 });
+  if (!isHamilPertama) {
+    if (input.jarak_kehamilan === "<2") {
+      score += 4; komplikasi.push("Jarak Kehamilan Terlalu Cepat (<2 Tahun)"); detailSkorList.push({ deskripsi: "Jarak Kehamilan Terlalu Cepat (<2 Tahun)", skor: 4 });
+    } else if (input.jarak_kehamilan === ">10") {
+      score += 4; komplikasi.push("Jarak Kehamilan Terlalu Lama (>10 Tahun)"); detailSkorList.push({ deskripsi: "Jarak Kehamilan Terlalu Lama (>10 Tahun)", skor: 4 });
+    }
   }
 
-  // Edema Evaluation
-  if (input.edema_level === "ringan_kaki") {
-    score += 4;
-    komplikasi.push("Edema Ekstremitas Ringan (Kaki)");
-    detailSkorList.push({ deskripsi: "Edema Ekstremitas Ringan (Kaki)", skor: 4 });
-  } else if (input.edema_level === "sedang_tungkai") {
-    score += 4;
-    komplikasi.push("Edema Ekstremitas Sedang (Tungkai/Betis)");
-    detailSkorList.push({ deskripsi: "Edema Ekstremitas Sedang (Tungkai/Betis)", skor: 4 });
-  } else if (input.edema_level === "berat_wajah_tangan") {
-    score += 8;
-    komplikasi.push("Edema Anasarka / Wajah & Tangan (Gejala Preeklamsia Berat)");
-    detailSkorList.push({ deskripsi: "Edema Anasarka (Wajah & Kelopak Tangan)", skor: 8 });
+  const jumlahAnakHidup = input.jumlah_anak_hidup ?? input.paritas ?? 0;
+  if (jumlahAnakHidup >= 4) {
+    score += 4; komplikasi.push("Terlalu Banyak Anak (>=4 Anak Hidup)"); detailSkorList.push({ deskripsi: "Terlalu Banyak Anak (>=4 Anak Hidup)", skor: 4 });
   }
 
-  // Specific Symptoms
-  if (input.keluhan_spesifik.includes("pusing_berat_kabur")) {
-    score += 8;
-    komplikasi.push("Nyeri Kepala Berat & Pandangan Kabur");
-    detailSkorList.push({ deskripsi: "Nyeri Kepala Berat & Pandangan Kabur", skor: 8 });
-  }
-  if (input.keluhan_spesifik.includes("nyeri_ulu_hati")) {
-    score += 8;
-    komplikasi.push("Nyeri Epigastrium / Ulu Hati (Tanda Impending Eklamsia)");
-    detailSkorList.push({ deskripsi: "Nyeri Ulu Hati Epigastrium", skor: 8 });
-  }
-  if (input.keluhan_spesifik.includes("anemia_pucat")) {
-    score += 4;
-    komplikasi.push("Anemia Dalam Kehamilan");
-    detailSkorList.push({ deskripsi: "Anemia / Pucat & Cepat Lelah", skor: 4 });
-  }
-  if (input.keluhan_spesifik.includes("perdarahan")) {
-    score += 8;
-    komplikasi.push("Perdarahan Antepartum / Postpartum");
-    detailSkorList.push({ deskripsi: "Perdarahan Jalan Lahir / Flek", skor: 8 });
-  }
-  if (input.keluhan_spesifik.includes("gerakan_janin_berkurang")) {
-    score += 8;
-    komplikasi.push("Gawat Janin / Fetal Distress");
-    detailSkorList.push({ deskripsi: "Gerakan Janin Berkurang", skor: 8 });
-  }
-  if (input.keluhan_spesifik.includes("riwayat_sc")) {
-    score += 4;
-    komplikasi.push("Bekas Seksio Sesarea (Bekas SC)");
-    detailSkorList.push({ deskripsi: "Riwayat Operasi SC Sebelumnya", skor: 4 });
+  if (input.tinggi_badan && input.tinggi_badan <= 145) {
+    score += 4; komplikasi.push("Tinggi Badan <=145 cm (Risiko CPD)"); detailSkorList.push({ deskripsi: "Tinggi Badan <=145 cm (Risiko CPD)", skor: 4 });
   }
 
-  if (input.sudah_dapat_treatment && komplikasi.length === 0) {
-    komplikasi.push("Dalam Terapi Penanganan Awal (Perlu Evaluasi Lanjutan)");
+  if (input.riwayat_keguguran === true) {
+    score += 4; komplikasi.push("Riwayat Keguguran / Gagal Kehamilan"); detailSkorList.push({ deskripsi: "Riwayat Keguguran / Gagal Kehamilan", skor: 4 });
   }
 
-  // Risk Classification
+  const riwayatBermasalah = input.riwayat_persalinan_bermasalah ?? [];
+  if (!isHamilPertama) {
+    if (riwayatBermasalah.includes("tang_vakum")) { score += 4; komplikasi.push("Riwayat Persalinan Ditarik Tang / Vakum"); detailSkorList.push({ deskripsi: "Riwayat Persalinan Ditarik Tang / Vakum", skor: 4 }); }
+    if (riwayatBermasalah.includes("plasenta_manual")) { score += 4; komplikasi.push("Riwayat Plasenta Manual / Uri Dirogoh"); detailSkorList.push({ deskripsi: "Riwayat Plasenta Manual / Uri Dirogoh", skor: 4 }); }
+    if (riwayatBermasalah.includes("infus_transfusi")) { score += 4; komplikasi.push("Riwayat Diberi Infus / Transfusi (Perdarahan)"); detailSkorList.push({ deskripsi: "Riwayat Diberi Infus / Transfusi (Perdarahan)", skor: 4 }); }
+  }
+
+  if (input.riwayat_sc_kehamilan === true || input.ada_riwayat_sc === true) {
+    score += 8; komplikasi.push("Riwayat Operasi Sesar (SC)"); detailSkorList.push({ deskripsi: "Riwayat Operasi Sesar (SC)", skor: 8 });
+  }
+
+  // KELOMPOK II — AGO
+  const penyakitList = input.penyakit_saat_ini ?? [];
+  const penyakitMap: Record<string, string> = {
+    anemia: "Kurang Darah / Anemia dalam Kehamilan",
+    malaria: "Malaria dalam Kehamilan",
+    tbc: "TBC Paru dalam Kehamilan",
+    jantung: "Payah Jantung dalam Kehamilan",
+    diabetes: "Kencing Manis (Diabetes) dalam Kehamilan",
+    pms: "Penyakit Menular Seksual dalam Kehamilan",
+  };
+  for (const key of Object.keys(penyakitMap)) {
+    if (penyakitList.includes(key)) { score += 4; komplikasi.push(penyakitMap[key]); detailSkorList.push({ deskripsi: penyakitMap[key], skor: 4 }); }
+  }
+
+  if (input.bengkak_darah_tinggi === true) {
+    score += 4; komplikasi.push("Bengkak Wajah / Tungkai Disertai Tekanan Darah Tinggi"); detailSkorList.push({ deskripsi: "Bengkak Wajah / Tungkai Disertai Tekanan Darah Tinggi", skor: 4 });
+  }
+  if (input.hamil_kembar === true) {
+    score += 4; komplikasi.push("Hamil Kembar (Gemelli)"); detailSkorList.push({ deskripsi: "Hamil Kembar (Gemelli)", skor: 4 });
+  }
+  if (input.hydramnion === true) {
+    score += 4; komplikasi.push("Hydramnion (Cairan Ketuban Berlebih)"); detailSkorList.push({ deskripsi: "Hydramnion (Cairan Ketuban Berlebih)", skor: 4 });
+  }
+  if (input.riwayat_bayi_mati === true) {
+    score += 4; komplikasi.push("Riwayat Bayi Mati Dalam Kandungan"); detailSkorList.push({ deskripsi: "Riwayat Bayi Mati Dalam Kandungan", skor: 4 });
+  }
+  if (input.serotinus === true) {
+    score += 4; komplikasi.push("Kehamilan Lebih Bulan / Serotinus (>42 Minggu)"); detailSkorList.push({ deskripsi: "Kehamilan Lebih Bulan / Serotinus (>42 Minggu)", skor: 4 });
+  }
+
+  // KELOMPOK III — GDOB
+  if (input.letak_sungsang === true) {
+    score += 8; komplikasi.push("Letak Bayi Sungsang"); detailSkorList.push({ deskripsi: "Letak Bayi Sungsang", skor: 8 });
+  }
+  if (input.letak_lintang === true) {
+    score += 8; komplikasi.push("Letak Bayi Lintang"); detailSkorList.push({ deskripsi: "Letak Bayi Lintang", skor: 8 });
+  }
+  if (input.pendarahan_kehamilan === true) {
+    score += 8; komplikasi.push("Perdarahan Dalam Kehamilan"); detailSkorList.push({ deskripsi: "Perdarahan Dalam Kehamilan", skor: 8 });
+  }
+  if (input.preeklampsia_berat === true) {
+    score += 8; komplikasi.push("Preeklampsia Berat / Kejang-Kejang (Eklampsia)"); detailSkorList.push({ deskripsi: "Preeklampsia Berat / Kejang-Kejang (Eklampsia)", skor: 8 });
+  }
+
+  const mapVal = calculateMAP(input.sistolik ?? 120, input.diastolik ?? 80);
+
   let riskLevel: RiskLevel = "Ringan";
   let katRisiko: "KRR" | "KRT" | "KRST" = "KRR";
-  let statusLabel = "🟩 Risiko Ringan (KRR)";
+  let statusLabel = "Risiko Ringan / Rendah";
 
-  const hasRedFlag =
-    isHipertensiBerat &&
-    (input.edema_level !== "none" ||
-      input.keluhan_spesifik.includes("pusing_berat_kabur") ||
-      input.keluhan_spesifik.includes("nyeri_ulu_hati"));
-
-  if (score >= 12 || hasRedFlag) {
-    riskLevel = "Berat";
-    katRisiko = "KRST";
-    statusLabel = "Risiko Sangat Tinggi / Berat";
-  } else if (score >= 6) {
-    riskLevel = "Sedang";
-    katRisiko = "KRT";
-    statusLabel = "Risiko Tinggi / Sedang";
-  } else {
-    riskLevel = "Ringan";
-    katRisiko = "KRR";
-    statusLabel = "Risiko Ringan / Rendah";
-  }
+  if (score >= 12) { riskLevel = "Berat"; katRisiko = "KRST"; statusLabel = "Risiko Sangat Tinggi / Berat"; }
+  else if (score >= 6) { riskLevel = "Sedang"; katRisiko = "KRT"; statusLabel = "Risiko Tinggi / Sedang"; }
 
   let faskes = "";
   let tempat = "";
   let penolong = "";
 
   if (riskLevel === "Berat") {
-    tempat = "Wajib Rujukan Rumah Sakit (RS Facilitas SC)";
+    tempat = "Wajib Rujukan Rumah Sakit (RS / SpOG)";
     penolong = "Dokter Spesialis Kebidanan (Sp.OG)";
-    faskes = "Wajib Rujukan Segera ke Rumah Sakit (Faskes Rujukan Lanjutan) dan Didampingi Dokter Spesialis Kebidanan & Kandungan (Sp.OG).";
+    faskes = "Dianjurkan bersalin di Rumah Sakit dengan Dokter Spesialis Kebidanan & Kandungan (Sp.OG). Skor >=12 wajib dirujuk segera.";
   } else if (riskLevel === "Sedang") {
     tempat = "Puskesmas Rawat Inap / PONED";
     penolong = "Bidan & Dokter Umum";
-    faskes = "Dapat Dilayani di Puskesmas / Rumah Sakit Type C dengan Pendampingan Bidan & Dokter Umum.";
+    faskes = "Dianjurkan bersalin dengan tenaga kesehatan (Bidan / Dokter) di Puskesmas atau Rumah Sakit Type C. Skor >=6 harus ditolong nakes.";
   } else {
     tempat = "Bidan Praktik Mandiri (BPM) / Puskesmas";
     penolong = "Bidan Wilayah";
-    faskes = "Boleh Bersalin di Bidan Praktik Mandiri (BPM) atau Puskesmas Rawat Inap dengan Pengawasan Bidan.";
+    faskes = "Dapat bersalin di Bidan Praktik Mandiri (BPM) atau Puskesmas Rawat Inap dengan pengawasan Bidan.";
   }
 
   const saranTerapiList: string[] = [];
-  if (isHipertensiBerat || input.keluhan_spesifik.includes("pusing_berat_kabur")) {
+  if (input.bengkak_darah_tinggi || input.preeklampsia_berat) {
     saranTerapiList.push("Kompres Warm Compress pada leher & pundak");
     saranTerapiList.push("Teknik Pernapasan Deep Breathing Relaksasi");
     saranTerapiList.push("Aromaterapi Lavender Meredakan Kecemasan");
-  } else if (input.edema_level !== "none") {
-    saranTerapiList.push("Elevasi Kaki (Posisikan Kaki Lebih Tinggi saat Istirahat)");
-    saranTerapiList.push("Kompres Lengkung Pergelangan Kaki");
-    saranTerapiList.push("Pijat Ringan Efusi Ekstremitas");
+  } else if (penyakitList.includes("anemia")) {
+    saranTerapiList.push("Konsumsi Makanan Tinggi Zat Besi (Bayam, Hati Ayam, Kacang Merah)");
+    saranTerapiList.push("Minum Tablet Tambah Darah (TTD) Sesuai Anjuran Bidan");
+    saranTerapiList.push("Hindari Minum Teh / Kopi Bersamaan dengan Makan");
   } else {
     saranTerapiList.push("Pijat Oxytocin Tulang Belakang (Bantuan Suami)");
     saranTerapiList.push("Senam Pelenturan Panggul Trimester 3");
@@ -214,12 +189,6 @@ export function evaluateScreening(input: ScreeningInput): ScreeningResult {
     detail_skor: detailSkorList,
     input_summary: input,
     nama_pasien: input.nama_pasien,
-    created_at: new Date().toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
+    created_at: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }),
   };
 }

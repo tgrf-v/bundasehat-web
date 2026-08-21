@@ -43,6 +43,25 @@ export interface ScreeningInput {
   posisi_janin?: string;
   ada_riwayat_sc?: boolean;
   kondisi_ketuban?: string;
+
+  // ── Field Poedji Rochjati (Screening Kehamilan) ──
+  kehamilan_ke?: number;
+  lama_menikah?: '<4' | '>=4';
+  jarak_kehamilan?: '<2' | '2-10' | '>10';
+  jumlah_anak_hidup?: number;
+  riwayat_keguguran?: boolean;
+  riwayat_persalinan_bermasalah?: string[];
+  riwayat_sc_kehamilan?: boolean;
+  penyakit_saat_ini?: string[];
+  bengkak_darah_tinggi?: boolean;
+  hamil_kembar?: boolean;
+  hydramnion?: boolean;
+  riwayat_bayi_mati?: boolean;
+  serotinus?: boolean;
+  letak_sungsang?: boolean;
+  letak_lintang?: boolean;
+  pendarahan_kehamilan?: boolean;
+  preeklampsia_berat?: boolean;
 }
 
 export type RiskLevel = 'Ringan' | 'Sedang' | 'Berat';

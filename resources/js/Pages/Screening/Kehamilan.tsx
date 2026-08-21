@@ -48,6 +48,7 @@ export default function KehamilanScreening() {
 
   const serverResult = flash?.screeningResult || propResult;
 
+  const TOTAL_STEPS = 3;
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -55,10 +56,8 @@ export default function KehamilanScreening() {
   const [screeningResult, setScreeningResult] = useState<ScreeningResult | null>(null);
   const [rightPanelView, setRightPanelView] = useState<"summary" | "detail">("summary");
 
-  // 6 Input Mandiri Ibu Hamil
-  const [formData, setFormData] = useState<ScreeningInput & {
-    ada_riwayat_sc?: boolean;
-  }>({
+  // State Form Poedji Rochjati
+  const [formData, setFormData] = useState<ScreeningInput>({
     nama_pasien: auth?.user?.name || "",
     nik: auth?.user?.nik || "",
     umur: 27,
@@ -76,10 +75,30 @@ export default function KehamilanScreening() {
     detail_treatment: "",
     tipe_screening: "kehamilan",
     wilayah_puskesmas: auth?.user?.puskesmas || "",
-    ada_riwayat_sc: false,
+    // Field Poedji Rochjati
+    kehamilan_ke: 1,
+    lama_menikah: undefined,
+    jarak_kehamilan: undefined,
+    jumlah_anak_hidup: 0,
+    tinggi_badan: undefined,
+    riwayat_keguguran: false,
+    riwayat_persalinan_bermasalah: [],
+    riwayat_sc_kehamilan: false,
+    penyakit_saat_ini: [],
+    bengkak_darah_tinggi: false,
+    hamil_kembar: false,
+    hydramnion: false,
+    riwayat_bayi_mati: false,
+    serotinus: false,
+    letak_sungsang: false,
+    letak_lintang: false,
+    pendarahan_kehamilan: false,
+    preeklampsia_berat: false,
   });
 
   const [gestationalInfo, setGestationalInfo] = useState<{ weeks: number; dueDate?: string }>({ weeks: 0 });
+
+  const isHamilPertama = (formData.kehamilan_ke ?? 1) === 1;
 
   useEffect(() => {
     if (serverResult) {
@@ -95,28 +114,38 @@ export default function KehamilanScreening() {
     }
   }, [formData.hpht]);
 
+  const toggleCheckbox = (field: keyof ScreeningInput, value: string) => {
+    const current = (formData[field] as string[]) ?? [];
+    const updated = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+    setFormData({ ...formData, [field]: updated });
+  };
+
   const validateStep1 = (): boolean => {
     const errs: Record<string, string> = {};
     if (!formData.nama_pasien.trim()) errs.nama_pasien = "Nama pasien wajib diisi";
     if (!formData.umur || formData.umur < 12 || formData.umur > 60) errs.umur = "Isi umur dengan benar (12-60 tahun)";
-    if ((formData.gravida ?? 1) < 1) errs.gravida = "Jumlah kehamilan (Gravida) minimal 1";
-    if (formData.paritas < 0) errs.paritas = "Paritas tidak boleh negatif";
+    if (!formData.hpht) errs.hpht = "Tanggal HPHT wajib dipilih";
+    if ((formData.kehamilan_ke ?? 1) < 1) errs.kehamilan_ke = "Kehamilan ke- minimal 1";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
   const validateStep2 = (): boolean => {
-    const errs: Record<string, string> = {};
-    if (!formData.hpht) errs.hpht = "Tanggal HPHT wajib dipilih untuk menghitung usia kandungan & HPL";
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+    setErrors({});
+    return true;
+  };
+
+  const validateStep3 = (): boolean => {
+    setErrors({});
+    return true;
   };
 
   const handleNextStep = (e?: React.SyntheticEvent) => {
     if (e) e.preventDefault();
-    if (currentStep === 1 && validateStep1()) {
-      setCurrentStep(2);
-    }
+    if (currentStep === 1 && validateStep1()) setCurrentStep(2);
+    else if (currentStep === 2 && validateStep2()) setCurrentStep(3);
   };
 
   const handlePrevStep = (e?: React.SyntheticEvent) => {
@@ -126,24 +155,19 @@ export default function KehamilanScreening() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (currentStep < 2) {
+    if (currentStep < TOTAL_STEPS) {
       handleNextStep(e);
       return;
     }
-    if (!validateStep1()) {
-      setCurrentStep(1);
-      return;
-    }
-    if (!validateStep2()) {
-      return;
-    }
+    if (!validateStep1() || !validateStep3()) return;
 
     setIsLoading(true);
 
     const payload = {
       ...formData,
-      jenis_persalinan: formData.ada_riwayat_sc ? "Sectio Sesarea" : "Persalinan Pervaginam",
-      keluhan_spesifik: formData.ada_riwayat_sc ? ["riwayat_sc"] : [],
+      gravida: formData.kehamilan_ke ?? 1,
+      jenis_persalinan: formData.riwayat_sc_kehamilan ? "Sectio Sesarea" : "Persalinan Pervaginam",
+      keluhan_spesifik: [],
     };
 
     router.post(route("screening.store"), payload as any, {
@@ -551,13 +575,16 @@ export default function KehamilanScreening() {
                   <div className="mb-4">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
                       <span className={currentStep >= 1 ? "text-emerald-700 font-bold" : ""}>
-                        1. Data Diri & Riwayat Kehamilan
+                        1. Identitas &amp; Riwayat
                       </span>
                       <span className={currentStep >= 2 ? "text-emerald-700 font-bold" : ""}>
-                        2. Usia Kandungan & Riwayat Lahir
+                        2. Kondisi Saat Ini
+                      </span>
+                      <span className={currentStep >= 3 ? "text-emerald-700 font-bold" : ""}>
+                        3. Kondisi Gawat
                       </span>
                     </div>
-                    <Progress value={(currentStep / 2) * 100} variant="default" className="h-2" />
+                    <Progress value={(currentStep / TOTAL_STEPS) * 100} variant="default" className="h-2" />
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -574,223 +601,206 @@ export default function KehamilanScreening() {
                       </div>
                     )}
                     
-                    {/* LANGKAH 1: DATA DIRI & RIWAYAT HAMIL */}
+                    {/* LANGKAH 1 - Kelompok I (APGO): Identitas & Riwayat */}
                     {currentStep === 1 && (
                       <div className="space-y-4 animate-fadeIn">
                         <div className="border-b border-slate-100 pb-2">
                           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                             <User className="h-4 w-4 text-emerald-700" />
-                            <span>Langkah 1: Identitas & Riwayat Hamil (G-P-A)</span>
+                            <span>Langkah 1: Identitas &amp; Riwayat Kehamilan</span>
                           </h3>
+                          <p className="text-[11px] text-slate-500 mt-0.5 ml-6">Kelompok I — Ada Potensi Gawat Obstetrik (APGO)</p>
                         </div>
-
-                        <div className="space-y-3">
+                        <div className="space-y-3.5">
                           <div>
                             <Label htmlFor="nama_pasien">Nama Lengkap Bunda <span className="text-rose-600">*</span></Label>
-                            <Input
-                              id="nama_pasien"
-                              placeholder="Masukkan nama lengkap Bunda..."
-                              value={formData.nama_pasien}
-                              onChange={(e) => setFormData({ ...formData, nama_pasien: e.target.value })}
-                              error={errors.nama_pasien}
-                              className="mt-1"
-                            />
+                            <Input id="nama_pasien" placeholder="Masukkan nama lengkap Bunda..." value={formData.nama_pasien} onChange={(e) => setFormData({ ...formData, nama_pasien: e.target.value })} error={errors.nama_pasien} className="mt-1" />
                           </div>
-
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <Label htmlFor="umur">Usia Bunda (Tahun) <span className="text-rose-600">*</span></Label>
-                              <Input
-                                id="umur"
-                                type="number"
-                                min={12}
-                                max={60}
-                                value={formData.umur || ""}
-                                onChange={(e) => setFormData({ ...formData, umur: Number(e.target.value) })}
-                                error={errors.umur}
-                                className="mt-1"
-                              />
+                              <Label htmlFor="kehamilan_ke">Ini Kehamilan ke- <span className="text-rose-600">*</span></Label>
+                              <Input id="kehamilan_ke" type="number" min={1} max={20} value={formData.kehamilan_ke ?? 1} onChange={(e) => setFormData({ ...formData, kehamilan_ke: Number(e.target.value) })} error={errors.kehamilan_ke} className="mt-1" />
                             </div>
                             <div>
-                              <Label htmlFor="pekerjaan">Status Pekerjaan</Label>
-                              <Select
-                                value={formData.pekerjaan || "Ibu Rumah Tangga"}
-                                onValueChange={(val) => setFormData({ ...formData, pekerjaan: val })}
-                              >
-                                <SelectTrigger id="pekerjaan" className="mt-1">
-                                  <SelectValue placeholder="Pilih pekerjaan" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="Ibu Rumah Tangga">Ibu Rumah Tangga (IRT)</SelectItem>
-                                  <SelectItem value="Karyawan Swasta">Karyawan Swasta</SelectItem>
-                                  <SelectItem value="PNS">PNS / ASN</SelectItem>
-                                  <SelectItem value="Wiraswasta">Wiraswasta / Usaha</SelectItem>
-                                  <SelectItem value="Petani/Buruh">Buruh / Petani</SelectItem>
-                                  <SelectItem value="Pelajar/Mahasiswa">Pelajar / Mahasiswa</SelectItem>
-                                </SelectContent>
-                              </Select>
+                              <Label htmlFor="umur">Usia Bunda (Tahun) <span className="text-rose-600">*</span></Label>
+                              <Input id="umur" type="number" min={12} max={60} value={formData.umur || ""} onChange={(e) => setFormData({ ...formData, umur: Number(e.target.value) })} error={errors.umur} className="mt-1" />
                             </div>
                           </div>
-
                           <div>
-                            <Label htmlFor="pendidikan">Pendidikan Terakhir</Label>
-                            <Select
-                              value={formData.pendidikan || "SLTA"}
-                              onValueChange={(val) => setFormData({ ...formData, pendidikan: val })}
-                            >
-                              <SelectTrigger id="pendidikan" className="mt-1">
-                                <SelectValue placeholder="Pilih pendidikan" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="SD">SD / Sederajat</SelectItem>
-                                <SelectItem value="SLTP">SLTP / SMP</SelectItem>
-                                <SelectItem value="SLTA">SLTA / SMA / SMK</SelectItem>
-                                <SelectItem value="DIPLOMA">Diploma (D3 / D4)</SelectItem>
-                                <SelectItem value="SARJANA">Sarjana (S1)</SelectItem>
-                                <SelectItem value="MAGISTER">Magister (S2 / S3)</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <Label htmlFor="hpht">Hari Pertama Haid Terakhir (HPHT) <span className="text-rose-600">*</span></Label>
+                            <DatePicker id="hpht" value={formData.hpht} onChange={(val) => setFormData({ ...formData, hpht: val })} placeholder="Pilih Tanggal HPHT Bunda" className="mt-1" />
+                            {gestationalInfo.weeks > 0 && (
+                              <p className="text-xs text-rose-600 font-bold mt-1.5 flex items-center gap-1">
+                                <Calendar className="h-3.5 w-3.5" />
+                                <span>Estimasi Usia Kandungan: {gestationalInfo.weeks} Minggu{gestationalInfo.dueDate ? ` · HPL: ${gestationalInfo.dueDate}` : ""}</span>
+                              </p>
+                            )}
                           </div>
-
-                          {/* Riwayat Kehamilan & Kelahiran (G - P - A) */}
-                          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
-                            <Label className="text-xs font-bold text-slate-800 block">
-                              Riwayat Kehamilan (Gravida - Paritas - Abortus)
-                            </Label>
-                            <div className="grid grid-cols-3 gap-2.5">
-                              <div>
-                                <span className="text-[11px] text-slate-600 block mb-1">Hamil ke- (G)</span>
-                                <Input
-                                  type="number"
-                                  min={1}
-                                  max={20}
-                                  value={formData.gravida || 1}
-                                  onChange={(e) => setFormData({ ...formData, gravida: Number(e.target.value) })}
-                                  className="h-8 text-xs font-semibold"
-                                />
-                              </div>
-                              <div>
-                                <span className="text-[11px] text-slate-600 block mb-1">Pernah Lahir (P)</span>
-                                <Input
-                                  type="number"
-                                  min={0}
-                                  max={20}
-                                  value={formData.paritas}
-                                  onChange={(e) => setFormData({ ...formData, paritas: Number(e.target.value) })}
-                                  className="h-8 text-xs font-semibold"
-                                />
-                              </div>
-                              <div>
-                                <span className="text-[11px] text-slate-600 block mb-1">Keguguran (A)</span>
-                                <Input
-                                  type="number"
-                                  min={0}
-                                  max={15}
-                                  value={formData.abortus || 0}
-                                  onChange={(e) => setFormData({ ...formData, abortus: Number(e.target.value) })}
-                                  className="h-8 text-xs font-semibold"
-                                />
-                              </div>
+                          {isHamilPertama && (
+                            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                              <Label className="text-xs font-bold text-slate-800 block">Sudah berapa lama Bunda menikah sebelum hamil ini?</Label>
+                              <RadioGroup value={formData.lama_menikah ?? ""} onValueChange={(val) => setFormData({ ...formData, lama_menikah: val as '<4' | '>=4' })} className="flex gap-5 pt-1">
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="<4" id="menikah-cepat" /><Label htmlFor="menikah-cepat" className="text-xs cursor-pointer">Kurang dari 4 tahun</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value=">=4" id="menikah-lama" /><Label htmlFor="menikah-lama" className="text-xs cursor-pointer">4 tahun atau lebih</Label></div>
+                              </RadioGroup>
+                            </div>
+                          )}
+                          {!isHamilPertama && (
+                            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                              <Label className="text-xs font-bold text-slate-800 block">Jarak kehamilan ini dengan kehamilan sebelumnya?</Label>
+                              <RadioGroup value={formData.jarak_kehamilan ?? ""} onValueChange={(val) => setFormData({ ...formData, jarak_kehamilan: val as '<2' | '2-10' | '>10' })} className="flex flex-col gap-1.5 pt-1">
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="<2" id="jarak-cepat" /><Label htmlFor="jarak-cepat" className="text-xs cursor-pointer">Kurang dari 2 tahun</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="2-10" id="jarak-normal" /><Label htmlFor="jarak-normal" className="text-xs cursor-pointer">2 sampai 10 tahun (Normal)</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value=">10" id="jarak-lama" /><Label htmlFor="jarak-lama" className="text-xs cursor-pointer">Lebih dari 10 tahun</Label></div>
+                              </RadioGroup>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <Label htmlFor="jumlah_anak_hidup">Jumlah Anak Hidup Saat Ini</Label>
+                              <Input id="jumlah_anak_hidup" type="number" min={0} max={20} value={formData.jumlah_anak_hidup ?? 0} onChange={(e) => setFormData({ ...formData, jumlah_anak_hidup: Number(e.target.value) })} className="mt-1" />
+                            </div>
+                            <div>
+                              <Label htmlFor="tinggi_badan">Tinggi Badan (cm)</Label>
+                              <Input id="tinggi_badan" type="number" min={100} max={220} placeholder="Contoh: 155" value={formData.tinggi_badan ?? ""} onChange={(e) => setFormData({ ...formData, tinggi_badan: Number(e.target.value) || undefined })} className="mt-1" />
                             </div>
                           </div>
-
+                          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                            <Label className="text-xs font-bold text-slate-800 block">Apakah Bunda pernah mengalami keguguran sebelumnya?</Label>
+                            <RadioGroup value={formData.riwayat_keguguran ? "true" : "false"} onValueChange={(val) => setFormData({ ...formData, riwayat_keguguran: val === "true" })} className="flex gap-5 pt-1">
+                              <div className="flex items-center space-x-2"><RadioGroupItem value="false" id="keguguran-no" /><Label htmlFor="keguguran-no" className="text-xs cursor-pointer">Tidak pernah</Label></div>
+                              <div className="flex items-center space-x-2"><RadioGroupItem value="true" id="keguguran-yes" /><Label htmlFor="keguguran-yes" className="text-xs cursor-pointer">Pernah keguguran</Label></div>
+                            </RadioGroup>
+                          </div>
+                          {!isHamilPertama && (
+                            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                              <Label className="text-xs font-bold text-slate-800 block">Pada persalinan sebelumnya, adakah kejadian berikut? (boleh pilih lebih dari satu)</Label>
+                              <div className="space-y-2 pt-1">
+                                {[
+                                  { value: "tang_vakum", label: "Bayi dilahirkan dengan ditarik tang / vakum" },
+                                  { value: "plasenta_manual", label: "Ari-ari / plasenta harus dikeluarkan manual (dirogoh)" },
+                                  { value: "infus_transfusi", label: "Diberi infus / transfusi darah karena pendarahan" },
+                                ].map(({ value, label }) => (
+                                  <div key={value} className="flex items-center gap-2">
+                                    <input type="checkbox" id={`bermasalah-${value}`} checked={(formData.riwayat_persalinan_bermasalah ?? []).includes(value)} onChange={() => toggleCheckbox("riwayat_persalinan_bermasalah", value)} className="rounded accent-rose-600 h-3.5 w-3.5 cursor-pointer" />
+                                    <Label htmlFor={`bermasalah-${value}`} className="text-xs cursor-pointer font-normal">{label}</Label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                            <Label className="text-xs font-bold text-slate-800 block">Apakah Bunda pernah melahirkan melalui Operasi Sesar (SC) sebelumnya?</Label>
+                            <RadioGroup value={formData.riwayat_sc_kehamilan ? "true" : "false"} onValueChange={(val) => setFormData({ ...formData, riwayat_sc_kehamilan: val === "true" })} className="flex gap-5 pt-1">
+                              <div className="flex items-center space-x-2"><RadioGroupItem value="false" id="sc-no" /><Label htmlFor="sc-no" className="text-xs cursor-pointer">Tidak / Belum pernah</Label></div>
+                              <div className="flex items-center space-x-2"><RadioGroupItem value="true" id="sc-yes" /><Label htmlFor="sc-yes" className="text-xs cursor-pointer">Pernah operasi SC</Label></div>
+                            </RadioGroup>
+                          </div>
                         </div>
                       </div>
                     )}
 
-                    {/* LANGKAH 2: USIA KANDUNGAN (HPHT) & PERSALINAN LALU */}
+                    {/* LANGKAH 2 - Kelompok II (AGO): Kondisi Saat Ini */}
                     {currentStep === 2 && (
                       <div className="space-y-4 animate-fadeIn">
                         <div className="border-b border-slate-100 pb-2">
                           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                             <Baby className="h-4 w-4 text-rose-600" />
-                            <span>Langkah 2: Usia Kandungan (HPHT) & Riwayat Lahir Lalu</span>
+                            <span>Langkah 2: Kondisi Kehamilan Saat Ini</span>
                           </h3>
+                          <p className="text-[11px] text-slate-500 mt-0.5 ml-6">Kelompok II — Ada Gawat Obstetrik (AGO)</p>
                         </div>
-
                         <div className="space-y-3.5">
-                          {/* HPHT DatePicker */}
-                          <div>
-                            <Label htmlFor="hpht">Hari Pertama Haid Terakhir (HPHT) <span className="text-rose-600">*</span></Label>
-                            <DatePicker
-                              id="hpht"
-                              value={formData.hpht}
-                              onChange={(val) => setFormData({ ...formData, hpht: val })}
-                              placeholder="Pilih Tanggal HPHT Bunda"
-                              className="mt-1"
-                            />
-                            {gestationalInfo.weeks > 0 && (
-                              <p className="text-xs text-rose-600 font-bold mt-1.5 flex items-center gap-1">
-                                <Calendar className="h-3.5 w-3.5" />
-                                <span>Estimasi Usia Kandungan: {gestationalInfo.weeks} Minggu {gestationalInfo.dueDate ? `· HPL: ${gestationalInfo.dueDate}` : ""}</span>
-                              </p>
-                            )}
-                          </div>
-
-                          {/* Riwayat Persalinan Sebelumnya */}
                           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
-                            <Label className="text-xs font-bold text-slate-800 block">
-                              Apakah Bunda pernah melahirkan melalui Operasi Caesar (SC) sebelumnya?
-                            </Label>
-                            <RadioGroup
-                              value={formData.ada_riwayat_sc ? "true" : "false"}
-                              onValueChange={(val) => setFormData({
-                                ...formData,
-                                ada_riwayat_sc: val === "true",
-                              })}
-                              className="flex gap-4 pt-1"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="false" id="sc-no" />
-                                <Label htmlFor="sc-no" className="text-xs cursor-pointer">Belum Pernah / Persalinan Normal</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="true" id="sc-yes" />
-                                <Label htmlFor="sc-yes" className="text-xs cursor-pointer">Pernah Operasi Caesar</Label>
-                              </div>
-                            </RadioGroup>
+                            <Label className="text-xs font-bold text-slate-800 block">Apakah Bunda saat ini menderita salah satu penyakit berikut? (boleh pilih lebih dari satu)</Label>
+                            <p className="text-[11px] text-slate-500">Pilih semua yang berlaku. Jika tidak ada, lewati bagian ini.</p>
+                            <div className="grid grid-cols-1 gap-2 pt-1">
+                              {[
+                                { value: "anemia", label: "Kurang darah / Anemia (sering lemas, pucat, pusing)" },
+                                { value: "malaria", label: "Malaria" },
+                                { value: "tbc", label: "TBC Paru (batuk lama, keringat malam)" },
+                                { value: "jantung", label: "Payah jantung (sesak napas, berdebar)" },
+                                { value: "diabetes", label: "Kencing manis / Diabetes" },
+                                { value: "pms", label: "Penyakit menular seksual (misal: sifilis, gonore)" },
+                              ].map(({ value, label }) => (
+                                <div key={value} className="flex items-center gap-2">
+                                  <input type="checkbox" id={`penyakit-${value}`} checked={(formData.penyakit_saat_ini ?? []).includes(value)} onChange={() => toggleCheckbox("penyakit_saat_ini", value)} className="rounded accent-rose-600 h-3.5 w-3.5 cursor-pointer shrink-0" />
+                                  <Label htmlFor={`penyakit-${value}`} className="text-xs cursor-pointer font-normal">{label}</Label>
+                                </div>
+                              ))}
+                            </div>
                           </div>
+                          {([
+                            { field: "bengkak_darah_tinggi", label: "Apakah Bunda mengalami bengkak pada wajah atau tungkai disertai tekanan darah tinggi?" },
+                            { field: "hamil_kembar", label: "Apakah Bunda sedang hamil kembar (lebih dari 1 bayi)?" },
+                            { field: "hydramnion", label: "Apakah dokter / bidan menyebutkan cairan ketuban Bunda terlalu banyak (Hydramnion)?" },
+                            { field: "riwayat_bayi_mati", label: "Apakah pada kehamilan sebelumnya ada bayi yang meninggal dalam kandungan?" },
+                            { field: "serotinus", label: "Apakah usia kehamilan Bunda sudah lebih dari 42 minggu (lewat bulan / serotinus)?" },
+                          ] as { field: keyof ScreeningInput; label: string }[]).map(({ field, label }) => (
+                            <div key={String(field)} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                              <Label className="text-xs font-bold text-slate-800 block">{label}</Label>
+                              <RadioGroup value={formData[field] ? "true" : "false"} onValueChange={(val) => setFormData({ ...formData, [field]: val === "true" })} className="flex gap-5 pt-1">
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="false" id={`${String(field)}-no`} /><Label htmlFor={`${String(field)}-no`} className="text-xs cursor-pointer">Tidak</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="true" id={`${String(field)}-yes`} /><Label htmlFor={`${String(field)}-yes`} className="text-xs cursor-pointer">Ya</Label></div>
+                              </RadioGroup>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                          {/* Info Banner Bidan */}
+                    {/* LANGKAH 3 - Kelompok III (GDOB): Kondisi Gawat Darurat */}
+                    {currentStep === 3 && (
+                      <div className="space-y-4 animate-fadeIn">
+                        <div className="border-b border-slate-100 pb-2">
+                          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <Info className="h-4 w-4 text-amber-600" />
+                            <span>Langkah 3: Kondisi Gawat / Darurat</span>
+                          </h3>
+                          <p className="text-[11px] text-slate-500 mt-0.5 ml-6">Kelompok III — Gawat Darurat Obstetrik (GDOB)</p>
+                        </div>
+                        <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-100 flex items-start gap-2.5 text-xs text-amber-800">
+                          <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                          <p className="leading-relaxed">Kondisi berikut membutuhkan penanganan segera. Jawab sejujurnya agar hasil screening akurat.</p>
+                        </div>
+                        <div className="space-y-3.5">
+                          {([
+                            { field: "letak_sungsang", label: "Apakah bidan / dokter menyebutkan posisi bayi sungsang (kepala di atas, pantat di bawah)?" },
+                            { field: "letak_lintang", label: "Apakah posisi bayi melintang (tidak kepala di bawah, tidak sungsang)?" },
+                            { field: "pendarahan_kehamilan", label: "Apakah Bunda mengalami pendarahan dari jalan lahir selama kehamilan ini?" },
+                            { field: "preeklampsia_berat", label: "Apakah Bunda pernah didiagnosis preeklampsia berat atau mengalami kejang-kejang (eklampsia) saat hamil?" },
+                          ] as { field: keyof ScreeningInput; label: string }[]).map(({ field, label }) => (
+                            <div key={String(field)} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                              <Label className="text-xs font-bold text-slate-800 block">{label}</Label>
+                              <RadioGroup value={formData[field] ? "true" : "false"} onValueChange={(val) => setFormData({ ...formData, [field]: val === "true" })} className="flex gap-5 pt-1">
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="false" id={`${String(field)}-no`} /><Label htmlFor={`${String(field)}-no`} className="text-xs cursor-pointer">Tidak</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="true" id={`${String(field)}-yes`} /><Label htmlFor={`${String(field)}-yes`} className="text-xs cursor-pointer">Ya</Label></div>
+                              </RadioGroup>
+                            </div>
+                          ))}
                           <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-100 flex items-start gap-2.5 text-xs text-emerald-900">
                             <Info className="h-4 w-4 text-emerald-700 shrink-0 mt-0.5" />
-                            <p className="leading-relaxed">
-                              Pemeriksaan tensi darah, detak jantung janin, dan tes laboratorium lengkap akan diverifikasi oleh Bidan saat Bunda berkunjung ke klinik/Puskesmas.
-                            </p>
+                            <p className="leading-relaxed">Pemeriksaan tensi darah, detak jantung janin, dan tes laboratorium lengkap akan diverifikasi oleh Bidan saat Bunda berkunjung ke klinik / Puskesmas.</p>
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {/* Step Navigation Buttons */}
+                    {/* Step Navigation */}
                     <div className="pt-4 flex items-center justify-between gap-3">
                       {currentStep > 1 ? (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={handlePrevStep}
-                          className="rounded-full text-xs font-bold px-5"
-                        >
+                        <Button type="button" variant="outline" onClick={handlePrevStep} className="rounded-full text-xs font-bold px-5">
                           <ChevronLeft className="h-4 w-4 mr-1" />
                           <span>Sebelumnya</span>
                         </Button>
                       ) : <div />}
-
-                      {currentStep < 2 ? (
-                        <Button
-                          type="button"
-                          onClick={handleNextStep}
-                          className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-6 ml-auto"
-                        >
+                      {currentStep < TOTAL_STEPS ? (
+                        <Button type="button" onClick={handleNextStep} className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-6 ml-auto">
                           <span>Lanjut</span>
                           <ChevronRight className="h-4 w-4 ml-1" />
                         </Button>
                       ) : (
-                        <Button
-                          type="submit"
-                          disabled={isLoading}
-                          className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm"
-                        >
+                        <Button type="submit" disabled={isLoading} className="rounded-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm">
                           {isLoading ? "Menghitung Risiko..." : "Lihat Hasil Analisis"}
                         </Button>
                       )}
