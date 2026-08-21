@@ -4,6 +4,7 @@ import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
+import { NumberStepper } from "@/Components/ui/number-stepper";
 import { Label } from "@/Components/ui/label";
 import { DatePicker } from "@/Components/ui/date-picker";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
@@ -619,11 +620,28 @@ export default function KehamilanScreening() {
                           <div className="grid grid-cols-2 gap-3">
                             <div>
                               <Label htmlFor="kehamilan_ke">Ini Kehamilan ke- <span className="text-rose-600">*</span></Label>
-                              <Input id="kehamilan_ke" type="number" min={1} max={20} value={formData.kehamilan_ke ?? 1} onChange={(e) => setFormData({ ...formData, kehamilan_ke: Number(e.target.value) })} error={errors.kehamilan_ke} className="mt-1" />
+                              <NumberStepper
+                                id="kehamilan_ke"
+                                min={1}
+                                max={20}
+                                value={formData.kehamilan_ke ?? 1}
+                                onChange={(val) => setFormData({ ...formData, kehamilan_ke: val })}
+                                error={errors.kehamilan_ke}
+                                className="mt-1"
+                              />
                             </div>
                             <div>
                               <Label htmlFor="umur">Usia Bunda (Tahun) <span className="text-rose-600">*</span></Label>
-                              <Input id="umur" type="number" min={12} max={60} value={formData.umur || ""} onChange={(e) => setFormData({ ...formData, umur: Number(e.target.value) })} error={errors.umur} className="mt-1" />
+                              <NumberStepper
+                                id="umur"
+                                min={12}
+                                max={60}
+                                value={formData.umur || ""}
+                                onChange={(val) => setFormData({ ...formData, umur: val })}
+                                error={errors.umur}
+                                suffix="thn"
+                                className="mt-1"
+                              />
                             </div>
                           </div>
                           <div>
@@ -658,11 +676,27 @@ export default function KehamilanScreening() {
                           <div className="grid grid-cols-2 gap-3">
                             <div>
                               <Label htmlFor="jumlah_anak_hidup">Jumlah Anak Hidup Saat Ini</Label>
-                              <Input id="jumlah_anak_hidup" type="number" min={0} max={20} value={formData.jumlah_anak_hidup ?? 0} onChange={(e) => setFormData({ ...formData, jumlah_anak_hidup: Number(e.target.value) })} className="mt-1" />
+                              <NumberStepper
+                                id="jumlah_anak_hidup"
+                                min={0}
+                                max={20}
+                                value={formData.jumlah_anak_hidup ?? 0}
+                                onChange={(val) => setFormData({ ...formData, jumlah_anak_hidup: val })}
+                                className="mt-1"
+                              />
                             </div>
                             <div>
                               <Label htmlFor="tinggi_badan">Tinggi Badan (cm)</Label>
-                              <Input id="tinggi_badan" type="number" min={100} max={220} placeholder="Contoh: 155" value={formData.tinggi_badan ?? ""} onChange={(e) => setFormData({ ...formData, tinggi_badan: Number(e.target.value) || undefined })} className="mt-1" />
+                              <NumberStepper
+                                id="tinggi_badan"
+                                min={100}
+                                max={220}
+                                placeholder="155"
+                                value={formData.tinggi_badan || 155}
+                                onChange={(val) => setFormData({ ...formData, tinggi_badan: val })}
+                                suffix="cm"
+                                className="mt-1"
+                              />
                             </div>
                           </div>
                           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
