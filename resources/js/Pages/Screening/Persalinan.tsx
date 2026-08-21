@@ -4,6 +4,7 @@ import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Card, CardContent } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
+import { NumberStepper } from "@/Components/ui/number-stepper";
 import { Label } from "@/Components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 import {
@@ -585,40 +586,37 @@ export default function PersalinanScreening() {
 
                           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
                             <Label className="text-xs font-bold text-slate-800 block">
-                              Riwayat Kehamilan (G - P - A)
+                              Riwayat Kehamilan (Gravida - Paritas - Abortus)
                             </Label>
-                            <div className="grid grid-cols-3 gap-2.5">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                               <div>
                                 <span className="text-[11px] text-slate-600 block mb-1">Hamil ke- (G)</span>
-                                <Input
-                                  type="number"
+                                <NumberStepper
+                                  id="gravida"
                                   min={1}
                                   max={20}
                                   value={formData.gravida || 1}
-                                  onChange={(e) => setFormData({ ...formData, gravida: Number(e.target.value) })}
-                                  className="h-8 text-xs font-semibold"
+                                  onChange={(val) => setFormData({ ...formData, gravida: val })}
                                 />
                               </div>
                               <div>
                                 <span className="text-[11px] text-slate-600 block mb-1">Kelahiran (P)</span>
-                                <Input
-                                  type="number"
+                                <NumberStepper
+                                  id="paritas"
                                   min={0}
                                   max={20}
-                                  value={formData.paritas}
-                                  onChange={(e) => setFormData({ ...formData, paritas: Number(e.target.value) })}
-                                  className="h-8 text-xs font-semibold"
+                                  value={formData.paritas ?? 0}
+                                  onChange={(val) => setFormData({ ...formData, paritas: val })}
                                 />
                               </div>
                               <div>
                                 <span className="text-[11px] text-slate-600 block mb-1">Keguguran (A)</span>
-                                <Input
-                                  type="number"
+                                <NumberStepper
+                                  id="abortus"
                                   min={0}
                                   max={15}
                                   value={formData.abortus || 0}
-                                  onChange={(e) => setFormData({ ...formData, abortus: Number(e.target.value) })}
-                                  className="h-8 text-xs font-semibold"
+                                  onChange={(val) => setFormData({ ...formData, abortus: val })}
                                 />
                               </div>
                             </div>

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Com
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { NumberStepper } from "@/Components/ui/number-stepper";
+import { Checkbox } from "@/Components/ui/checkbox";
 import { Label } from "@/Components/ui/label";
 import { DatePicker } from "@/Components/ui/date-picker";
 import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
@@ -715,10 +716,13 @@ export default function KehamilanScreening() {
                                   { value: "plasenta_manual", label: "Ari-ari / plasenta harus dikeluarkan manual (dirogoh)" },
                                   { value: "infus_transfusi", label: "Diberi infus / transfusi darah karena pendarahan" },
                                 ].map(({ value, label }) => (
-                                  <div key={value} className="flex items-center gap-2">
-                                    <input type="checkbox" id={`bermasalah-${value}`} checked={(formData.riwayat_persalinan_bermasalah ?? []).includes(value)} onChange={() => toggleCheckbox("riwayat_persalinan_bermasalah", value)} className="rounded accent-rose-600 h-3.5 w-3.5 cursor-pointer" />
-                                    <Label htmlFor={`bermasalah-${value}`} className="text-xs cursor-pointer font-normal">{label}</Label>
-                                  </div>
+                                  <Checkbox
+                                    key={value}
+                                    id={`bermasalah-${value}`}
+                                    checked={(formData.riwayat_persalinan_bermasalah ?? []).includes(value)}
+                                    onCheckedChange={() => toggleCheckbox("riwayat_persalinan_bermasalah", value)}
+                                    label={label}
+                                  />
                                 ))}
                               </div>
                             </div>
@@ -757,10 +761,13 @@ export default function KehamilanScreening() {
                                 { value: "diabetes", label: "Kencing manis / Diabetes" },
                                 { value: "pms", label: "Penyakit menular seksual (misal: sifilis, gonore)" },
                               ].map(({ value, label }) => (
-                                <div key={value} className="flex items-center gap-2">
-                                  <input type="checkbox" id={`penyakit-${value}`} checked={(formData.penyakit_saat_ini ?? []).includes(value)} onChange={() => toggleCheckbox("penyakit_saat_ini", value)} className="rounded accent-rose-600 h-3.5 w-3.5 cursor-pointer shrink-0" />
-                                  <Label htmlFor={`penyakit-${value}`} className="text-xs cursor-pointer font-normal">{label}</Label>
-                                </div>
+                                <Checkbox
+                                  key={value}
+                                  id={`penyakit-${value}`}
+                                  checked={(formData.penyakit_saat_ini ?? []).includes(value)}
+                                  onCheckedChange={() => toggleCheckbox("penyakit_saat_ini", value)}
+                                  label={label}
+                                />
                               ))}
                             </div>
                           </div>

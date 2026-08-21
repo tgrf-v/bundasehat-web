@@ -3,6 +3,7 @@ import { Head, useForm, router, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
+import { Textarea } from "@/Components/ui/textarea";
 import { Label } from "@/Components/ui/label";
 import { Tabs } from "@/Components/ui/tabs";
 import { Dialog } from "@/Components/ui/dialog";
@@ -1116,13 +1117,13 @@ export default function AdminKamusIndex() {
             <Label htmlFor="video_description" className="text-xs font-bold text-slate-700">
               Deskripsi &amp; Manfaat Terapi
             </Label>
-            <textarea
+            <Textarea
               id="video_description"
               rows={3}
               placeholder="Jelaskan gerakan yang diajarkan, persiapan yang diperlukan, serta manfaat terapeutik untuk ibu hamil..."
               value={videoForm.data.description}
               onChange={(e) => videoForm.setData("description", e.target.value)}
-              className="w-full p-3 rounded-2xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+              className="mt-1"
             />
           </div>
 
