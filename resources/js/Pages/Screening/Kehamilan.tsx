@@ -212,7 +212,7 @@ export default function KehamilanScreening() {
             </div>
 
             {/* Kolom Kanan (Konten Utama & Form Screening - 50% - Scrollable) */}
-            <ScrollArea className="lg:col-span-6 lg:h-[calc(100vh-65px)] h-auto">
+            <div className="lg:col-span-6 lg:h-[calc(100vh-65px)] h-auto overflow-y-auto overflow-x-hidden">
               <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
 
               
@@ -852,7 +852,7 @@ export default function KehamilanScreening() {
               )}
 
               </div>
-            </ScrollArea>
+            </div>
 
           </div>
         </div>

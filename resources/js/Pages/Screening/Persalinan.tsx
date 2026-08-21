@@ -166,8 +166,8 @@ export default function PersalinanScreening() {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white lg:hidden" />
             </div>
 
-            {/* Kolom Kanan (Konten Utama & Form - 50% - ScrollArea) */}
-            <ScrollArea className="lg:col-span-6 lg:h-[calc(100vh-65px)] h-auto">
+            {/* Kolom Kanan (Konten Utama & Form - 50% - Scrollable) */}
+            <div className="lg:col-span-6 lg:h-[calc(100vh-65px)] h-auto overflow-y-auto overflow-x-hidden">
               <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
               
               {/* Header Kolom Kanan */}
@@ -709,7 +709,7 @@ export default function PersalinanScreening() {
               )}
 
               </div>
-            </ScrollArea>
+            </div>
 
           </div>
         </div>
