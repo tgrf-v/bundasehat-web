@@ -99,7 +99,7 @@ export function HasilRingkas({
       </Card>
 
       {/* Card 1: Rekomendasi Tempat & Penolong Persalinan */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-rose-50/60 border border-rose-100/90 space-y-1">
+      <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/90 shadow-soft-xs space-y-1">
         <h4 className="font-bold text-rose-700 text-xs sm:text-sm">
           Rekomendasi Tempat &amp; Penolong Persalinan
         </h4>
