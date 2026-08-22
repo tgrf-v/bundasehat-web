@@ -1,25 +1,42 @@
-﻿import { ScreeningInput, ScreeningResult, RiskLevel, DetailSkorFactor } from "@/types/screening";
+import { ScreeningInput, ScreeningResult, RiskLevel, DetailSkorFactor } from "@/types/screening";
 
 export function calculateGestationalAge(hphtString?: string): {
   weeks: number;
+  days: number;
   dueDate?: string;
+  formattedAge: string;
 } {
-  if (!hphtString) return { weeks: 0 };
+  if (!hphtString) return { weeks: 0, days: 0, formattedAge: "0 Minggu" };
   try {
     const hpht = new Date(hphtString);
-    if (isNaN(hpht.getTime())) return { weeks: 0 };
+    if (isNaN(hpht.getTime())) return { weeks: 0, days: 0, formattedAge: "0 Minggu" };
     const today = new Date();
-    const diffTime = Math.abs(today.getTime() - hpht.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffTime = today.getTime() - hpht.getTime();
+    if (diffTime < 0) return { weeks: 0, days: 0, formattedAge: "0 Minggu" };
+
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     const weeks = Math.floor(diffDays / 7);
+    const days = diffDays % 7;
+
+    let formattedAge = "";
+    if (weeks > 0 && days > 0) {
+      formattedAge = `${weeks} Minggu ${days} Hari`;
+    } else if (weeks > 0 && days === 0) {
+      formattedAge = `${weeks} Minggu`;
+    } else if (weeks === 0 && days > 0) {
+      formattedAge = `${days} Hari`;
+    } else {
+      formattedAge = "0 Hari";
+    }
+
     const hpl = new Date(hpht);
     hpl.setDate(hpl.getDate() + 7);
     hpl.setMonth(hpl.getMonth() - 3);
     hpl.setFullYear(hpl.getFullYear() + 1);
     const formattedDate = hpl.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
-    return { weeks: Math.max(0, weeks), dueDate: formattedDate };
+    return { weeks: Math.max(0, weeks), days: Math.max(0, days), dueDate: formattedDate, formattedAge };
   } catch (error) {
-    return { weeks: 0 };
+    return { weeks: 0, days: 0, formattedAge: "0 Minggu" };
   }
 }
 

@@ -19,27 +19,42 @@ class ScoringService
     }
 
     /**
-     * Hitung usia kehamilan dalam minggu dan HPL (Naegele rule).
+     * Hitung usia kehamilan dalam minggu dan hari serta HPL (Naegele rule).
      *
-     * @return array{weeks: int, dueDate: string|null}
+     * @return array{weeks: int, days: int, dueDate: string|null, formattedAge: string}
      */
     public function calculateGestationalAge(?string $hphtString): array
     {
         if (empty($hphtString)) {
-            return ['weeks' => 0, 'dueDate' => null];
+            return ['weeks' => 0, 'days' => 0, 'dueDate' => null, 'formattedAge' => '0 Minggu'];
         }
         try {
             $hpht  = Carbon::parse($hphtString);
             $today = Carbon::now();
-            $diffDays = $today->diffInDays($hpht);
+            $diffDays = max(0, (int) $today->diffInDays($hpht));
             $weeks    = (int) floor($diffDays / 7);
+            $days     = (int) ($diffDays % 7);
+
+            $formattedAge = '';
+            if ($weeks > 0 && $days > 0) {
+                $formattedAge = "{$weeks} Minggu {$days} Hari";
+            } elseif ($weeks > 0 && $days === 0) {
+                $formattedAge = "{$weeks} Minggu";
+            } elseif ($weeks === 0 && $days > 0) {
+                $formattedAge = "{$days} Hari";
+            } else {
+                $formattedAge = '0 Hari';
+            }
+
             $hpl = $hpht->copy()->addDays(7)->subMonths(3)->addYear();
             return [
-                'weeks'   => max(0, $weeks),
-                'dueDate' => $hpl->translatedFormat('j F Y'),
+                'weeks'        => max(0, $weeks),
+                'days'         => max(0, $days),
+                'dueDate'      => $hpl->translatedFormat('j F Y'),
+                'formattedAge' => $formattedAge,
             ];
         } catch (\Exception $e) {
-            return ['weeks' => 0, 'dueDate' => null];
+            return ['weeks' => 0, 'days' => 0, 'dueDate' => null, 'formattedAge' => '0 Minggu'];
         }
     }
 

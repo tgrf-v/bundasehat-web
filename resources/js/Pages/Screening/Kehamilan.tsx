@@ -98,7 +98,7 @@ export default function KehamilanScreening() {
     preeklampsia_berat: false,
   });
 
-  const [gestationalInfo, setGestationalInfo] = useState<{ weeks: number; dueDate?: string }>({ weeks: 0 });
+  const [gestationalInfo, setGestationalInfo] = useState<{ weeks: number; days: number; dueDate?: string; formattedAge: string }>({ weeks: 0, days: 0, formattedAge: "" });
 
   const isHamilPertama = (formData.kehamilan_ke ?? 1) === 1;
 
@@ -453,7 +453,7 @@ export default function KehamilanScreening() {
 
                       <p className="text-xs font-semibold text-slate-600">
                         Skor KSPR: <strong className="text-slate-900 font-bold">{screeningResult.total_skor || screeningResult.skor_poedji_rochjati || 2} Poin</strong>
-                        {gestationalInfo.weeks > 0 && ` · Usia Hamil: ${gestationalInfo.weeks} Minggu`}
+                        {(gestationalInfo.weeks > 0 || gestationalInfo.days > 0) && ` · Usia Hamil: ${gestationalInfo.formattedAge}`}
                       </p>
 
                       {/* Action links in card footer (Lihat Perhitungan & Cek Ulang) */}
@@ -648,10 +648,10 @@ export default function KehamilanScreening() {
                           <div>
                             <Label htmlFor="hpht">Hari Pertama Haid Terakhir (HPHT) <span className="text-rose-600">*</span></Label>
                             <DatePicker id="hpht" value={formData.hpht} onChange={(val) => setFormData({ ...formData, hpht: val })} placeholder="Pilih Tanggal HPHT Bunda" className="mt-1" />
-                            {gestationalInfo.weeks > 0 && (
+                            {(gestationalInfo.weeks > 0 || gestationalInfo.days > 0) && (
                               <p className="text-xs text-rose-600 font-bold mt-1.5 flex items-center gap-1">
                                 <Calendar className="h-3.5 w-3.5" />
-                                <span>Estimasi Usia Kandungan: {gestationalInfo.weeks} Minggu{gestationalInfo.dueDate ? ` · HPL: ${gestationalInfo.dueDate}` : ""}</span>
+                                <span>Estimasi Usia Kandungan: {gestationalInfo.formattedAge}{gestationalInfo.dueDate ? ` · HPL: ${gestationalInfo.dueDate}` : ""}</span>
                               </p>
                             )}
                           </div>
