@@ -246,35 +246,6 @@ export function ProfilEditForm({
             {errors.pendidikan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.pendidikan}</p>}
           </div>
 
-          {/* Field 7: HPHT (Khusus Ibu Hamil) */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
-              Hari Pertama Haid Terakhir (HPHT)
-            </label>
-            <input
-              type="date"
-              value={data.hpht}
-              onChange={(e) => setData("hpht", e.target.value)}
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
-            />
-            {errors.hpht && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.hpht}</p>}
-          </div>
-
-          {/* Field 8: Wilayah Puskesmas Domisili */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
-              Puskesmas Domisili / Rujukan
-            </label>
-            <input
-              type="text"
-              value={data.puskesmas}
-              placeholder="Contoh: Puskesmas Kecamatan Cilandak"
-              onChange={(e) => setData("puskesmas", e.target.value)}
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
-            />
-            {errors.puskesmas && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.puskesmas}</p>}
-          </div>
-
           {/* Action Buttons */}
           <div className="flex items-center justify-between pt-4">
             <button

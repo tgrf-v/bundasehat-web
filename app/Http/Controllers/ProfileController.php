@@ -53,8 +53,6 @@ class ProfileController extends Controller
             'tanggal_lahir' => ['nullable', 'date'],
             'pekerjaan' => ['nullable', 'string', 'max:100'],
             'pendidikan' => ['nullable', 'string', 'max:50'],
-            'hpht' => ['nullable', 'date'],
-            'puskesmas' => ['nullable', 'string', 'max:255'],
             'foto_profil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'hapus_foto' => ['nullable', 'boolean'],
         ]);

@@ -5,8 +5,6 @@ export interface ProfileFormData {
   tanggal_lahir: string;
   pekerjaan: string;
   pendidikan: string;
-  hpht: string;
-  puskesmas: string;
   foto_profil?: File | null;
   hapus_foto?: boolean;
 }

@@ -34,8 +34,6 @@ export default function ProfilIndex() {
     tanggal_lahir: user.tanggal_lahir || "",
     pekerjaan: user.pekerjaan || "",
     pendidikan: user.pendidikan || "",
-    hpht: user.hpht || "",
-    puskesmas: user.puskesmas || "",
     foto_profil: null,
     hapus_foto: false,
   });
