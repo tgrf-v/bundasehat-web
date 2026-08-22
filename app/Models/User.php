@@ -32,6 +32,7 @@ class User extends Authenticatable
         'pendidikan',
         'hpht',
         'puskesmas',
+        'foto_profil',
     ];
 
     /**

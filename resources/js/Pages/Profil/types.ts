@@ -7,4 +7,6 @@ export interface ProfileFormData {
   pendidikan: string;
   hpht: string;
   puskesmas: string;
+  foto_profil?: File | null;
+  hapus_foto?: boolean;
 }

@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -54,9 +55,39 @@ class ProfileController extends Controller
             'pendidikan' => ['nullable', 'string', 'max:50'],
             'hpht' => ['nullable', 'date'],
             'puskesmas' => ['nullable', 'string', 'max:255'],
+            'foto_profil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'hapus_foto' => ['nullable', 'boolean'],
         ]);
 
-        $request->user()->update($validated);
+        $user = $request->user();
+
+        if ($request->hasFile('foto_profil')) {
+            // Hapus foto lama jika ada
+            if ($user->foto_profil && str_starts_with($user->foto_profil, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $user->foto_profil);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+
+            $path = $request->file('foto_profil')->store('avatars', 'public');
+            $validated['foto_profil'] = '/storage/' . $path;
+        } elseif ($request->boolean('hapus_foto')) {
+            if ($user->foto_profil && str_starts_with($user->foto_profil, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $user->foto_profil);
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+            $validated['foto_profil'] = null;
+        } else {
+            // Jangan timpa foto_profil jika tidak diupload / tidak dihapus
+            unset($validated['foto_profil']);
+        }
+
+        unset($validated['hapus_foto']);
+
+        $user->update($validated);
 
         return Redirect::back()->with('success', 'Data profil berhasil diperbarui.');
     }

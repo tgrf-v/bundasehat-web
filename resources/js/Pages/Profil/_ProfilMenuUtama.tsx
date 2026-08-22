@@ -34,8 +34,16 @@ export function ProfilMenuUtama({
           onClick={() => onNavigate("edit_profil")}
           className="relative group cursor-pointer"
         >
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white shadow-soft-md bg-emerald-700 text-white flex items-center justify-center group-hover:scale-105 transition-all text-3xl font-bold">
-            {user.name ? user.name.charAt(0).toUpperCase() : <UserIcon className="h-10 w-10 text-white" />}
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white shadow-soft-md bg-slate-100 text-slate-600 flex items-center justify-center group-hover:scale-105 transition-all">
+            {user.foto_profil ? (
+              <img
+                src={user.foto_profil}
+                alt={user.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <UserIcon className="h-12 w-12 sm:h-14 sm:w-14 text-slate-600" />
+            )}
           </div>
           <div className="absolute bottom-0 right-0 p-1.5 rounded-full bg-rose-600 text-white shadow-soft-sm group-hover:scale-110 transition-transform">
             <UserIcon className="h-3.5 w-3.5" />

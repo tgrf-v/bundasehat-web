@@ -11,6 +11,7 @@ export interface User {
     pendidikan?: string | null;
     hpht?: string | null;
     puskesmas?: string | null;
+    foto_profil?: string | null;
 }
 
 export type PageProps<T = Record<string, unknown>> = T & {

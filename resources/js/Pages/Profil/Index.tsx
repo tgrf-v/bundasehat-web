@@ -36,20 +36,32 @@ export default function ProfilIndex() {
     pendidikan: user.pendidikan || "",
     hpht: user.hpht || "",
     puskesmas: user.puskesmas || "",
+    foto_profil: null,
+    hapus_foto: false,
   });
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    form.patch(route("profile.update"), {
-      preserveScroll: true,
-      onSuccess: () => {
-        setIsSaved(true);
-        setTimeout(() => {
-          setIsSaved(false);
-          setActiveView("menu");
-        }, 1200);
+
+    // Gunakan router.post dengan method spoofing _method: 'patch' dan forceFormData agar upload biner gambar didukung
+    router.post(
+      route("profile.update"),
+      {
+        ...form.data,
+        _method: "patch",
       },
-    });
+      {
+        forceFormData: true,
+        preserveScroll: true,
+        onSuccess: () => {
+          setIsSaved(true);
+          setTimeout(() => {
+            setIsSaved(false);
+            setActiveView("menu");
+          }, 1200);
+        },
+      }
+    );
   };
 
   const handleLogoutConfirm = () => {
@@ -74,6 +86,7 @@ export default function ProfilIndex() {
             errors={form.errors}
             processing={form.processing}
             isSaved={isSaved}
+            initialPhoto={user.foto_profil}
             onSubmit={handleSaveProfile}
             onBack={() => setActiveView("menu")}
           />
