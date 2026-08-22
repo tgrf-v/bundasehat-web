@@ -344,24 +344,24 @@ export default function KehamilanScreening() {
                       </div>
                     </div>
 
-                    {/* Section 2: Informasi Umum Pasien */}
+                    {/* Section 2: Informasi Umum Pasien & Rincian Poin */}
                     <div className="space-y-2.5 pt-2">
                       <h4 className="font-bold text-slate-900 text-sm sm:text-base">Informasi umum</h4>
                       
                       <div className="space-y-2">
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                          <span className="font-medium text-slate-700">Umur</span>
-                          <span className="font-bold text-rose-600">
-                            {formData.umur} thn : {formData.umur < 20 || formData.umur >= 35 ? "4 poin" : "2 poin"}
-                          </span>
-                        </div>
-
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                          <span className="font-medium text-slate-700">Jumlah Hamil / Melahirkan (Paritas)</span>
-                          <span className="font-bold text-rose-600">
-                            Hamil ke-{formData.gravida || 1} : {formData.paritas >= 4 ? "4 poin" : "0 poin"}
-                          </span>
-                        </div>
+                        {screeningResult.detail_skor && screeningResult.detail_skor.length > 0 ? (
+                          screeningResult.detail_skor.map((item, idx) => (
+                            <div key={idx} className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
+                              <span className="font-medium text-slate-700">{item.deskripsi}</span>
+                              <span className="font-bold text-rose-600">+{item.skor} Poin</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
+                            <span className="font-medium text-slate-700">Skor Awal Ibu Hamil (KSPR)</span>
+                            <span className="font-bold text-rose-600">+2 Poin</span>
+                          </div>
+                        )}
 
                         <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
                           <span className="font-medium text-slate-700">Taksiran HPL</span>
@@ -369,13 +369,6 @@ export default function KehamilanScreening() {
                             {screeningResult.taksiran_hpl || gestationalInfo.dueDate || "Sesuai HPHT"}
                           </span>
                         </div>
-
-                        {formData.ada_riwayat_sc && (
-                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                            <span className="font-medium text-slate-700">Riwayat Persalinan Lalu</span>
-                            <span className="font-bold text-rose-600">Bekas Operasi Caesar : 8 poin</span>
-                          </div>
-                        )}
                       </div>
                     </div>
 
@@ -493,36 +486,17 @@ export default function KehamilanScreening() {
                       </h4>
 
                       <div className="space-y-2">
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                          <span className="font-medium text-slate-700">Skor Awal Ibu Hamil (KSPR)</span>
-                          <span className="font-bold text-rose-600">+ 2 Poin</span>
-                        </div>
-
-                        {formData.umur < 20 && (
+                        {screeningResult.detail_skor && screeningResult.detail_skor.length > 0 ? (
+                          screeningResult.detail_skor.map((item, idx) => (
+                            <div key={idx} className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
+                              <span className="font-medium text-slate-700">{item.deskripsi}</span>
+                              <span className="font-bold text-rose-600">+{item.skor} Poin</span>
+                            </div>
+                          ))
+                        ) : (
                           <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                            <span className="font-medium text-slate-700">Usia Terlalu Muda (&lt;20 Tahun)</span>
-                            <span className="font-bold text-rose-600">+ 4 Poin</span>
-                          </div>
-                        )}
-
-                        {formData.umur >= 35 && (
-                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                            <span className="font-medium text-slate-700">Usia Terlalu Tua (&ge;35 Tahun)</span>
-                            <span className="font-bold text-rose-600">+ 4 Poin</span>
-                          </div>
-                        )}
-
-                        {formData.paritas >= 4 && (
-                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                            <span className="font-medium text-slate-700">Grande Multipara (Pernah Melahirkan &ge;4 Kali)</span>
-                            <span className="font-bold text-rose-600">+ 4 Poin</span>
-                          </div>
-                        )}
-
-                        {formData.ada_riwayat_sc && (
-                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
-                            <span className="font-medium text-slate-700">Pernah Operasi Caesar (Seksio Sesarea)</span>
-                            <span className="font-bold text-rose-600">+ 8 Poin</span>
+                            <span className="font-medium text-slate-700">Skor Awal Ibu Hamil (KSPR)</span>
+                            <span className="font-bold text-rose-600">+2 Poin</span>
                           </div>
                         )}
                       </div>
