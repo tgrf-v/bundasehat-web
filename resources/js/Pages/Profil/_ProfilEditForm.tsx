@@ -1,6 +1,16 @@
 import React, { useRef, useState } from "react";
 import { Card } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
+import { DatePicker } from "@/Components/ui/date-picker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 import { ArrowLeft, CheckCircle2, AlertTriangle, Camera, Trash2, User } from "lucide-react";
 import { ProfileFormData } from "./types";
 
@@ -14,6 +24,16 @@ interface ProfilEditFormProps {
   onSubmit: (e: React.FormEvent) => void;
   onBack: () => void;
 }
+
+const PENDIDIKAN_OPTIONS = [
+  { label: "Tidak / Belum Sekolah", value: "Tidak / Belum Sekolah" },
+  { label: "SD / Sederajat", value: "SD" },
+  { label: "SMP / Sederajat", value: "SMP" },
+  { label: "SMA / SMK / Sederajat", value: "SMA/SMK" },
+  { label: "Diploma (D1 - D4)", value: "Diploma" },
+  { label: "Sarjana (S1)", value: "S1" },
+  { label: "Magister / Doktor (S2 / S3)", value: "S2/S3" },
+];
 
 export function ProfilEditForm({
   data,
@@ -155,106 +175,126 @@ export function ProfilEditForm({
             </div>
           </div>
 
-          {/* Field 1: Nama */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
-              Nama Lengkap <span className="text-rose-500">*</span>
-            </label>
-            <input
+          {/* Baris 1: Nama Lengkap */}
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-name" className="text-xs font-bold text-slate-700">
+              Nama lengkap <span className="text-rose-500">*</span>
+            </Label>
+            <Input
+              id="profile-name"
               type="text"
               value={data.name}
               onChange={(e) => setData("name", e.target.value)}
               placeholder="Nama Lengkap"
               required
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
+              error={errors.name}
+              className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900"
             />
-            {errors.name && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.name}</p>}
           </div>
 
-          {/* Field 2: NIK */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+          {/* Baris 2: Nomor Induk Kependudukan (NIK) */}
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-nik" className="text-xs font-bold text-slate-700">
               Nomor Induk Kependudukan (NIK)
-            </label>
-            <input
+            </Label>
+            <Input
+              id="profile-nik"
               type="text"
               maxLength={16}
               value={data.nik}
               onChange={(e) => setData("nik", e.target.value)}
-              placeholder="16 Digit NIK KTP"
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
+              placeholder="16 digit NIK KTP"
+              error={errors.nik}
+              className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900"
             />
-            {errors.nik && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.nik}</p>}
           </div>
 
-          {/* Field 3: Nomor Handphone / WA */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
-              Nomor WhatsApp / Handphone
-            </label>
-            <input
+          {/* Baris 3: Nomor WhatsApp / Handphone */}
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-phone" className="text-xs font-bold text-slate-700">
+              Nomor WhatsApp / handphone
+            </Label>
+            <Input
+              id="profile-phone"
               type="tel"
               value={data.no_telepon}
-              placeholder="Contoh: 081234567890"
+              placeholder="081200000002"
               onChange={(e) => setData("no_telepon", e.target.value)}
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
+              error={errors.no_telepon}
+              className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900"
             />
-            {errors.no_telepon && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.no_telepon}</p>}
           </div>
 
-          {/* Field 4: Tanggal Lahir */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
-              Tanggal Lahir
-            </label>
-            <input
-              type="date"
-              value={data.tanggal_lahir}
-              onChange={(e) => setData("tanggal_lahir", e.target.value)}
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
-            />
-            {errors.tanggal_lahir && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.tanggal_lahir}</p>}
+          {/* Baris 4: Grid 2 Kolom di Desktop (Tanggal Lahir & Pendidikan) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Kolom Kiri: Tanggal Lahir (DatePicker dengan selector tahun) */}
+            <div className="space-y-1.5">
+              <Label htmlFor="profile-dob" className="text-xs font-bold text-slate-700">
+                Tanggal lahir
+              </Label>
+              <DatePicker
+                id="profile-dob"
+                value={data.tanggal_lahir}
+                onChange={(dateString) => setData("tanggal_lahir", dateString)}
+                placeholder="Pilih..."
+                error={errors.tanggal_lahir}
+              />
+            </div>
+
+            {/* Kolom Kanan: Pendidikan (Select) */}
+            <div className="space-y-1.5">
+              <Label htmlFor="profile-education" className="text-xs font-bold text-slate-700">
+                Pendidikan
+              </Label>
+              <Select
+                value={data.pendidikan || ""}
+                onValueChange={(val) => setData("pendidikan", val)}
+              >
+                <SelectTrigger id="profile-education" className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900 border-slate-200">
+                  <SelectValue placeholder="Pilih..." />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+                  {PENDIDIKAN_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value} className="text-xs sm:text-sm rounded-xl">
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.pendidikan && (
+                <p className="text-xs font-medium text-rose-600 animate-fadeIn pl-3">
+                  {errors.pendidikan}
+                </p>
+              )}
+            </div>
           </div>
 
-          {/* Field 5: Pekerjaan */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
+          {/* Baris 5: Pekerjaan */}
+          <div className="space-y-1.5">
+            <Label htmlFor="profile-job" className="text-xs font-bold text-slate-700">
               Pekerjaan
-            </label>
-            <input
+            </Label>
+            <Input
+              id="profile-job"
               type="text"
               value={data.pekerjaan}
-              placeholder="Contoh: Ibu Rumah Tangga / Karyawan"
+              placeholder="Contoh: Ibu rumah tangga"
               onChange={(e) => setData("pekerjaan", e.target.value)}
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
+              error={errors.pekerjaan}
+              className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900"
             />
-            {errors.pekerjaan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.pekerjaan}</p>}
-          </div>
-
-          {/* Field 6: Pendidikan Terakhir */}
-          <div>
-            <label className="text-xs font-bold text-slate-700 mb-1.5 block">
-              Pendidikan Terakhir
-            </label>
-            <input
-              type="text"
-              value={data.pendidikan}
-              placeholder="Contoh: SMA / S-1"
-              onChange={(e) => setData("pendidikan", e.target.value)}
-              className="w-full rounded-full h-11 px-5 border border-slate-200 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all bg-white"
-            />
-            {errors.pendidikan && <p className="text-[11px] text-rose-500 mt-1 pl-3">{errors.pendidikan}</p>}
           </div>
 
           {/* Action Buttons */}
           <div className="flex items-center justify-between pt-4">
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={onBack}
-              className="rounded-full px-6 h-11 border border-rose-200 text-rose-600 font-bold text-xs hover:bg-rose-50 transition-colors uppercase shrink-0"
+              className="rounded-full px-6 h-11 border-rose-200 text-rose-600 font-bold text-xs hover:bg-rose-50 hover:text-rose-700 transition-colors uppercase shrink-0"
             >
               Batal
-            </button>
+            </Button>
             <Button
               type="submit"
               variant="default"
