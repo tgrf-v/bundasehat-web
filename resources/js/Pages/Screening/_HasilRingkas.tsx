@@ -113,16 +113,16 @@ export function HasilRingkas({
         <h4 className="font-bold text-slate-900 text-xs sm:text-sm">
           Rincian Faktor Risiko Terdeteksi:
         </h4>
-        <div className="space-y-2">
+        <div className="divide-y divide-slate-100">
           {screeningResult.detail_skor && screeningResult.detail_skor.length > 0 ? (
             screeningResult.detail_skor.map((item, idx) => (
-              <div key={idx} className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
+              <div key={idx} className="py-2.5 px-1 bg-white flex items-center justify-between text-xs sm:text-sm">
                 <span className="font-medium text-slate-700">{item.deskripsi}</span>
                 <span className="font-bold text-rose-600">+{item.skor} Poin</span>
               </div>
             ))
           ) : (
-            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm">
+            <div className="py-2.5 px-1 bg-white flex items-center justify-between text-xs sm:text-sm">
               <span className="font-medium text-slate-700">Skor Awal Ibu Hamil (KSPR)</span>
               <span className="font-bold text-rose-600">+2 Poin</span>
             </div>
