@@ -212,7 +212,7 @@ class ScreeningController extends Controller
      *
      * @return array<string, mixed>
      */
-    private function formatScreeningResult(Screening $screening): array
+    public static function formatScreeningResult(Screening $screening): array
     {
         return [
             'id' => $screening->id,

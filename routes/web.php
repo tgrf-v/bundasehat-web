@@ -33,14 +33,7 @@ Route::middleware('auth')->group(function () {
         if ($user !== null) {
             $latest = $user->screenings()->latest()->first();
             if ($latest !== null) {
-                $latestScreening = [
-                    'kode_screening' => $latest->kode_screening,
-                    'tingkat_risiko' => $latest->tingkat_risiko,
-                    'kategori_risiko' => $latest->kategori_risiko,
-                    'skor_kspr' => $latest->skor_kspr,
-                    'map_value' => (float) $latest->map_value,
-                    'created_at' => $latest->created_at?->translatedFormat('j F Y, H:i') . ' WIB',
-                ];
+                $latestScreening = ScreeningController::formatScreeningResult($latest);
             }
         }
 
@@ -56,7 +49,26 @@ Route::middleware('auth')->group(function () {
 
     // Screening Kehamilan (GET — tampilkan form)
     Route::get('/screening/kehamilan', function () {
-        return Inertia::render('Screening/Kehamilan');
+        $user = auth()->user();
+        $recentScreenings = [];
+        $latestScreening = null;
+
+        if ($user !== null) {
+            $recent = $user->screenings()
+                ->latest()
+                ->take(2)
+                ->get();
+
+            if ($recent->isNotEmpty()) {
+                $recentScreenings = $recent->map(fn ($s) => ScreeningController::formatScreeningResult($s))->values()->all();
+                $latestScreening = $recentScreenings[0] ?? null;
+            }
+        }
+
+        return Inertia::render('Screening/Kehamilan', [
+            'recentScreenings' => $recentScreenings,
+            'latestScreening' => $latestScreening,
+        ]);
     })->name('screening.kehamilan');
 
     // Screening Persalinan (GET — tampilkan form)
