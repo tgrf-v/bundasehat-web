@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { router, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Button } from "@/Components/ui/button";
-import { Progress } from "@/Components/ui/progress";
 import { AlertTriangle, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react";
 import { ScreeningInput, ScreeningResult } from "@/types/screening";
 import { calculateGestationalAge } from "@/lib/scoringEngine";
@@ -13,32 +12,22 @@ import { ScreeningStepIndicator } from "./_ScreeningStepIndicator";
 import { FormStep1Identitas } from "./_FormStep1Identitas";
 import { FormStep2Kondisi } from "./_FormStep2Kondisi";
 import { FormStep3Gawat } from "./_FormStep3Gawat";
-import { HasilRingkas } from "./_HasilRingkas";
-import { HasilDetail } from "./_HasilDetail";
 
 export default function KehamilanScreening() {
   const {
     auth,
-    flash,
-    screeningResult: propResult,
     latestScreening: serverLatestScreening,
     recentScreenings: serverRecentScreenings,
   } = usePage<PageProps<{
-    screeningResult?: ScreeningResult;
     latestScreening?: ScreeningResult;
     recentScreenings?: ScreeningResult[];
   }>>().props;
-
-  const serverResult = flash?.screeningResult || propResult;
 
   const TOTAL_STEPS = 3;
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [hasScreened, setHasScreened] = useState<boolean>(false);
   const [isFormActive, setIsFormActive] = useState<boolean>(false);
-  const [screeningResult, setScreeningResult] = useState<ScreeningResult | null>(null);
-  const [rightPanelView, setRightPanelView] = useState<"summary" | "detail">("summary");
 
   const [formData, setFormData] = useState<ScreeningInput>({
     nama_pasien: auth?.user?.name || "",
@@ -81,15 +70,6 @@ export default function KehamilanScreening() {
   const [gestationalInfo, setGestationalInfo] = useState<{ weeks: number; days: number; dueDate?: string; formattedAge: string }>({ weeks: 0, days: 0, formattedAge: "" });
 
   const isHamilPertama = (formData.kehamilan_ke ?? 1) === 1;
-
-  useEffect(() => {
-    if (serverResult) {
-      setScreeningResult(serverResult);
-      setHasScreened(true);
-      setIsFormActive(false);
-      setRightPanelView("summary");
-    }
-  }, [serverResult]);
 
   useEffect(() => {
     if (formData.hpht) {
@@ -144,13 +124,7 @@ export default function KehamilanScreening() {
     };
 
     router.post(route("screening.store"), payload as any, {
-      preserveState: true,
       preserveScroll: true,
-      onSuccess: () => {
-        setIsLoading(false);
-        setErrors({});
-        setIsFormActive(false);
-      },
       onError: (serverErrors) => {
         setIsLoading(false);
         setErrors(serverErrors as Record<string, string>);
@@ -160,31 +134,19 @@ export default function KehamilanScreening() {
 
   const handleStartScreening = () => {
     setIsFormActive(true);
-    setHasScreened(false);
     setCurrentStep(1);
     setErrors({});
   };
 
   const handleViewDetailFromInitial = (selectedScreening?: ScreeningResult) => {
     const target = selectedScreening || serverLatestScreening;
-    if (target) {
-      setScreeningResult(target);
-      setHasScreened(true);
-      setIsFormActive(false);
-      setRightPanelView("summary");
+    if (target?.id) {
+      router.visit(route("screening.show", { screening: target.id }));
     }
-  };
-
-  const handleRescreen = () => {
-    setHasScreened(false);
-    setIsFormActive(true);
-    setCurrentStep(1);
-    setRightPanelView("summary");
   };
 
   const handleBackToInitial = () => {
     setIsFormActive(false);
-    setHasScreened(false);
     setCurrentStep(1);
   };
 
@@ -217,35 +179,15 @@ export default function KehamilanScreening() {
                     Screening Kehamilan
                   </h1>
                   <p className="text-sm text-slate-500 leading-relaxed">
-                    {hasScreened
-                      ? "Hasil analisis risiko kehamilan & panduan terapi Bunda."
-                      : isFormActive
+                    {isFormActive
                       ? "Isi pertanyaan berikut untuk mendeteksi risiko komplikasi kehamilan."
                       : "Skrining awal mandiri Ibu Hamil untuk mendeteksi risiko komplikasi."}
                   </p>
                 </div>
 
-                {/* Dynamic Area: 1) Initial/Empty State, 2) Form Input, 3) Hasil Screening */}
+                {/* Dynamic Area: 1) Initial Landing State, 2) Form Input Steps */}
                 <div className="flex-1 flex flex-col justify-between">
-                  {hasScreened && screeningResult ? (
-                    rightPanelView === "detail" ? (
-                      <HasilDetail
-                        screeningResult={screeningResult}
-                        formData={formData}
-                        gestationalInfo={gestationalInfo}
-                        setRightPanelView={setRightPanelView}
-                        handleRescreen={handleRescreen}
-                      />
-                    ) : (
-                      <HasilRingkas
-                        screeningResult={screeningResult}
-                        formData={formData}
-                        gestationalInfo={gestationalInfo}
-                        setRightPanelView={setRightPanelView}
-                        handleRescreen={handleRescreen}
-                      />
-                    )
-                  ) : !isFormActive ? (
+                  {!isFormActive ? (
                     <InitialScreeningState
                       recentScreenings={serverRecentScreenings || (serverLatestScreening ? [serverLatestScreening] : [])}
                       latestScreening={serverLatestScreening || null}
@@ -253,82 +195,106 @@ export default function KehamilanScreening() {
                       onViewDetail={handleViewDetailFromInitial}
                     />
                   ) : (
-                  <div className="space-y-5">
-                    {/* Header bar to go back if needed */}
-                    <div className="flex items-center justify-between pb-1">
-                      <button
-                        type="button"
-                        onClick={handleBackToInitial}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
-                      >
-                        <ArrowLeft className="h-3.5 w-3.5" />
-                        <span>Kembali</span>
-                      </button>
-                    </div>
+                    <div className="space-y-5">
+                      {/* Header bar to go back to initial preview */}
+                      <div className="flex items-center justify-between pb-1">
+                        <button
+                          type="button"
+                          onClick={handleBackToInitial}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+                        >
+                          <ArrowLeft className="h-3.5 w-3.5" />
+                          <span>Kembali</span>
+                        </button>
+                      </div>
 
-                    <ScreeningStepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
+                      <ScreeningStepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      {/* Error Banner */}
+                      {/* Global Validation Error Banner */}
                       {Object.keys(errors).length > 0 && (
-                        <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium space-y-1 animate-fadeIn">
-                          {Object.values(errors).map((err, idx) => (
-                            <p key={idx} className="flex items-center gap-1.5">
-                              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-500" />
-                              <span>{err}</span>
-                            </p>
-                          ))}
+                        <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-2.5 text-xs text-rose-700 animate-shake">
+                          <AlertTriangle className="h-4 w-4 shrink-0 text-rose-500 mt-0.5" />
+                          <div className="space-y-0.5">
+                            <span className="font-bold">Mohon lengkapi isian wajib:</span>
+                            <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
+                              {Object.entries(errors).map(([key, err]) => (
+                                <li key={key}>{err}</li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
                       )}
 
-                      {currentStep === 1 && (
-                        <FormStep1Identitas
-                          formData={formData}
-                          setFormData={setFormData}
-                          errors={errors}
-                          gestationalInfo={gestationalInfo}
-                          isHamilPertama={isHamilPertama}
-                          toggleCheckbox={toggleCheckbox}
-                        />
-                      )}
-
-                      {currentStep === 2 && (
-                        <FormStep2Kondisi
-                          formData={formData}
-                          setFormData={setFormData}
-                          toggleCheckbox={toggleCheckbox}
-                        />
-                      )}
-
-                      {currentStep === 3 && (
-                        <FormStep3Gawat
-                          formData={formData}
-                          setFormData={setFormData}
-                        />
-                      )}
-
-                      {/* Step Navigation */}
-                      <div className="pt-4 flex items-center justify-between gap-3">
-                        {currentStep > 1 ? (
-                          <Button type="button" variant="outline" onClick={handlePrevStep} className="rounded-full text-xs font-bold px-5">
-                            <ChevronLeft className="h-4 w-4 mr-1" />
-                            <span>Sebelumnya</span>
-                          </Button>
-                        ) : <div />}
-                        {currentStep < TOTAL_STEPS ? (
-                          <Button type="button" onClick={handleNextStep} className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-6 ml-auto">
-                            <span>Lanjut</span>
-                            <ChevronRight className="h-4 w-4 ml-1" />
-                          </Button>
-                        ) : (
-                          <Button type="submit" disabled={isLoading} className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-8 ml-auto shadow-soft-sm">
-                            {isLoading ? "Menghitung Risiko..." : "Lihat Hasil Analisis"}
-                          </Button>
+                      {/* Multi-Step Form */}
+                      <form onSubmit={handleSubmit} className="space-y-5">
+                        {currentStep === 1 && (
+                          <FormStep1Identitas
+                            formData={formData}
+                            setFormData={setFormData}
+                            gestationalInfo={gestationalInfo}
+                            errors={errors}
+                            isHamilPertama={isHamilPertama}
+                            toggleCheckbox={toggleCheckbox}
+                          />
                         )}
-                      </div>
-                    </form>
-                  </div>
-                )}
+
+                        {currentStep === 2 && (
+                          <FormStep2Kondisi
+                            formData={formData}
+                            setFormData={setFormData}
+                            toggleCheckbox={toggleCheckbox}
+                          />
+                        )}
+
+                        {currentStep === 3 && (
+                          <FormStep3Gawat
+                            formData={formData}
+                            setFormData={setFormData}
+                          />
+                        )}
+
+                        {/* Navigation Buttons (Prev / Next / Submit) */}
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                          {currentStep > 1 ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={handlePrevStep}
+                              className="rounded-full px-5 border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs h-10 gap-1.5"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                              <span>Sebelumnya</span>
+                            </Button>
+                          ) : (
+                            <div />
+                          )}
+
+                          {currentStep < TOTAL_STEPS ? (
+                            <Button
+                              type="button"
+                              onClick={handleNextStep}
+                              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-6 h-10 shadow-soft-sm gap-1.5 ml-auto"
+                            >
+                              <span>Lanjutkan</span>
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          ) : (
+                            <Button
+                              type="submit"
+                              disabled={isLoading}
+                              className="rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-8 h-10 shadow-soft-sm gap-2 ml-auto"
+                            >
+                              {isLoading ? (
+                                <span>Menganalisis...</span>
+                              ) : (
+                                <span>Selesai & Lihat Hasil</span>
+                              )}
+                            </Button>
+                          )}
+                        </div>
+                      </form>
+                    </div>
+                  )}
                 </div>
 
               </div>

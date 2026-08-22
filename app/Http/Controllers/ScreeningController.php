@@ -166,7 +166,7 @@ class ScreeningController extends Controller
             'probabilitas_ml' => $probabilitasMl,
         ]);
 
-        return redirect()->back()->with('screeningResult', $this->formatScreeningResult($screening));
+        return redirect()->route('screening.show', ['screening' => $screening->id]);
     }
 
     /**
