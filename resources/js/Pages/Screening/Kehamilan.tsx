@@ -3,11 +3,12 @@ import { router, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Button } from "@/Components/ui/button";
 import { Progress } from "@/Components/ui/progress";
-import { AlertTriangle, ChevronRight, ChevronLeft } from "lucide-react";
+import { AlertTriangle, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react";
 import { ScreeningInput, ScreeningResult } from "@/types/screening";
-import { calculateGestationalAge, evaluateScreening } from "@/lib/scoringEngine";
+import { calculateGestationalAge } from "@/lib/scoringEngine";
 import { PageProps } from "@/types";
 
+import { InitialScreeningState } from "./_InitialScreeningState";
 import { ScreeningStepIndicator } from "./_ScreeningStepIndicator";
 import { FormStep1Identitas } from "./_FormStep1Identitas";
 import { FormStep2Kondisi } from "./_FormStep2Kondisi";
@@ -16,8 +17,16 @@ import { HasilRingkas } from "./_HasilRingkas";
 import { HasilDetail } from "./_HasilDetail";
 
 export default function KehamilanScreening() {
-  const { auth, flash, screeningResult: propResult } = usePage<PageProps<{
+  const {
+    auth,
+    flash,
+    screeningResult: propResult,
+    latestScreening: serverLatestScreening,
+    recentScreenings: serverRecentScreenings,
+  } = usePage<PageProps<{
     screeningResult?: ScreeningResult;
+    latestScreening?: ScreeningResult;
+    recentScreenings?: ScreeningResult[];
   }>>().props;
 
   const serverResult = flash?.screeningResult || propResult;
@@ -27,6 +36,7 @@ export default function KehamilanScreening() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasScreened, setHasScreened] = useState<boolean>(false);
+  const [isFormActive, setIsFormActive] = useState<boolean>(false);
   const [screeningResult, setScreeningResult] = useState<ScreeningResult | null>(null);
   const [rightPanelView, setRightPanelView] = useState<"summary" | "detail">("summary");
 
@@ -76,6 +86,7 @@ export default function KehamilanScreening() {
     if (serverResult) {
       setScreeningResult(serverResult);
       setHasScreened(true);
+      setIsFormActive(false);
       setRightPanelView("summary");
     }
   }, [serverResult]);
@@ -135,7 +146,11 @@ export default function KehamilanScreening() {
     router.post(route("screening.store"), payload as any, {
       preserveState: true,
       preserveScroll: true,
-      onSuccess: () => { setIsLoading(false); setErrors({}); },
+      onSuccess: () => {
+        setIsLoading(false);
+        setErrors({});
+        setIsFormActive(false);
+      },
       onError: (serverErrors) => {
         setIsLoading(false);
         setErrors(serverErrors as Record<string, string>);
@@ -143,10 +158,34 @@ export default function KehamilanScreening() {
     });
   };
 
-  const handleRescreen = () => {
+  const handleStartScreening = () => {
+    setIsFormActive(true);
     setHasScreened(false);
     setCurrentStep(1);
+    setErrors({});
+  };
+
+  const handleViewDetailFromInitial = (selectedScreening?: ScreeningResult) => {
+    const target = selectedScreening || serverLatestScreening;
+    if (target) {
+      setScreeningResult(target);
+      setHasScreened(true);
+      setIsFormActive(false);
+      setRightPanelView("summary");
+    }
+  };
+
+  const handleRescreen = () => {
+    setHasScreened(false);
+    setIsFormActive(true);
+    setCurrentStep(1);
     setRightPanelView("summary");
+  };
+
+  const handleBackToInitial = () => {
+    setIsFormActive(false);
+    setHasScreened(false);
+    setCurrentStep(1);
   };
 
   return (
@@ -170,41 +209,63 @@ export default function KehamilanScreening() {
 
             {/* Kolom Kanan (Konten Utama & Form Screening - 50% - Scrollable) */}
             <div className="lg:col-span-6 lg:h-[calc(100vh-65px)] h-auto overflow-y-auto overflow-x-hidden">
-              <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10">
+              <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-full bg-white relative z-10 space-y-6">
 
                 {/* Header Kolom Kanan */}
-                <div className="mb-6 text-center">
+                <div className="mb-2 text-center shrink-0">
                   <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
                     Screening Kehamilan
                   </h1>
                   <p className="text-sm text-slate-500 leading-relaxed">
                     {hasScreened
                       ? "Hasil analisis risiko kehamilan & panduan terapi Bunda."
+                      : isFormActive
+                      ? "Isi pertanyaan berikut untuk mendeteksi risiko komplikasi kehamilan."
                       : "Skrining awal mandiri Ibu Hamil untuk mendeteksi risiko komplikasi."}
                   </p>
                 </div>
 
-                {/* Dynamic Area: Hasil atau Form Input */}
-                {hasScreened && screeningResult ? (
-                  rightPanelView === "detail" ? (
-                    <HasilDetail
-                      screeningResult={screeningResult}
-                      formData={formData}
-                      gestationalInfo={gestationalInfo}
-                      setRightPanelView={setRightPanelView}
-                      handleRescreen={handleRescreen}
+                {/* Dynamic Area: 1) Initial/Empty State, 2) Form Input, 3) Hasil Screening */}
+                <div className="flex-1 flex flex-col justify-between">
+                  {hasScreened && screeningResult ? (
+                    rightPanelView === "detail" ? (
+                      <HasilDetail
+                        screeningResult={screeningResult}
+                        formData={formData}
+                        gestationalInfo={gestationalInfo}
+                        setRightPanelView={setRightPanelView}
+                        handleRescreen={handleRescreen}
+                      />
+                    ) : (
+                      <HasilRingkas
+                        screeningResult={screeningResult}
+                        formData={formData}
+                        gestationalInfo={gestationalInfo}
+                        setRightPanelView={setRightPanelView}
+                        handleRescreen={handleRescreen}
+                      />
+                    )
+                  ) : !isFormActive ? (
+                    <InitialScreeningState
+                      recentScreenings={serverRecentScreenings || (serverLatestScreening ? [serverLatestScreening] : [])}
+                      latestScreening={serverLatestScreening || null}
+                      onStartScreening={handleStartScreening}
+                      onViewDetail={handleViewDetailFromInitial}
                     />
                   ) : (
-                    <HasilRingkas
-                      screeningResult={screeningResult}
-                      formData={formData}
-                      gestationalInfo={gestationalInfo}
-                      setRightPanelView={setRightPanelView}
-                      handleRescreen={handleRescreen}
-                    />
-                  )
-                ) : (
                   <div className="space-y-5">
+                    {/* Header bar to go back if needed */}
+                    <div className="flex items-center justify-between pb-1">
+                      <button
+                        type="button"
+                        onClick={handleBackToInitial}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+                      >
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                        <span>Kembali</span>
+                      </button>
+                    </div>
+
                     <ScreeningStepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -268,6 +329,7 @@ export default function KehamilanScreening() {
                     </form>
                   </div>
                 )}
+                </div>
 
               </div>
             </div>
