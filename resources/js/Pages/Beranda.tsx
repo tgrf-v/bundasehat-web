@@ -17,53 +17,15 @@ import {
 } from "lucide-react";
 import { ScreeningResult } from "@/types/screening";
 
-interface LatestScreeningSummary {
-  kode_screening: string;
-  tingkat_risiko: string;
-  kategori_risiko: string;
-  skor_kspr: number;
-  map_value: number;
-  created_at: string;
-}
-
 import { PageProps } from "@/types";
 
 type BerandaPageProps = PageProps<{
-  latestScreening: LatestScreeningSummary | null;
+  latestScreening: ScreeningResult | null;
 }>;
 
 export default function Beranda() {
   const { latestScreening, auth } = usePage<BerandaPageProps>().props;
-
-  // Map latestScreening to ScreeningResult format for existing UI components that may use it
-  const screeningResult: ScreeningResult | null = latestScreening ? {
-    kode_screening: latestScreening.kode_screening,
-    skor_poedji_rochjati: latestScreening.skor_kspr,
-    total_skor: latestScreening.skor_kspr,
-    tingkat_risiko: latestScreening.tingkat_risiko as ScreeningResult["tingkat_risiko"],
-    kategori_risiko: latestScreening.kategori_risiko as ScreeningResult["kategori_risiko"],
-    status_label: "",
-    map_value: latestScreening.map_value,
-    potensi_komplikasi: [],
-    rekomendasi_faskes: "",
-    rekomendasi_tempat: "",
-    penolong_persalinan: "",
-    saran_terapi_ids: [],
-    saran_terapi: [],
-    detail_skor: [],
-    input_summary: {
-      nama_pasien: "",
-      umur: 0,
-      paritas: 0,
-      sistolik: 0,
-      diastolik: 0,
-      edema_level: "none",
-      keluhan_spesifik: [],
-      sudah_dapat_treatment: false,
-      tipe_screening: "kehamilan",
-    },
-    created_at: latestScreening.created_at,
-  } : null;
+  const screeningResult = latestScreening;
 
   return (
     <BundaSehatLayout activeNav="beranda">
@@ -293,7 +255,7 @@ export default function Beranda() {
                   {/* Bottom Action Footer */}
                   <div className="flex items-center justify-between border-t border-slate-100 pt-4">
                     <Link
-                      href="/screening/kehamilan"
+                      href={screeningResult.id ? `/screening/${screeningResult.id}` : "/screening/kehamilan"}
                       className="text-xs sm:text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors"
                     >
                       Lihat Detail Hasil
